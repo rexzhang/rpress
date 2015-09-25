@@ -3,3 +3,4 @@
 
 
 from rpress.app import create_app
+from rpress.database import db

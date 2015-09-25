@@ -7,10 +7,12 @@ import logging
 from flask import Flask
 
 from rpress import configs
+from rpress.database import db
 
 #from rpress.views import test_view as test
 from rpress import views as test
 # add some other view
+
 
 __all__ = ['create_app']
 
@@ -24,31 +26,33 @@ REGISTER_BLUE_PRINTS = (
 
 
 def create_app(config=None,app_name=None):
-
     if app_name is None:
         app_name = DEFAULT_APP_NAME
 
     app = Flask(app_name)
 
-    configure_app(app,config)
-    #configure_db(app)
+    configure_app(app, config)
+    configure_db(app)
     configure_blueprints(app)
     #configure_cache(app)
     return app
+    #return
 
 
-def configure_app(app,config):
-    app.config.from_object(configs.ConfigDev())
-
+def configure_app(app, config):
     if config is not None:
         app.config.from_object(config)
+    else:
+        app.config.from_object(configs.ConfigDev())
 
-    app.config.from_envvar('APP_CONFIG',silent=True)
+    #app.config.from_envvar('APP_CONFIG',silent=True)
     return
 
 
 def configure_db(app):
-    pass
+    """"""
+    db.init_app(app)
+    return
 
 
 def configure_blueprints(app):
