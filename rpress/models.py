@@ -2,7 +2,7 @@
 #coding=utf-8
 
 
-from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey
 
 from rpress.database import db
 
@@ -12,23 +12,36 @@ class User(db.Model):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
-    email = Column(String(120), unique=True)
 
-    def __init__(self, name=None, email=None):
+    password = Column(String(256))
+    email = Column(String(120), unique=True)
+    display = Column(String(50))
+
+    def __init__(self, name=None, password=None):
         self.name = name
-        self.email = email
+        self.password = password
 
     def __repr__(self):
         return '<User %r>' % (self.name)
 
 
 ########################################################################
-class Blog(db.Model):
+class Post(db.Model):
     """"""
-    __tablename__ = 'blogs'
+    __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)
+    #site id
 
+    creater = Column(Integer, ForeignKey('users.id'), default=1)  #暂时定义 user_id＝＝0 为异常归属
+    updater = Column(Integer, ForeignKey('users.id'), default=1)
+
+    publish = Column(Boolean, default=False)
+    publish_ext = Column(String(8), default='unknow')  #unknow, publish, draft/autosave/history/trash
+
+    allow_comment = Column(Boolean, default=True)
+
+    type = Column(String(4), default='blog')  #blog/page
     name = Column(String(50), unique=True)
 
     title = Column(String(50))
@@ -44,7 +57,7 @@ class Blog(db.Model):
     #----------------------------------------------------------------------
     def __repr__(self):
         """"""
-        return '<Blog %r>' % (self.title)
+        return '<Post %r>' % (self.title)
 
 
 

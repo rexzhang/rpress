@@ -101,10 +101,6 @@ page 隶属于 site
 
 * id
 * site_id
-* name
-
-* title
-* content
 
 * creater_user_id
 * create_date
@@ -112,11 +108,15 @@ page 隶属于 site
 * update_date
 
 * publish       #True/False
-* publish_ext   #publish/history  / draft/auto-draft/trash
-
-* type          #blog/page
+* publish_ext   #publish / history/draft/auto-draft/trash
 
 * allow_comment #True/False
+
+* type          #blog/page
+* name
+
+* title
+* content
 
 
 ###分类表结构 terms

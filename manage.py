@@ -19,8 +19,16 @@ def init_db():
     """不能正常工作，可能是当前缺少 model 关联操作"""
 ##    app.request_context()
 ##    with app.app_context():
-    from rpress.models import Blog
+    from rpress.models import User, Post
     db.create_all()
+
+    u = User(name='admin', password='admin')
+    db.session.add(u)
+    db.session.commit()
+
+    p = Post(title=u'这是第一篇博客', content=u'我是博客内容')
+    db.session.add(p)
+    db.session.commit()
 
     return
 

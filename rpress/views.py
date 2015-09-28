@@ -7,7 +7,7 @@ from flask.views import MethodView
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from rpress import helpers
-from rpress.models import Blog, User
+from rpress.models import Post, User
 
 
 instance = Blueprint('index',__name__)
@@ -25,7 +25,7 @@ class BlogView(MethodView):
     def get(self, post):
         """"""
         print('post:', post)
-        blog = Blog.query.filter_by(id=post).first_or_404()
+        blog = Post.query.filter_by(id=post).first_or_404()
 
         return helpers.render_template('blog.html', blog=blog)
 
