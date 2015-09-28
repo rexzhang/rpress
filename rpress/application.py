@@ -4,9 +4,11 @@
 
 import os
 import logging
-from flask import Flask
 
-from rpress import configs
+from flask import Flask
+from flask.ext.themes2 import Themes
+
+from rpress.configs import ConfigDev
 from rpress.database import db
 
 #from rpress.views import test_view as test
@@ -33,6 +35,7 @@ def create_app(config=None,app_name=None):
 
     configure_app(app, config)
     configure_db(app)
+    configure_theme(app)
     configure_blueprints(app)
     #configure_cache(app)
     return app
@@ -43,7 +46,7 @@ def configure_app(app, config):
     if config is not None:
         app.config.from_object(config)
     else:
-        app.config.from_object(configs.ConfigDev())
+        app.config.from_object(ConfigDev)
 
     #app.config.from_envvar('APP_CONFIG',silent=True)
     return
@@ -52,6 +55,13 @@ def configure_app(app, config):
 def configure_db(app):
     """"""
     db.init_app(app)
+    return
+
+
+#----------------------------------------------------------------------
+def configure_theme(app):
+    """"""
+    Themes(app, app_identifier='rpress')
     return
 
 

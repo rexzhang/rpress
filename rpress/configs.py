@@ -10,6 +10,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class ConfigDefault(object):
     DEBUG = True
+    THEME_DEFAULT = 'rexzhangname'
 
 
 class ConfigDev(ConfigDefault):

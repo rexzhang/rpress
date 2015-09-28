@@ -6,8 +6,8 @@ from flask import Flask
 from flask import current_app
 from flask.ext.script import Manager
 
-from rpress import db
 from rpress import create_app
+from rpress import db
 
 
 manager = Manager(create_app())

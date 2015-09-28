@@ -1,0 +1,13 @@
+{
+    "application": "rpress",
+    "identifier": "rexzhangname",
+
+    "name": "Rex.Zhang.name",
+    "author": "Rex Zhang",
+    "description": "theme for rPress",
+    "website": "https://github.com/rexzhang/rpress",
+    "license": "GPL",
+
+    "doctype": "html5"
+}
+
