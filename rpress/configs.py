@@ -11,6 +11,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class ConfigDefault(object):
     DEBUG = True
     THEME_DEFAULT = 'rexzhangname'
+    SECRET_KEY = 'this is secret key'
 
 
 class ConfigDev(ConfigDefault):

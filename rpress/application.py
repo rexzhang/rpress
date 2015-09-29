@@ -12,7 +12,7 @@ from rpress.configs import ConfigDev
 from rpress.database import db
 
 #from rpress.views import test_view as test
-from rpress import views as test
+from rpress import views as test_view
 # add some other view
 
 
@@ -22,7 +22,7 @@ __all__ = ['create_app']
 DEFAULT_APP_NAME = 'rpress'
 
 REGISTER_BLUE_PRINTS = (
-    (test.instance, ''),
+    (test_view.post, ''),
     # add your blue print here
 )
 
@@ -66,7 +66,7 @@ def configure_theme(app):
 
 
 def configure_blueprints(app):
-    for blue,url_prefix in REGISTER_BLUE_PRINTS:
+    for blue, url_prefix in REGISTER_BLUE_PRINTS:
         #app.register_blueprint(blue)
-        app.register_blueprint(blue,url_prefix=url_prefix)
+        app.register_blueprint(blue, url_prefix=url_prefix)
     return
