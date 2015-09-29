@@ -2,6 +2,8 @@
 #coding=utf-8
 
 
+import hashlib
+
 from flask import Flask
 from flask import current_app
 from flask.ext.script import Manager
@@ -22,7 +24,7 @@ def init_db():
     from rpress.models import User, Post
     db.create_all()
 
-    u = User(name='admin', password='admin')
+    u = User(name='admin', password=hashlib.sha256('admin').hexdigest())
     db.session.add(u)
     db.session.commit()
 

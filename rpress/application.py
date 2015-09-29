@@ -8,8 +8,11 @@ import logging
 from flask import Flask
 from flask.ext.themes2 import Themes
 
+
+from rpress import db
+from rpress import login_manager
 from rpress.configs import ConfigDev
-from rpress.database import db
+
 
 #from rpress.views import test_view as test
 from rpress import views as test_view
@@ -36,10 +39,11 @@ def create_app(config=None,app_name=None):
     configure_app(app, config)
     configure_db(app)
     configure_theme(app)
+    configure_permission(app)
+
     configure_blueprints(app)
     #configure_cache(app)
     return app
-    #return
 
 
 def configure_app(app, config):
@@ -62,6 +66,13 @@ def configure_db(app):
 def configure_theme(app):
     """"""
     Themes(app, app_identifier='rpress')
+    return
+
+
+#----------------------------------------------------------------------
+def configure_permission(app):
+    """"""
+    login_manager.setup_app(app)
     return
 
 
