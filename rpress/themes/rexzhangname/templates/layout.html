@@ -1,17 +1,35 @@
-<!doctype html>
-<html>
-    <head>
-        {% block head %}
-        <!-- link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" -->
-        <title>{% block title %}{% endblock %} - rPress</title>
-        {% endblock %}
-    </head>
-    <body>
-        <div id="content">{% block content %}{% endblock %}</div>
-        <div id="footer">
-            {% block footer %}
-            (c) Rex Zhang, power by rPress.
-            {% endblock %}
-        </div>
-    </body>
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <!-- Required meta tags always come first -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
+
+  {% block head %}
+  <link rel=stylesheet type=text/css href="{{ theme_static('style.css') }}">
+  <title>{% block title %}{% endblock %} - rPress</title>
+  {% endblock %}
+</head>
+
+<body>
+  <div class="container">
+    {% block header %}{% endblock %}
+
+    {% block navigation %}{% endblock %}
+
+    {% block carousel %}{% endblock %}
+
+    {% block content %}{% endblock %}
+  </div>
+  {% block footer %}{% endblock %}
+
+  <!-- jQuery first, then Bootstrap JS. -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script>
+</body>
+
 </html>

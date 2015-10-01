@@ -1,0 +1,289 @@
+//------------------------------------------------------
+// global variables
+$font-family-major: Georgia, "Times New Roman", Times, serif;
+$font-family-second: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", sans-serif;
+
+$color-white: #FFFFFF;
+$color-silver: #E9E9E9;
+$color-gray: #AFAFAF;
+$color-black: #000000;
+
+$base-page-blank-width: 16px;
+
+.font-common {
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+}
+
+.underline-box {
+    border-bottom: 1px solid;
+    border-bottom-color: $color-silver;
+}
+
+//------------------------------------------------------
+body {
+    font: 100% $font-family-major;
+    border: 0 none;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+
+    @extend .font-common;
+
+    letter-spacing: 0;
+    text-transform: none;
+
+    a {
+        color: $color-black;
+    }
+}
+
+//------------------------------------------------------
+// header
+#header {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-left: $base-page-blank-width + 15px;
+    padding-right: $base-page-blank-width;
+}
+
+.site-title {
+    color: $color-black;
+
+    a {
+        text-decoration: none;
+    }
+
+    h1 {
+        font-size: 2.6em;
+        line-height: 1em;
+        margin: 0.3em 0 0.15em;
+    }
+
+    h3 {
+        font-size: 1.6em;
+        line-height: 1em;
+        margin: 0.3em 0 0.15em;
+    }
+}
+
+.site-description {
+    font-family: $font-family-second;
+    color: $color-gray;
+
+    h6 {
+        font-size: 0.85em;
+        margin-left: 0.2em;
+    }
+}
+
+//------------------------------------------------------
+// navigation
+#navigation {
+    padding-left: $base-page-blank-width;
+    padding-right: $base-page-blank-width;
+}
+
+.nav-box-common {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.nav-mainmenu {
+    font-size: 14px;
+    font-family: $font-family-second;
+    margin-bottom: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 0px;
+    padding-right: 0px;
+    float: left;
+
+    ul {}
+
+    li {
+        list-style-type: none;
+        display: block;
+        float: left;
+    }
+
+    a {
+        @extend .nav-box-common;
+
+        color: $color-gray;
+        text-transform: uppercase;
+    }
+
+    a:hover {
+        @extend .nav-box-common;
+
+        color: #111;
+        background: $color-silver;
+        text-decoration: none;
+    }
+
+    form {
+        @extend .nav-box-common;
+
+        input[type="text"], input[type="password"], textarea, #dsq-content textarea {
+            font-family: "Courier New", Courier, Verdana, sans-serif;
+        }
+    }
+}
+
+//------------------------------------------------------
+// post
+#post-loop {
+    padding-top: 28px;
+    padding-bottom: 0px;
+    padding-left: $base-page-blank-width + 15px;
+    padding-right: 30px;
+}
+
+.post-summary-box {
+    padding-bottom: 20px;
+
+    @extend .underline-box;
+
+    margin-bottom: 22.4px;
+}
+
+.post-summary-content {}
+
+.post-metabar {
+    font-family: $font-family-second;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.post-excerpt {
+    margin-top: 15.4px;
+    margin-bottom: 15.4px;
+}
+
+//------------------------------------------------------
+#pagination {
+    margin-bottom: 15.4px;
+}
+
+//------------------------------------------------------
+// sidebar
+#sidebar {
+    padding-top: 28px;
+    padding-bottom: 28px;
+    padding-left: 9.8px;
+    padding-right: $base-page-blank-width + 9.8px;
+}
+
+.widget {
+    margin-bottom: 14px;
+
+    h3 {
+        font-family: $font-family-second;
+        font-size: .9em;
+        color: $color-gray;
+
+        @extend .font-common;
+
+        letter-spacing: 0.10em;
+        text-transform: uppercase;
+        text-align: left;
+        padding: 6px 8px 3px 0px;
+        margin-bottom: .6em;
+
+        @extend .underline-box;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-top: 2.1px;
+        padding-bottom: 2.1px;
+        padding-left: 10px;
+        padding-right: 2px;
+    }
+
+    li {
+        //font-size: 95%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+//------------------------------------------------------
+// footer
+#footer {
+    clear: both;
+    font-size: 1em;
+    overflow: hidden;
+    text-align: left;
+    position: relative;
+    background-color: $color-black;
+    color: #999;
+
+    a {
+        color: $color-white;
+    }
+
+    ul {
+        padding: 0 5px;
+    }
+
+    li {
+        list-style-type: none;
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        h5 {
+            a {
+                font-size: 1em;
+                color: $color-white;
+            }
+        }
+
+        .link-list {
+            a {}
+        }
+    }
+
+    .content-pad {
+        padding: 20px 0 1em;
+    }
+
+    .widget-title {
+        padding-left: 0;
+        border: 0;
+        margin-bottom: .6em;
+        font-size: .85em;
+        color: $color-white;
+    }
+
+    .findent {
+        padding: 0 5px 0 0;
+    }
+
+    .latest_posts {
+        padding: 0;
+
+        li {
+            margin-bottom: .5em;
+
+            .list-excerpt {
+                font-size: .9em;
+                line-height: 1.5em;
+            }
+        }
+    }
+}
+
+.terms {
+    font-size: 0.8em;
+}

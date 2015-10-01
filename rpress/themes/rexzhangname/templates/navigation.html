@@ -1,0 +1,16 @@
+<div id="navigation" class="container">
+  <ul class="nav-mainmenu">
+    <li>
+      <a href="http://rex.zhang.name/about/">About</a>
+    </li>
+    <li>
+      <a href="http://rex.zhang.name/guestbook/">GuestBook</a>
+    </li>
+  </ul>
+  <form class="searchform" onsubmit="this.submit();return false;" action="http://rex.zhang.name/" method="get">
+    <fieldset>
+      <input class="searchfield" type="text" onblur="if (this.value == '') {this.value = 'Search';}" onfocus="if (this.value == 'Search') {this.value = '';}" name="s" value="Search">
+      <input class="submit btn" type="image" alt="Go" src="http://rex.zhang.name/wp-content/themes/platform/images/search-btn.png" name="submit">
+    </fieldset>
+  </form>
+</div>

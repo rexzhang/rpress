@@ -30,7 +30,8 @@ post.add_url_rule('/test',view_func=TestView.as_view('test'),methods=['GET',])
 #----------------------------------------------------------------------
 def index():
     """"""
-    return 'this is home page'
+    text = 'this is home page'
+    return render_template('index.html', text=text)
 
 
 @post.route('/blog/<int:post_id>', methods=['GET', 'POST'])
