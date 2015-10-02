@@ -122,6 +122,7 @@ page 隶属于 site
 ###分类表结构 terms
 
 * id
+* site_id
 * name
 
 * type          #tag/category 系统将 category 也视为 tag 处理，只是前台用途不同，必然某些工作博客需要一个大分类机制来归纳文章

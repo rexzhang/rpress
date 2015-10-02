@@ -19,7 +19,7 @@ class ConfigDev(ConfigDefault):
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'rpress_dev.db')
     SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
-    SQLALCHEMY_ECHO = True
+    #SQLALCHEMY_ECHO = True
 
 
 class ConfigRelease(ConfigDefault):
