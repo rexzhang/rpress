@@ -47,11 +47,9 @@ page 隶属于 site
     * www.site2.com/bbb
     * www.site2.com/rp-admin/rrr
 
-
 最好是基于账号是否是超级管理员来判断是否能管理整个系统，这样就可以将具体站点内容相关的权限分发下去
 
 站点编号从 1 开始
-
 
 URL 规则
 -------
@@ -80,6 +78,9 @@ URL 规则
 * archive
     * /date/YYYY/MM
     * /date/YYYY
+
+* rPress admin
+	* /rpadmin/xxxx
 
 
 数据库表结构

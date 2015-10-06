@@ -1,16 +1,8 @@
-{% extends theme('layout.html') %}
+{% extends theme('theme_layout.html') %}
 {% block head %}{{ super() }}{% endblock %}
 
-{% block header %}
-{% include theme('header.html') %}
-{% endblock %}
-
-{% block navigation %}
-{% include theme('navigation.html') %}
-{% endblock %}
-
 {% block carousel %}
-{% include theme('carousel.html') %}
+{% include theme('_carousel.html') %}
 {% endblock %}
 
 {% block content %}
@@ -37,8 +29,4 @@
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block footer %}
-{% include theme('footer.html') %}
 {% endblock %}

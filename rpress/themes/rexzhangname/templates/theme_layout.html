@@ -1,0 +1,20 @@
+{% extends theme('layout.html') %}
+
+{% block head %}{{ super() }}
+<link rel=stylesheet type=text/css href="{{ theme_static('style.css') }}">
+{% endblock %}
+
+{% block title %}xxxx - yyyy{% endblock %}
+
+{% block body %}
+  <div class="container">
+  {% block header %}{% include theme('_header.html') %}{% endblock %}
+
+  {% block navigation %}{% include theme('_navigation.html') %}{% endblock %}
+
+  {% block carousel %}{% endblock %}
+
+  {% block content %}{% endblock %}
+  </div>
+  {% block footer %}{% include theme('_footer.html') %}{% endblock %}
+{% endblock %}

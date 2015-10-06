@@ -4,6 +4,7 @@
 
 from __future__ import print_function, unicode_literals, absolute_import
 
+from sqlalchemy import desc
 import flask
 from flask import request, redirect, url_for, flash
 from flask.ext.login import login_required
@@ -22,15 +23,48 @@ rpadmin = flask.Blueprint('rpadmin', __name__)
 #----------------------------------------------------------------------
 def index():
     """"""
-    return 'this is rPress admin home page'
+    return render_template("rpadmin_index.html")
 
 
-@rpadmin.route('/rpadmin/<int:post_id>', methods=['GET', 'POST'])
+@rpadmin.route('/post/<string:type>/list', methods=['GET'])
 @login_required
 #----------------------------------------------------------------------
-def post_edit(post_id):
+def post_list(type):
     """"""
-    post = Post.query.filter_by(id=post_id).first_or_404()  #!!!
+    if type not in ['blog', 'page']:
+        return  #!!!
+
+    posts = Post.query.filter_by(type=type).order_by(desc('create_date')).all()
+
+    return render_template("rpadmin_post_list.html", posts=posts)
+
+
+@rpadmin.route('/post/<uuid:uuid>/publish/turn', methods=['GET'])
+@login_required
+#----------------------------------------------------------------------
+def post_publish_status_turn(uuid):
+    """"""
+    post = Post.query.filter_by(uuid=str(uuid)).first_or_404()  #!!!
+    if post.publish == True:
+        post.publish = False
+        post.publish_ext = 'draft'
+    else:
+        post.publish = True
+        post.publish_ext = 'publish'
+
+    db.session.add(post)
+    db.session.commit()
+
+    next = request.args.get('next')  #!!!
+    return redirect(next or url_for('.index'))
+
+
+@rpadmin.route('/post/<uuid:uuid>/edit', methods=['GET', 'POST'])
+@login_required
+#----------------------------------------------------------------------
+def post_edit(uuid):
+    """"""
+    post = Post.query.filter_by(uuid=str(uuid)).first_or_404()  #!!!
     form = PostEditForm(obj=post)
 
     if form.validate_on_submit():
@@ -43,4 +77,4 @@ def post_edit(post_id):
     else:
         pass
 
-    return render_template("post_edit.html", post_id=post_id, form=form)
+    return render_template("rpadmin_post_edit.html", uuid=str(uuid), form=form)

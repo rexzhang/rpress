@@ -1,23 +1,15 @@
-{% extends theme('layout.html') %}
+{% extends theme('theme_layout.html') %}
 {% block head %}{{ super() }}{% endblock %}
 
-{% block header %}
-{% include theme('header.html') %}
-{% endblock %}
-
-{% block navigation %}
-{% include theme('navigation.html') %}
-{% endblock %}
-
 {% block carousel %}
-{% include theme('carousel.html') %}
+{% include theme('_carousel.html') %}
 {% endblock %}
 
 {% block content %}
 <div id="content" class="container">
   <div class="row">
     <div id="post-roll" class="col-sm-8">
-      {% include theme('blog_roll.html') %}
+      {% include theme('_blog_roll.html') %}
       <div id=pagination>
         <span class="previous-entries">
                 <a href="http://rex.zhang.name/page/2/">← Previous Entries</a>
@@ -25,12 +17,7 @@
         <span class="next-entries"></span>
       </div>
     </div>
-    <div id="sidebar" class="col-sm-4"> {% include theme('sidebar.html') %}</div>
+    <div id="sidebar" class="col-sm-4"> {% include theme('_sidebar.html') %}</div>
   </div>
 </div>
 {% endblock %}
-
-{% block footer %}
-{% include theme('footer.html') %}
-{% endblock %}
-

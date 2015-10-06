@@ -52,7 +52,7 @@ class Post(db.Model):
     update_date = Column(DateTime)
 
     publish = Column(Boolean, default=False)
-    publish_ext = Column(String(8), default='unknow')  #publish 为 True 时才有意义。unknow, publish, draft/autosave/history/trash
+    publish_ext = Column(String(8), default='unknow')  #publish 为 True 时才有意义。unknow, publish, draft/autosave/history/trash #修改过程版本存放在另外一个表中
 
     allow_comment = Column(Boolean, default=True)
 

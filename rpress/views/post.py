@@ -5,13 +5,12 @@
 from __future__ import print_function, unicode_literals, absolute_import
 
 from datetime import datetime
-from sqlalchemy import func, extract
+from sqlalchemy import desc, asc, func, extract
 
 import flask
 from flask import request, redirect, url_for, flash, abort
 from flask.views import MethodView
 from flask.ext.login import login_required
-from sqlalchemy import desc, asc
 
 from rpress import db
 from rpress.helpers.template import render_template
@@ -220,6 +219,24 @@ def post_author(author):
 def post_uuid(uuid):
     """"""
     post = Post.query.filter_by(uuid=str(uuid), publish=True).first_or_404()
+
+    content = {
+        'post': {
+            'title': post.title,
+            'author': post.creater.name,
+            'create_date': post.create_date,
+            'content': post.content,
+        },
+    }
+
+    return render_template('post.html', content=content)
+
+
+@post.route('/<string:name>', methods=['GET', ])
+#----------------------------------------------------------------------
+def page_name(name):
+    """"""
+    post = Post.query.filter_by(name=name, publish=True, type='page').first_or_404()
 
     content = {
         'post': {
