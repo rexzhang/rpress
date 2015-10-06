@@ -101,7 +101,7 @@ class Term(db.Model):
 
     id = Column(Integer, primary_key=True)
 
-    name = Column(String(50))
+    name = Column(String(50), unique=True)
     type = Column(String(50))  #tag/category
     display = Column(String(50))
 

@@ -57,12 +57,13 @@ URL 规则
 -------
 特色子类均用固定子目录来区分 blog/archive/category/tag/date/
 
-* blog/page
+* post(blog/page)
     * /post/uuid0001
 
 * blog
-    * /blog/YYYY/MM/DD/uuid0001 - recommend
-    * /YYYY/MM/DD/uuid0001 - second recommend
+    * /YYYY/MM/DD/uuid0001 - recommend
+    * /YYYY/MM/DD/name - second recommend
+    * /blog/YYYY/MM/DD/uuid0001 
     * /blog/uuid0001
     * /blog/name
 

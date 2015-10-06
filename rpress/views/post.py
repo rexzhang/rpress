@@ -76,13 +76,13 @@ content = {
 def _post_roll(posts):
     """internal funtion"""
     post_roll = []
-    for blog in posts:
+    for post in posts:
         post_roll.append({
-            'title': blog.title,
-            'author': blog.creater.name,
-            'create_date': blog.create_date,
-            'excerpt': blog.content,
-            'link': '\blog\%s' % blog.name,
+            'title': post.title,
+            'author': post.creater.name,
+            'create_date': post.create_date,
+            'excerpt': post.content,
+            'link': '\\post\\%s' % post.uuid,
         })
 
     return post_roll
@@ -95,18 +95,18 @@ def _sidebar():
     terms = Term.query.filter_by(type='category').order_by('name').all()
     for term in terms:
         categories.append({
-            'name': term.name,
+            'display': term.display,
             'desc': term.name,
-            'link': '\category\%s' % term.name,
+            'link': '\\category\\%s' % term.name,
         })
 
     tags = []
     terms = Term.query.filter_by(type='tag').order_by('name').all()
     for term in terms:
         tags.append({
-            'name': term.name,
+            'display': term.display,
             'desc': term.name,
-            'link': '\tag\%s' % term.name,
+            'link': '\\tag\\%s' % term.name,
         })
 
     widgets = {
@@ -115,7 +115,6 @@ def _sidebar():
         'date_years': _widget_date_year(),
     }
 
-    print(_widget_date_year())
     return widgets
 
 
@@ -130,6 +129,8 @@ def _widget_date_year():
 
         if year not in date_years:
             date_years[year] = {
+                'display': str(year),
+                'link': '\\date\\%d' % year,
                 'count': 1,
             }
 
@@ -159,9 +160,48 @@ def index():
 #----------------------------------------------------------------------
 def post_date(year):
     """"""
-    posts = Post.query.filter(Post.type=='blog', Post.publish==True,
-                                 Post.create_date>=datetime(year, 1, 1),
-                                 Post.create_date<datetime(year+1, 1, 1)).order_by(desc('create_date')).all()
+    posts = Post.query.filter_by(type='blog', publish=True) \
+        .filter(Post.create_date>=datetime(year, 1, 1),
+                Post.create_date<datetime(year+1, 1, 1)).order_by(desc('create_date')).all()
+    post_roll = _post_roll(posts)
+
+    widgets = _sidebar()
+
+    content = {
+        'post_roll': post_roll,
+        'widgets': widgets,
+    }
+
+    return render_template('index.html', content=content)
+
+
+@post.route('/category/<string:term>', methods=['GET'])
+@post.route('/tag/<string:term>', methods=['GET'])
+#----------------------------------------------------------------------
+def post_term(term):
+    """"""
+    #posts = Post.query.join(Post.terms).filter(Term.name==term).all()
+    #posts = Post.query.filter(Post.terms.any(Term.name==term)).all()
+    posts = Post.query.filter_by(type='blog', publish=True).filter(Post.terms.any(Term.name==term)).order_by(desc('create_date')).all()
+    #
+    post_roll = _post_roll(posts)
+
+    widgets = _sidebar()
+
+    content = {
+        'post_roll': post_roll,
+        'widgets': widgets,
+    }
+
+    return render_template('index.html', content=content)
+
+
+@post.route('/author/<string:author>', methods=['GET'])
+#----------------------------------------------------------------------
+def post_author(author):
+    """"""
+    posts = Post.query.filter_by(type='blog', publish=True).filter(Post.creater.has(User.name==author)).order_by(desc('create_date')).all()
+
     post_roll = _post_roll(posts)
 
     widgets = _sidebar()
