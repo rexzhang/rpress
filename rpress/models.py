@@ -6,6 +6,7 @@ from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, Foreign
 from sqlalchemy.orm import relationship  #, backref
 
 from rpress.database import db
+from rpress.helpers.uuid1plus import uuid1plus2datetime
 
 
 ########################################################################
@@ -40,16 +41,18 @@ class Post(db.Model):
     __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)
-    guid = Column(String(32), unique=True)
+    uuid = Column(String(36), unique=True)
     #site id
 
-    creater = Column(Integer, ForeignKey('users.id'), default=0)  #暂时定义 user_id＝＝0 为异常归属
+    creater_id = Column(Integer, ForeignKey('users.id'), default=0)  #暂时定义 user_id＝＝0 为异常归属
+    updater_id = Column(Integer, ForeignKey('users.id'))
+    creater = relationship('User', foreign_keys=[creater_id])
+    updater = relationship('User', foreign_keys=[updater_id])
     create_date = Column(DateTime)
-    updater = Column(Integer, ForeignKey('users.id'))
     update_date = Column(DateTime)
 
     publish = Column(Boolean, default=False)
-    publish_ext = Column(String(8), default='unknow')  #unknow, publish, draft/autosave/history/trash
+    publish_ext = Column(String(8), default='unknow')  #publish 为 True 时才有意义。unknow, publish, draft/autosave/history/trash
 
     allow_comment = Column(Boolean, default=True)
 
@@ -63,13 +66,16 @@ class Post(db.Model):
     content = Column(Text)
 
     #----------------------------------------------------------------------
-    def __init__(self, guid, creater_id, create_date, publish=True, publish_ext='publish', type='blog', name=None, title=None, content=None):
+    def __init__(self, uuid, creater_id, create_date=None, publish=True, publish_ext='publish', type='blog', name=None, title=None, content=None):
         """Constructor"""
-        self.guid = guid
+        if create_date is None:
+            create_date = uuid1plus2datetime(uuid)
 
-        self.creater = creater_id
+        self.uuid = str(uuid)
+
+        self.creater_id = creater_id
         self.create_date = create_date
-        self.updater = creater_id
+        self.updater_id = creater_id
         self.update_date = create_date
 
         self.publish = publish

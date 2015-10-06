@@ -10,20 +10,15 @@ a mulit-site and mulit-user blog system.
 * 不同域名
 * 不同子目录？？
 
-所有 id 均使用类 uuid 的唯一编号 ?? 如果使用 MySQL 就使用数字id，如使用 mongodb 就使用 uuid
+所有 post 均使用类 uuid 的唯一编号
 
 所有 name 均只支持小写字母、数字、减号组合，同时字母开头；同时在需要时可用于组合 url
 
 所有 site_id 为 0 标示为系统级设置与具体站点无关，或者系统级默认设置
 
-
 blog 隶属于 user
 
 page 隶属于 site
-
-
-特色子类均用固定子目录来区分 blog/archive/category/tag/date/
-
 
 站点模式
 -------
@@ -56,6 +51,34 @@ page 隶属于 site
 最好是基于账号是否是超级管理员来判断是否能管理整个系统，这样就可以将具体站点内容相关的权限分发下去
 
 站点编号从 1 开始
+
+
+URL 规则
+-------
+特色子类均用固定子目录来区分 blog/archive/category/tag/date/
+
+* blog/page
+    * /post/uuid0001
+
+* blog
+    * /blog/YYYY/MM/DD/uuid0001 - recommend
+    * /YYYY/MM/DD/uuid0001 - second recommend
+    * /blog/uuid0001
+    * /blog/name
+
+* page
+    * /name - recommend
+    * /page/uuid0001
+
+* category
+    * /category/xxxx
+
+* tag
+    * /tag/xxxx
+
+* archive
+    * /date/YYYY/MM
+    * /date/YYYY
 
 
 数据库表结构

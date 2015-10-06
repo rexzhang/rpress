@@ -9,7 +9,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class ConfigDefault(object):
-    DEBUG = True
+    DEBUG = False
     THEME_DEFAULT = 'rexzhangname'
     SECRET_KEY = 'this is secret key, please change for product environment'
 

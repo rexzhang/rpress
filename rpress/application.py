@@ -14,9 +14,10 @@ from rpress import login_manager
 from rpress.configs import ConfigDev
 
 
-#from rpress.views import test_view as test
-from rpress import views as test_view
-# add some other view
+#from rpress.helpers import RegexConverter
+from rpress.views import permission as permission_view
+from rpress.views import rpadmin as rpadmin_view
+from rpress.views import post as post_view
 
 
 __all__ = ['create_app']
@@ -25,7 +26,10 @@ __all__ = ['create_app']
 DEFAULT_APP_NAME = 'rpress'
 
 REGISTER_BLUE_PRINTS = (
-    (test_view.post, ''),
+    (post_view.post, ''),
+    (rpadmin_view.rpadmin, '/rpadmin'),
+    (permission_view.permission, ''),
+
     # add your blue print here
 )
 
@@ -39,6 +43,7 @@ def create_app(config=None,app_name=None):
     configure_app(app, config)
     configure_db(app)
     configure_theme(app)
+    configure_filter(app)
     configure_permission(app)
 
     configure_blueprints(app)
@@ -66,6 +71,16 @@ def configure_db(app):
 def configure_theme(app):
     """"""
     Themes(app, app_identifier='rpress')
+    return
+
+
+#----------------------------------------------------------------------
+def configure_filter(app):
+    """"""
+    @app.template_filter('datetime_short')
+    def filter_datatime_short(value):
+        return value.strftime(format="%Y-%m-%d")
+
     return
 
 

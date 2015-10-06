@@ -26,23 +26,21 @@
 <div id=tags class="widget">
   <h3>标签</h3>
   <div>
-    <a class="tag-link-10" style="font-size: 8pt;" title="1个话题" href="http://rex.zhang.name/tag/achi/">ACHI</a>
-    <a class="tag-link-11" style="font-size: 8pt;" title="1个话题" href="http://rex.zhang.name/tag/apache/">apache</a>
-    <a class="tag-link-12" style="font-size: 8pt;" title="1个话题" href="http://rex.zhang.name/tag/baidu/">baidu</a>
-    <a class="tag-link-13" style="font-size: 8pt;" title="1个话题" href="http://rex.zhang.name/tag/bootstrap/">Bootstrap</a>
+    {% for tag in content.widgets.tags %}
+    <a class="tag-link-10" style="font-size: 8pt;" title="1个话题" href="{{ tag.link }}">{{ tag.name }}</a>
+    {% endfor %}
+  </div>
+  <div>
     <a class="tag-link-14" style="font-size: 8pt;" title="1个话题" href="http://rex.zhang.name/tag/c/">C++</a>
   </div>
 </div>
 <div id=category class="widget">
-  <h3>分类目录</h3>
+  <h3>分类</h3>
   <div>
     <ul>
-      <li>
-        <a title="关于程序开发设计的文章" href="http://rex.zhang.name/category/coding/">Coding</a>
-      </li>
-      <li>
-        <a title="Linux发布版本相关的所有话题，以Debian访问的为主" href="http://rex.zhang.name/category/linux/">Linux</a>
-      </li>
+      {% for category in content.widgets.categories %}
+      <li><a title="{{ category.desc }}" href="{{ category.link }}">{{ category.name }}</a></li>
+      {% endfor %}
     </ul>
   </div>
 </div>
@@ -51,13 +49,7 @@
   <div>
     <ul>
       <li>
-        <a href="http://rex.zhang.name/wp-login.php">登录</a>
-      </li>
-      <li>
-        <a href="http://rex.zhang.name/feed/"></a>
-      </li>
-      <li>
-        <a href="http://rex.zhang.name/comments/feed/"></a>
+        <a href="/login">登录</a>
       </li>
       <li>
         <a title="基于 rPress" href="https://github.com/rexzhang/rpress">rPress</a>
@@ -66,18 +58,14 @@
   </div>
 </div>
 <div id=accccc class="widget">
-  <h3>文章归档</h3>
+  <h3>归档</h3>
   <div>
     <ul>
+    {% for year, _ in content.widgets.date_years|dictsort|reverse %}
       <li>
-        <a href="http://rex.zhang.name/date/2014/11/">2014年十一月</a>
+        <a href="/date/{{ year }}">{{ year }}</a>
       </li>
-      <li>
-        <a href="http://rex.zhang.name/date/2014/10/">2014年十月</a>
-      </li>
-      <li>
-        <a href="http://rex.zhang.name/date/2014/06/">2014年六月</a>
-      </li>
+    {% endfor %}
     </ul>
   </div>
 </div>

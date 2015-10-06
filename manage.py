@@ -5,8 +5,6 @@
 from __future__ import print_function, unicode_literals, absolute_import
 
 import hashlib
-import uuid
-
 
 #from flask import Flask
 #from flask import current_app
@@ -14,6 +12,7 @@ from flask.ext.script import Manager
 
 from rpress import create_app
 from rpress import db
+from rpress.helpers.uuid1plus import uuid1plus
 
 
 manager = Manager(create_app())
@@ -30,11 +29,11 @@ def init_db():
 
     db.create_all()
 
-    user = User(name='rex', password=hashlib.sha256('rex').hexdigest())
+    user = User(name='rex', password=hashlib.sha256('rexzhang').hexdigest())
     db.session.add(user)
     db.session.commit()
 
-    post = Post(guid=uuid.uuid1().hex, creater_id=user.id, create_date=datetime.now(), title=u'这是第一篇博客', content=u'我是博客内容')
+    post = Post(uuid=uuid1plus(datetime.now()), creater_id=user.id, title=u'这是第一篇博客', content=u'我是博客内容')
     db.session.add(post)
     db.session.commit()
 
@@ -63,22 +62,20 @@ def import_wordpress():
     print('parsering RSS file...')
     for entry in wordpress_data.entries:
         #print(entry.wp_post_id, entry.wp_post_type, entry.wp_status, entry.author, entry.title, ' --- ', entry.wp_post_name)
+        ##!!!还有一个多次导入排除重复的问题，使用创建时间＋文章标题？
 
         if entry.wp_post_type not in import_wp_past_type_list:
             #skip some post
             continue
 
-        #id
-        guid = uuid.uuid1().hex
+        #uuid
+        uuid = uuid1plus(datetime.strptime(entry.wp_post_date, "%Y-%m-%d %H:%M:%S"))
 
         #author
         user = User.query.filter_by(name=entry.author).first()
         if user is None:
             print('!!!ERROR!!miss user:%s, skip one post;%s' % (entry.author, entry.title))
             continue
-
-        #time
-        create_date = datetime.strptime(entry.wp_post_date, "%Y-%m-%d %H:%M:%S")
 
         #publish status
         if entry.wp_status == 'publish':
@@ -92,7 +89,7 @@ def import_wordpress():
 
         #post type
         if entry.wp_post_type == 'post':
-            type = 'post'
+            type = 'blog'
         elif entry.wp_post_type == 'page':
             type = 'page'
         else:
@@ -103,8 +100,8 @@ def import_wordpress():
             content = html_parser.unescape(entry.content[0].value)
 
         print('+ %s %s' % (publish_ext, entry.title))
-        post = Post(guid=guid,
-                    creater_id=user.id, create_date=create_date,
+        post = Post(uuid=uuid,
+                    creater_id=user.id,
                     publish=publish, publish_ext=publish_ext,
                     type=type,
                     name=entry.wp_post_name,

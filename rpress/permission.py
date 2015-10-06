@@ -28,7 +28,7 @@ class LoginUser(flask.ext.login.UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     """TODO:会导致一次数据查询，需要迁移到内存类容器中处理"""
-    print 'user_id:', user_id
+    #print 'user_id:', user_id
     user = User.query.filter_by(id=user_id).first()
 
     if user is None:

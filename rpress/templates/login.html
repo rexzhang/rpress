@@ -1,15 +1,20 @@
 {% extends theme('layout.html') %}
 {% block content %}
-<form method="POST" action="/login">
-    {{ form.csrf_token }}
-    <div>
-        {{ form.username.label }}:
-        {{ form.username }}
-    </div>
-    <div>
-        {{ form.password.label }}:
-        {{ form.password }}
-    </div>
-    {{ form.submit }}
-</form>
+<div class="row">
+  <div class="col-sm-4"></div>
+  <div id="login" class="col-sm-4">
+  <h3>rPress</h3>
+    <form method="POST" action="/login">
+      {{ form.csrf_token }}
+      <div>
+        {{ form.username.label }}: {{ form.username }}
+      </div>
+      <div>
+        {{ form.password.label }}: {{ form.password }}
+      </div>
+      {{ form.submit }}
+    </form>
+  </div>
+  <div class="col-sm-4"></div>
+</div>
 {% endblock %}
