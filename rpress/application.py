@@ -74,12 +74,30 @@ def configure_theme(app):
     return
 
 
+import re
+_code_block_begin_re = '\[code:[a-z]+\]\n'
+_code_block_begin_html = '<pre><code>\n'
+_code_block_end_re = '\n\[/code\]'
+_code_block_end_html = '\n</code></pre>'
 #----------------------------------------------------------------------
 def configure_filter(app):
     """"""
     @app.template_filter('datetime_short')
-    def filter_datatime_short(value):
-        return value.strftime(format="%Y-%m-%d")
+    def filter_datatime_short(string):
+        return string.strftime(format="%Y-%m-%d")
+
+    @app.template_filter('codeblock')
+    def filter_codeblock(string):
+        begin_amount = len(re.findall(_code_block_begin_re, string))
+        en_amount = len(re.findall(_code_block_end_re, string))
+
+        string = re.sub(_code_block_begin_re, _code_block_begin_html, string)
+        string = re.sub(_code_block_end_re, _code_block_end_html, string)
+
+        if begin_amount > en_amount:
+            for x in xrange(begin_amount - en_amount):
+                string += _code_block_end_html
+        return string
 
     return
 

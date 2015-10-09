@@ -1,5 +1,7 @@
 {% extends theme('rpadmin_layout.html') %}
 {% block content %}
+<a href="{{ url_for('rpadmin.post_new', type=post_type) }}">New post</a>
+
 <table class="table">
     {#<caption>table title and/or explanatory text</caption>#}
     <thead>

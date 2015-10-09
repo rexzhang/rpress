@@ -14,7 +14,7 @@ from flask.ext.login import login_required
 
 from rpress import db
 from rpress.helpers.template import render_template
-from rpress.models import Post, User, Term
+from rpress.models import Post, User, Term, Comment
 from rpress.permission import login_user, logout_user
 
 
@@ -80,7 +80,7 @@ def _post_roll(posts):
             'title': post.title,
             'author': post.creater.name,
             'create_date': post.create_date,
-            'excerpt': post.content,
+            'excerpt': post.content[:50],
             'link': '\\post\\%s' % post.uuid,
         })
 
@@ -213,13 +213,9 @@ def post_author(author):
     return render_template('index.html', content=content)
 
 
-# /post/uuid0001
-@post.route('/post/<uuid:uuid>', methods=['GET', ])
 #----------------------------------------------------------------------
-def post_uuid(uuid):
-    """"""
-    post = Post.query.filter_by(uuid=str(uuid), publish=True).first_or_404()
-
+def _render_post(post):
+    """render one post"""
     content = {
         'post': {
             'title': post.title,
@@ -229,7 +225,27 @@ def post_uuid(uuid):
         },
     }
 
+    comment_list = []
+    comments = Comment.query.filter_by(post=post).order_by(desc('create_date')).all()
+    for comment in comments:
+        comment_list.append({
+            'author_name': comment.author_name,
+            'create_date': comment.create_date,
+            'content': comment.content,
+        })
+        print(comment_list)
+    content['comments'] = comment_list
+
     return render_template('post.html', content=content)
+
+
+# /post/uuid0001
+@post.route('/post/<uuid:uuid>', methods=['GET', ])
+#----------------------------------------------------------------------
+def post_uuid(uuid):
+    """"""
+    post = Post.query.filter_by(uuid=str(uuid), publish=True).first_or_404()
+    return _render_post(post)
 
 
 @post.route('/<string:name>', methods=['GET', ])
@@ -238,13 +254,4 @@ def page_name(name):
     """"""
     post = Post.query.filter_by(name=name, publish=True, type='page').first_or_404()
 
-    content = {
-        'post': {
-            'title': post.title,
-            'author': post.creater.name,
-            'create_date': post.create_date,
-            'content': post.content,
-        },
-    }
-
-    return render_template('post.html', content=content)
+    return _render_post(post)

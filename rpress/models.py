@@ -2,11 +2,13 @@
 #coding=utf-8
 
 
+import hashlib
+
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship  #, backref
 
 from rpress.database import db
-from rpress.helpers.uuid1plus import uuid1plus2datetime
+from rpress.helpers.uuid1plus import uuid1, uuid1fromdatetime
 
 
 ########################################################################
@@ -16,8 +18,8 @@ class User(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
 
-    password = Column(String(256))
-    email = Column(String(120), unique=True)
+    _password = Column('password', String(256))
+    email = Column(String, unique=True)
     display = Column(String(50))
 
     def __init__(self, name=None, password=None):
@@ -26,6 +28,22 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.name)
+
+    #----------------------------------------------------------------------
+    def _password_get(self):
+        """"""
+        return self._password
+
+    #----------------------------------------------------------------------
+    def _password_set(self, password):
+        """"""
+        if password is None:
+            self._password = ''
+        else:
+            self._password = hashlib.sha256(password).hexdigest()
+        return
+
+    password = db.synonym("_password", descriptor=property(fget=_password_get, fset=_password_set))
 
 
 ########################################################################
@@ -62,20 +80,28 @@ class Post(db.Model):
                         secondary=post_term_relations,
                         backref="posts")
 
-    title = Column(String(50))
+    title = Column(String)
     content = Column(Text)
 
     #----------------------------------------------------------------------
-    def __init__(self, uuid, creater_id, create_date=None, publish=True, publish_ext='publish', type='blog', name=None, title=None, content=None):
+    def __init__(self, creater, uuid=None, create_date=None, publish=False, publish_ext='draft', type='blog', name=None, title=None, content=None):
         """Constructor"""
-        if create_date is None:
-            create_date = uuid1plus2datetime(uuid)
+        if uuid is None and create_date is None:
+            uuid = uuid1()
+            create_date = uuid.datetime
+
+        elif uuid is not None and create_date is None:
+            create_date = uuid.datetime
+
+        elif uuid is None and create_date is not None:
+            uuid = uuid1fromdatetime(create_date)
 
         self.uuid = str(uuid)
 
-        self.creater_id = creater_id
+        self.creater = creater
+        self.updater = creater
+
         self.create_date = create_date
-        self.updater_id = creater_id
         self.update_date = create_date
 
         self.publish = publish
@@ -106,15 +132,59 @@ class Term(db.Model):
     display = Column(String(50))
 
     #----------------------------------------------------------------------
-    def __init__(self, name, type='tag'):
+    def __init__(self, name, type='tag', display=None):
         """Constructor"""
         self.name = name
         self.type = type
 
-        self.display = name
+        if display is None:
+            self.display = name
+        else:
+            self.display = display
+
         return
 
     #----------------------------------------------------------------------
     def __repr__(self):
         """"""
         return '<Term %r>' % (self.name)
+
+
+########################################################################
+class Comment(db.Model):
+    """"""
+    __tablename__ = 'comments'
+
+    id = Column(Integer, primary_key=True)
+
+    post_id = Column(Integer, ForeignKey('posts.id'))
+    post = relationship('Post', foreign_keys=[post_id])
+
+    author_name = Column(String(50))
+    author_email = Column(String)
+    author_ip = Column(String(19))
+    author_url = Column(String)
+
+    create_date = Column(DateTime)
+    content = Column(Text)
+
+    #----------------------------------------------------------------------
+    def __init__(self, post, author_name, create_date, content, author_email=None, author_ip=None, author_url=None):
+        """Constructor"""
+        self.post = post
+
+        self.author_name = author_name
+        self.author_email = author_email
+        self.author_ip = author_ip
+        self.author_url = author_url
+
+        self.create_date = create_date
+        self.content = content
+        return
+
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        return '<Comment %r>' % (self.author_name)  #!!!
+
+

@@ -6,11 +6,12 @@ from __future__ import print_function, unicode_literals, absolute_import
 
 from sqlalchemy import desc
 import flask
-from flask import request, redirect, url_for, flash
-from flask.ext.login import login_required
+from flask import g, request, redirect, url_for, flash
+from flask.ext.login import login_required, current_user
 
 from rpress import db
 from rpress.helpers.template import render_template
+from rpress.helpers.validate import is_valid_post_type
 from rpress.models import Post, User
 from rpress.forms import PostEditForm
 
@@ -31,12 +32,12 @@ def index():
 #----------------------------------------------------------------------
 def post_list(type):
     """"""
-    if type not in ['blog', 'page']:
+    if not is_valid_post_type(type):
         return  #!!!
 
     posts = Post.query.filter_by(type=type).order_by(desc('create_date')).all()
 
-    return render_template("rpadmin_post_list.html", posts=posts)
+    return render_template("rpadmin_post_list.html", posts=posts, post_type=type)
 
 
 @rpadmin.route('/post/<uuid:uuid>/publish/turn', methods=['GET'])
@@ -78,3 +79,22 @@ def post_edit(uuid):
         pass
 
     return render_template("rpadmin_post_edit.html", uuid=str(uuid), form=form)
+
+
+@rpadmin.route('/post/<string:type>/new', methods=['GET',])
+@login_required
+#----------------------------------------------------------------------
+def post_new(type):
+    """"""
+    if not is_valid_post_type(type):
+        return  #!!!
+
+    user = User.query.filter_by(id=current_user.id).first()
+    if user is None:
+        return  #!!!
+
+    post = Post(user)
+    db.session.add(post)
+    db.session.commit()
+
+    return redirect(url_for('.post_edit', uuid=post.uuid))
