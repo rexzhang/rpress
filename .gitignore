@@ -60,3 +60,4 @@ rpress.wpu
 *.db
 *.css
 *.css.map
+deploy.ini

@@ -12,7 +12,7 @@ SOCKET="$PROJECT_DIR/rPress.sock"
 # remove pidfile
 cd $PROJECT_DIR
 if [ -f $PIDFILE ]; then
-    kill $PIDFILE
+    kill `cat $PIDFILE`
     rm -f -- $PIDFILE
 fi
 
