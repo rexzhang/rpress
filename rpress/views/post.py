@@ -81,7 +81,7 @@ def _post_roll(posts):
             'author': post.creater.name,
             'create_date': post.create_date,
             'excerpt': post.content[:50],
-            'link': '\\post\\%s' % post.uuid,
+            'link': url_for('post.post_uuid', uuid=post.uuid),
         })
 
     return post_roll
@@ -96,7 +96,7 @@ def _sidebar():
         categories.append({
             'display': term.display,
             'desc': term.name,
-            'link': '\\category\\%s' % term.name,
+            'link': url_for('post.post_term_category', term=term.name),
         })
 
     tags = []
@@ -105,7 +105,7 @@ def _sidebar():
         tags.append({
             'display': term.display,
             'desc': term.name,
-            'link': '\\tag\\%s' % term.name,
+            'link': url_for('post.post_term_tag', term=term.name),
         })
 
     widgets = {
@@ -129,7 +129,7 @@ def _widget_date_year():
         if year not in date_years:
             date_years[year] = {
                 'display': str(year),
-                'link': '\\date\\%d' % year,
+                'link':  url_for('post.post_date', year=year),
                 'count': 1,
             }
 
@@ -174,13 +174,9 @@ def post_date(year):
     return render_template('index.html', content=content)
 
 
-@post.route('/category/<string:term>', methods=['GET'])
-@post.route('/tag/<string:term>', methods=['GET'])
 #----------------------------------------------------------------------
 def post_term(term):
     """"""
-    #posts = Post.query.join(Post.terms).filter(Term.name==term).all()
-    #posts = Post.query.filter(Post.terms.any(Term.name==term)).all()
     posts = Post.query.filter_by(type='blog', publish=True).filter(Post.terms.any(Term.name==term)).order_by(desc('create_date')).all()
     #
     post_roll = _post_roll(posts)
@@ -193,6 +189,20 @@ def post_term(term):
     }
 
     return render_template('index.html', content=content)
+
+
+@post.route('/category/<string:term>', methods=['GET'])
+#----------------------------------------------------------------------
+def post_term_category(term):
+    """"""
+    return post_term(term)
+
+
+@post.route('/tag/<string:term>', methods=['GET'])
+#----------------------------------------------------------------------
+def post_term_tag(term):
+    """"""
+    return post_term(term)
 
 
 @post.route('/author/<string:author>', methods=['GET'])

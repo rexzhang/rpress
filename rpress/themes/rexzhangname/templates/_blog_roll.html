@@ -10,7 +10,7 @@
           <em>
             <span>by</span>
             <span class="stress">
-              <a rel="author" title="由{{ post.author }}发布" href="/author/{{ post.author }}">{{ post.author }}</a>
+              <a rel="author" title="由{{ post.author }}发布" href="{{ url_for('post.post_author', author=post.author) }}">{{ post.author }}</a>
             </span>
             <span>on</span>
             <span class="stress" title="{{ post.create_date }}">{{ post.create_date|datetime_short }}</span> ·
