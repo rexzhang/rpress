@@ -8,13 +8,10 @@ import logging
 from flask import Flask
 from flask.ext.themes2 import Themes
 
-
 from rpress import db
 from rpress import login_manager
-from rpress.configs import ConfigDev
+from rpress.configs import ConfigDev, ConfigRelease
 
-
-#from rpress.helpers import RegexConverter
 from rpress.views import permission as permission_view
 from rpress.views import rpadmin as rpadmin_view
 from rpress.views import post as post_view
@@ -55,7 +52,7 @@ def configure_app(app, config):
     if config is not None:
         app.config.from_object(config)
     else:
-        app.config.from_object(ConfigDev)
+        app.config.from_object(ConfigDev())
 
     #app.config.from_envvar('APP_CONFIG',silent=True)
     return

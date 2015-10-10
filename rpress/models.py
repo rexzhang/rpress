@@ -19,7 +19,7 @@ class User(db.Model):
     name = Column(String(50), unique=True)
 
     _password = Column('password', String(256))
-    email = Column(String, unique=True)
+    email = Column(String(32), unique=True)
     display = Column(String(50))
 
     def __init__(self, name=None, password=None):
@@ -80,7 +80,7 @@ class Post(db.Model):
                         secondary=post_term_relations,
                         backref="posts")
 
-    title = Column(String)
+    title = Column(String(128))
     content = Column(Text)
 
     #----------------------------------------------------------------------
@@ -161,9 +161,9 @@ class Comment(db.Model):
     post = relationship('Post', foreign_keys=[post_id])
 
     author_name = Column(String(50))
-    author_email = Column(String)
+    author_email = Column(String(32))
     author_ip = Column(String(19))
-    author_url = Column(String)
+    author_url = Column(Text)
 
     create_date = Column(DateTime)
     content = Column(Text)

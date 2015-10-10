@@ -5,3 +5,5 @@ Flask-Themes2
 Flask-WTF
 Flask-Login
 feedparser
+gunicorn
+PyMySQL

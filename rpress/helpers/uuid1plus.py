@@ -61,7 +61,7 @@ def uuid1(node=None, clock_seq=None):
     if _uuid_generate_time and node is clock_seq is None:
         _buffer = ctypes.create_string_buffer(16)
         _uuid_generate_time(_buffer)
-        return UUID(bytes=_buffer.raw)
+        return UUID1Plus(bytes=_buffer.raw)
 
     unix_timestamp = time.time()
     return _unix_timestamp_to_uuid1(unix_timestamp, node, clock_seq)
