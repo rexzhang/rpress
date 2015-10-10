@@ -13,7 +13,7 @@ from rpress import db
 from rpress.helpers.template import render_template
 from rpress.helpers.validate import is_valid_post_type
 from rpress.models import Post, User
-from rpress.forms import PostEditForm
+from rpress.forms import PostEditForm, ProfilesForm, PasswordForm
 
 
 rpadmin = flask.Blueprint('rpadmin', __name__)
@@ -24,7 +24,7 @@ rpadmin = flask.Blueprint('rpadmin', __name__)
 #----------------------------------------------------------------------
 def index():
     """"""
-    return render_template("rpadmin_index.html")
+    return render_template("/rpadmin/index.html")
 
 
 @rpadmin.route('/post/<string:type>/list', methods=['GET'])
@@ -37,7 +37,7 @@ def post_list(type):
 
     posts = Post.query.filter_by(type=type).order_by(desc('create_date')).all()
 
-    return render_template("rpadmin_post_list.html", posts=posts, post_type=type)
+    return render_template("/rpadmin/post_list.html", posts=posts, post_type=type)
 
 
 @rpadmin.route('/post/<uuid:uuid>/publish/turn', methods=['GET'])
@@ -73,12 +73,13 @@ def post_edit(uuid):
         db.session.add(post)
         db.session.commit()
 
-        #flash(_("Posting success"), "success")
+        flash("post updated", "success")
         #return redirect(url_for('.blog'))
     else:
+        flash('post edit error')
         pass
 
-    return render_template("rpadmin_post_edit.html", uuid=str(uuid), form=form)
+    return render_template("/rpadmin/post_edit.html", uuid=str(uuid), form=form)
 
 
 @rpadmin.route('/post/<string:type>/new', methods=['GET',])
@@ -98,3 +99,53 @@ def post_new(type):
     db.session.commit()
 
     return redirect(url_for('.post_edit', uuid=post.uuid))
+
+
+@rpadmin.route('/profiles', methods=['GET', 'POST'])
+@login_required
+#----------------------------------------------------------------------
+def profiles():
+    """"""
+    user = User.query.filter_by(id=current_user.id).first()
+    if user is None:
+        return  #!!!
+    form = ProfilesForm(obj=user)
+
+    if form.validate_on_submit():
+        form.populate_obj(user)
+        db.session.add(user)
+        db.session.commit()
+    else:
+        pass  #!!!
+
+    return render_template('rpadmin/profiles.html', form=form)
+
+
+@rpadmin.route('/profiles/password', methods=['GET', 'POST'])
+@login_required
+#----------------------------------------------------------------------
+def profiles_password():
+    """"""
+    user = User.query.filter_by(id=current_user.id).first()
+    if user is None:
+        return  #!!!
+
+    form = PasswordForm()
+
+    if form.validate_on_submit():
+        if user.password_validate(form.data['password_old']):
+            user.password = form.data['password_new']
+
+            db.session.add(user)
+            db.session.commit()
+
+            flash('password is changed!')
+            return redirect(url_for('rpadmin.profiles'))
+
+        else:
+            flash("old password is NOT correct")
+
+    else:
+        pass  #!!!
+
+    return render_template('rpadmin/profiles_password.html', form=form)

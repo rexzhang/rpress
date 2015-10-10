@@ -1,0 +1,16 @@
+{% extends theme('/rpadmin/layout.html') %}
+
+{% block content %}
+<a href="{{ url_for('rpadmin.profiles_password') }}">Change Password</a>
+<hr>
+<form method="POST" action="{{ url_for('rpadmin.profiles') }}">
+  {{ form.csrf_token }}
+  <div>
+    {{ form.email.label }}: {{ form.email }}
+  </div>
+  <div>
+    {{ form.display.label }}: {{ form.display }}
+  </div>
+  {{ form.submit }}
+  </form>
+{% endblock %}

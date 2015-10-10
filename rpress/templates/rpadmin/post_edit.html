@@ -1,6 +1,6 @@
-{% extends theme('rpadmin_layout.html') %}
+{% extends theme('/rpadmin/layout.html') %}
 {% block content %}
-<form method="POST" action="/rpadmin/post/{{ uuid }}/edit">
+<form method="POST" action="{{ url_for('rpadmin.post_edit', uuid=uuid) }}">
   {{ form.csrf_token }}
   <div>
     {{ form.title.label }}: {{ form.title }}

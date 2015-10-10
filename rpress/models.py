@@ -43,6 +43,14 @@ class User(db.Model):
             self._password = hashlib.sha256(password).hexdigest()
         return
 
+    #----------------------------------------------------------------------
+    def password_validate(self, password=None):
+        """check user's password"""
+        if password is not None and hashlib.sha256(password).hexdigest() == self._password:
+            return True
+
+        return False
+
     password = db.synonym("_password", descriptor=property(fget=_password_get, fset=_password_set))
 
 
@@ -75,7 +83,7 @@ class Post(db.Model):
     allow_comment = Column(Boolean, default=True)
 
     type = Column(String(4), default='blog')  #blog/page
-    name = Column(String(50))
+    name = Column(String(128))
     terms = relationship("Term",
                         secondary=post_term_relations,
                         backref="posts")

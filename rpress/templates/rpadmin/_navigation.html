@@ -1,0 +1,9 @@
+<div>
+  <ul class="=nav nav-tabs">
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('rpadmin.profiles') }}">Profiles</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('rpadmin.post_list', type='blog') }}">Blogs</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('rpadmin.post_list', type='page') }}">Pages</a></li>
+    <li class="nav-item"><a class="nav-link" href="/rpadmin/term/list">Terms</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('permission.logout') }}">Logout</a></li>
+  </ul>
+</div>
