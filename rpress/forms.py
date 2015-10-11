@@ -34,3 +34,11 @@ class PasswordForm(Form):
     password_old = StringField(u'当前密码')
     password_new = StringField(u'新密码')
     submit = SubmitField("submit")
+
+
+########################################################################
+class SiteForm(Form):
+    """"""
+    title = StringField(u'站点名称')
+    desc = StringField(u'站点描述')
+    submit = SubmitField("submit")

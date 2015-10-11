@@ -1,4 +1,4 @@
-{% extends theme('theme_layout.html') %}
+{% extends theme('layout.html') %}
 {% block head %}{{ super() }}{% endblock %}
 
 {% block carousel %}
@@ -16,7 +16,7 @@
         <em>
           <span>by</span>
           <span class="stress">
-            <a rel="author" title="由{{ content.post.author }}发布" href="/author/{{ content.post.author }}">{{ content.post.author }}</a>
+            <a rel="author" title="由{{ content.post.author }}发布" href="{{ url_for('post.post_author', author=content.post.author) }}">{{ content.post.author }}</a>
           </span>
           <span>on</span>
           <span class="stress" title="{{ content.post.create_date }}">{{ content.post.create_date|datetime_short }}</span> ·

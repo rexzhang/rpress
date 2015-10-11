@@ -1,10 +1,10 @@
-{% extends theme('layout.html') %}
+{% extends theme('layout_base.html') %}
 
 {% block head %}{{ super() }}
 <link rel=stylesheet type=text/css href="{{ theme_static('style.css') }}">
 {% endblock %}
 
-{% block title %}Wellcome - rPress{% endblock %}
+{% block title %}Wellcome | {{ site.title }}{% endblock %}
 
 {% block body %}
   <div class="container">

@@ -196,3 +196,27 @@ class Comment(db.Model):
         return '<Comment %r>' % (self.author_name)  #!!!
 
 
+########################################################################
+class Site(db.Model):
+    """"""
+    __tablename__ = 'sites'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+
+    title = Column(String(50))
+    desc = Column(String(128))
+
+    #----------------------------------------------------------------------
+    def __init__(self, name, title, desc=None):
+        """Constructor"""
+        self.name = name
+
+        self.title = title
+        self.desc = desc
+        return
+
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        return '<Site %r>' % (self.title)

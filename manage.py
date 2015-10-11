@@ -22,15 +22,17 @@ manager = Manager(create_app())
 @manager.command
 def init_db(defaultdate=False):
     """不能正常工作，可能是当前缺少 model 关联操作"""
-    from datetime import datetime
 ##    app.request_context()
 ##    with app.app_context():
-    from rpress.models import User, Post
+    from rpress.models import User, Site, Post
 
     db.create_all()
 
     user = User(name='rex', password='rexzhang')
     db.session.add(user)
+
+    site = Site(name='rexzhangname', title='Rex.Zhang.name', desc='从记录到不仅仅是记录')
+    db.session.add(site)
 
     post = Post(creater=user, publish=True, publish_ext='publish', title=u'这是第一篇博客', content=u'我是博客内容')
     db.session.add(post)

@@ -1,15 +1,15 @@
-{% extends theme('layout.html') %}
+{% extends theme('layout_base.html') %}
 
 {% block head %}{{ super() }}
 <link rel=stylesheet type=text/css href="{{ theme_static('style.css') }}">
 {% endblock %}
 
-{% block title %}admin - rPress{% endblock %}
+{% block title %}{{ site.title }} | rPress{% endblock %}
 
 {% block body %}
 <div class="container-fluid">
 {% block header %}
-  <div><h1>rPress</h1></div>
+  <div><h2><a href="/">{{ site.title }}</a> - rPress Admin</h2></div>
 {% endblock %}
 
 {% block navigation %}{% include theme('/rpadmin/_navigation.html') %}{% endblock %}

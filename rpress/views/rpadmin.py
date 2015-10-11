@@ -12,8 +12,8 @@ from flask.ext.login import login_required, current_user
 from rpress import db
 from rpress.helpers.template import render_template
 from rpress.helpers.validate import is_valid_post_type
-from rpress.models import Post, User
-from rpress.forms import PostEditForm, ProfilesForm, PasswordForm
+from rpress.models import User, Site, Post
+from rpress.forms import PostEditForm, ProfilesForm, PasswordForm, SiteForm
 
 
 rpadmin = flask.Blueprint('rpadmin', __name__)
@@ -149,3 +149,24 @@ def profiles_password():
         pass  #!!!
 
     return render_template('rpadmin/profiles_password.html', form=form)
+
+
+@rpadmin.route('/site', methods=['GET', 'POST'])
+@login_required
+#----------------------------------------------------------------------
+def site():
+    """"""
+    site = Site.query.filter_by(id=1).first()
+    if site is None:
+        return
+
+    form = SiteForm(obj=site)
+
+    if form.validate_on_submit():
+        form.populate_obj(site)
+        db.session.add(site)
+        db.session.commit()
+    else:
+        pass  #!!!
+
+    return render_template('rpadmin/site.html', form=form)
