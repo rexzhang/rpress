@@ -18,9 +18,9 @@ from rpress.helpers.importer import convert_code_tag
 manager = Manager(create_app())
 
 
+@manager.option('-d', '--init_default_date', default=False)
 #----------------------------------------------------------------------
-@manager.command
-def init_db(defaultdate=False):
+def init_db(init_default_date):
     """不能正常工作，可能是当前缺少 model 关联操作"""
 ##    app.request_context()
 ##    with app.app_context():
@@ -28,7 +28,7 @@ def init_db(defaultdate=False):
 
     db.create_all()
 
-    if defaultdate:
+    if init_default_date:
         user = User(name='rex', password='rexzhang')
         db.session.add(user)
 
