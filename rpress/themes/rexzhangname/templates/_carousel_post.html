@@ -1,0 +1,3 @@
+{% set photo_num=[1,2,3,4,5]|random %}
+{% set photo_url='img/photoshow%02d.jpg'|format(photo_num) %}
+<img src="{{ theme_static(photo_url) }}" width="100%">

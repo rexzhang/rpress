@@ -1,6 +1,6 @@
 {#
 <div id="recent-comment" class="widget">
-  <h3>近期评论</h3>
+  <h4>近期评论</h4>
   <div>
     <ul>
       <li>
@@ -27,7 +27,7 @@
 #}
 
 <div id=tags class="widget">
-  <h3>标签</h3>
+  <h4>标签</h4>
   <div>
     {% for tag in content.widgets.tags %}
     <a style="font-size: 8pt;" title="{{ tag.desc }}" href="{{ tag.link }}">{{ tag.display }}</a>
@@ -36,7 +36,7 @@
 </div>
 
 <div id=category class="widget">
-  <h3>分类</h3>
+  <h4>分类</h4>
   <div>
     <ul>
       {% for category in content.widgets.categories %}
@@ -47,7 +47,7 @@
 </div>
 
 <div id=function class="widget">
-  <h3>功能</h3>
+  <h4>功能</h4>
   <div>
     <ul>
       <li>
@@ -61,7 +61,7 @@
 </div>
 
 <div id=accccc class="widget">
-  <h3>归档</h3>
+  <h4>归档</h4>
   <div>
     <ul>
     {% for _, year in content.widgets.date_years|dictsort|reverse %}

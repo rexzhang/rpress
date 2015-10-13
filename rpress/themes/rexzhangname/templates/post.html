@@ -2,37 +2,29 @@
 {% block head %}{{ super() }}{% endblock %}
 
 {% block carousel %}
-{% include theme('_carousel.html') %}
+{% include theme('_carousel_post.html') %}
 {% endblock %}
 
 {% block content %}
-<div class="post-summary-box">
-  <div class="post-summary-content">
-    <div class="post-title-box">
-      <div class="post-title">
-        <h2>{{ content.post.title }}</h2>
+{% set post=content.post %}
+<div id="post">
+  <div class="post-summary-box">
+    <div class="post-summary-content">
+      <div class="post-title-box">
+        <div class="post-title">
+          <h2>{{ post.title }}</h2>
+        </div>
+        {% include theme('_post_metabar.html') %}
+        <div class="post-content">{{ post.content|codeblock|safe }}</div>
       </div>
-      <div class="post-metabar">
-        <em>
-          <span>by</span>
-          <span class="stress">
-            <a rel="author" title="由{{ content.post.author }}发布" href="{{ url_for('post.post_author', author=content.post.author) }}">{{ content.post.author }}</a>
-          </span>
-          <span>on</span>
-          <span class="stress" title="{{ content.post.create_date }}">{{ content.post.create_date|datetime2str_short }}</span> ·
-          <span class="stress">
-            <a href="http://rex.zhang.name/2014/11/987/#comments">Leave a Comment</a>
-          </span>
-        </em>
-      </div>
-      <div class="post-content">{{ content.post.content|codeblock|safe }}</div>
     </div>
   </div>
-</div>
-<div>
-  {% for comment in content.comments %}
-  <div>{{ comment.author_name }}</div>
-  <div>{{ comment.content|safe }}</div>
-  {% endfor %}
+
+  <div>
+    {% for comment in content.comments %}
+    <div>{{ comment.author_name }}</div>
+    <div>{{ comment.content|safe }}</div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

@@ -8,14 +8,14 @@
 {% block title %}Wellcome | {{ site.title }}{% endblock %}
 
 {% block body %}
-  <div class="container">
-  {% block header %}{% include theme('_header.html') %}{% endblock %}
+<div class="container padding0">
+  <div id="header" class="container padding0">{% block header %}{% include theme('_header.html') %}{% endblock %}</div>
 
-  {% block navigation %}{% include theme('_navigation.html') %}{% endblock %}
+  <div id="navigation" class="container padding0">{% block navigation %}{% include theme('_navigation.html') %}{% endblock %}</div>
 
-  {% block carousel %}{% endblock %}
+  <div class="container padding0">{% block carousel %}{% endblock %}</div>
 
-  {% block content %}{% endblock %}
-  </div>
-  {% block footer %}{% include theme('_footer.html') %}{% endblock %}
+  <div id="content" class="container padding0">{% block content %}{% endblock %}</div>
+</div>
+{% block footer %}{% include theme('_footer.html') %}{% endblock %}
 {% endblock %}

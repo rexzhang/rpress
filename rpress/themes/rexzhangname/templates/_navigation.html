@@ -1,5 +1,5 @@
-<div id="navigation" class="container">
-  <ul class="nav-mainmenu">
+<div class="row margin0">
+  <ul class="nav-mainmenu col-sm-9">
     <li>
       <a href="/about">About</a>
     </li>
@@ -7,10 +7,15 @@
       <a href="/guestbook">GuestBook</a>
     </li>
   </ul>
-  <form class="searchform" onsubmit="this.submit();return false;" action="http://rex.zhang.name/" method="get">
+  <form class="searchform col-sm-3 padding0" onsubmit="this.submit();return false;" action="http://rex.zhang.name/" method="get">
     <fieldset>
-      <input class="searchfield" type="text" onblur="if (this.value == '') {this.value = 'Search';}" onfocus="if (this.value == 'Search') {this.value = '';}" name="s" value="Search">
-      <input class="submit btn" type="image" alt="Go" src="http://rex.zhang.name/wp-content/themes/platform/images/search-btn.png" name="submit">
+    <div class="input-group" width="100px">
+      <input type="text" class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+    </div>
+    {#<span class="glyphicon glyphicon-search" aria-hidden="true"></span>#}
     </fieldset>
   </form>
 </div>

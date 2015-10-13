@@ -8,12 +8,27 @@ $color-silver: #E9E9E9;
 $color-gray: #AFAFAF;
 $color-black: #000000;
 
-$base-page-blank-width: 16px;
+$base-page-blank-width: 1em;
 
 .font-common {
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
+}
+
+.area-common {
+    padding-top: $base-page-blank-width * 1.75;
+    padding-bottom: $base-page-blank-width * 1.75;
+    padding-left: $base-page-blank-width;
+    padding-right: $base-page-blank-width;
+}
+
+.margin0 {
+    margin: 0;
+}
+
+.padding0 {
+    padding: 0;
 }
 
 .underline-box {
@@ -24,12 +39,18 @@ $base-page-blank-width: 16px;
 //------------------------------------------------------
 body {
     font: 100% $font-family-major;
-    border: 0 none;
     margin: 0;
+    border: 0 none;
     outline: 0 none;
     padding: 0;
 }
 
+//h1 site title
+//h2 post title
+//h3 post@rollcell title
+//h4 widget title/footer widget title
+//h5 sub-title
+//h6 site desc
 h1, h2, h3, h4, h5, h6 {
     font-family: Georgia, "Times New Roman", Times, serif;
 
@@ -46,10 +67,9 @@ h1, h2, h3, h4, h5, h6 {
 //------------------------------------------------------
 // header
 #header {
-    padding-top: 25px;
-    padding-bottom: 25px;
-    padding-left: $base-page-blank-width + 15px;
-    padding-right: $base-page-blank-width;
+    @extend .area-common;
+
+    padding-bottom: 0px;
 }
 
 .site-title {
@@ -86,8 +106,8 @@ h1, h2, h3, h4, h5, h6 {
 //------------------------------------------------------
 // navigation
 #navigation {
-    padding-left: $base-page-blank-width;
-    padding-right: $base-page-blank-width;
+    //padding-left: 0px;
+    padding-right: 0px;
 }
 
 .nav-box-common {
@@ -141,55 +161,55 @@ h1, h2, h3, h4, h5, h6 {
 
 //------------------------------------------------------
 // post
-#post-roll {
-    padding-top: 28px;
-    padding-bottom: 0px;
-    padding-left: $base-page-blank-width + 15px;
-    padding-right: 30px;
-}
+#post {
+    @extend .area-common;
 
-.post-summary-box {
-    margin-bottom: 22.4px;
-    padding-bottom: 20px;
+    .post-summary-box {
+        margin-bottom: 22.4px;
+        padding-bottom: 20px;
 
-    @extend .underline-box;
-}
-
-.post-summary-content {}
-
-.post-title {
-    h2 {
-        margin-bottom: 0px;
+        @extend .underline-box;
     }
 
-    a {
-        color: $color-black;
-    }
-}
+    .post-summary-content {}
 
-.post-metabar {
-    font-family: $font-family-second;
-    font-size: 0.8em;
-    color: $color-silver;
-    letter-spacing: 0.1em;
+    .post-title {
+        h2 {
+            margin-bottom: 0px;
+        }
 
-    em {
-        font-style: normal;
-    }
+        h3 {}
 
-    .stress {
-        color: $color-gray;
-        text-transform: uppercase;
+        a {
+            color: $color-black;
+        }
     }
 
-    a {
-        color: $color-gray;
-    }
-}
+    .post-metabar {
+        font-family: $font-family-second;
+        font-size: 0.8em;
+        color: $color-silver;
+        letter-spacing: 0.1em;
 
-.post-excerpt {
-    margin-top: 15.4px;
-    margin-bottom: 15.4px;
+        em {
+            font-style: normal;
+        }
+
+        .stress {
+            color: $color-gray;
+            text-transform: uppercase;
+        }
+
+        a {
+            color: $color-gray;
+        }
+    }
+
+    .post-excerpt, .post-content {
+        margin-top: 1em;
+        margin-bottom: 1em;
+        line-height: 1.6em;
+    }
 }
 
 //------------------------------------------------------
@@ -200,16 +220,13 @@ h1, h2, h3, h4, h5, h6 {
 //------------------------------------------------------
 // sidebar
 #sidebar {
-    padding-top: 28px;
-    padding-bottom: 28px;
-    padding-left: 9.8px;
-    padding-right: $base-page-blank-width + 9.8px;
+    @extend .area-common;
 }
 
 .widget {
     margin-bottom: 14px;
 
-    h3 {
+    h4 {
         font-family: $font-family-second;
         font-size: .9em;
         color: $color-gray;
