@@ -28,15 +28,16 @@ def init_db(defaultdate=False):
 
     db.create_all()
 
-    user = User(name='rex', password='rexzhang')
-    db.session.add(user)
+    if defaultdate:
+        user = User(name='rex', password='rexzhang')
+        db.session.add(user)
 
-    site = Site(name='rexzhangname', title='Rex.Zhang.name', desc='从记录到不仅仅是记录')
-    db.session.add(site)
+        site = Site(name='rexzhangname', title='Rex.Zhang.name', desc='从记录到不仅仅是记录')
+        db.session.add(site)
 
-    post = Post(creater=user, publish=True, publish_ext='publish', title=u'这是第一篇博客', content=u'我是博客内容')
-    db.session.add(post)
-    db.session.commit()
+        post = Post(creater=user, publish=True, publish_ext='publish', title=u'这是第一篇博客', content=u'我是博客内容')
+        db.session.add(post)
+        db.session.commit()
 
     return
 
