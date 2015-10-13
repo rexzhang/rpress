@@ -19,7 +19,7 @@
             <a rel="author" title="由{{ content.post.author }}发布" href="{{ url_for('post.post_author', author=content.post.author) }}">{{ content.post.author }}</a>
           </span>
           <span>on</span>
-          <span class="stress" title="{{ content.post.create_date }}">{{ content.post.create_date|datetime_short }}</span> ·
+          <span class="stress" title="{{ content.post.create_date }}">{{ content.post.create_date|datetime2str_short }}</span> ·
           <span class="stress">
             <a href="http://rex.zhang.name/2014/11/987/#comments">Leave a Comment</a>
           </span>

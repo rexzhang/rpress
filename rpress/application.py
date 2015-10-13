@@ -10,6 +10,7 @@ from flask.ext.themes2 import Themes
 
 from rpress import db
 from rpress import login_manager
+from rpress.helpers.template.filter import configure_filter
 from rpress.configs import ConfigDev, ConfigRelease
 
 from rpress.views import permission as permission_view
@@ -68,34 +69,6 @@ def configure_db(app):
 def configure_theme(app):
     """"""
     Themes(app, app_identifier='rpress')
-    return
-
-
-import re
-_code_block_begin_re = '\[code:[a-z]+\]\n'
-_code_block_begin_html = '<pre><code>\n'
-_code_block_end_re = '\n\[/code\]'
-_code_block_end_html = '\n</code></pre>'
-#----------------------------------------------------------------------
-def configure_filter(app):
-    """"""
-    @app.template_filter('datetime_short')
-    def filter_datatime_short(string):
-        return string.strftime(format="%Y-%m-%d")
-
-    @app.template_filter('codeblock')
-    def filter_codeblock(string):
-        begin_amount = len(re.findall(_code_block_begin_re, string))
-        en_amount = len(re.findall(_code_block_end_re, string))
-
-        string = re.sub(_code_block_begin_re, _code_block_begin_html, string)
-        string = re.sub(_code_block_end_re, _code_block_end_html, string)
-
-        if begin_amount > en_amount:
-            for x in xrange(begin_amount - en_amount):
-                string += _code_block_end_html
-        return string
-
     return
 
 

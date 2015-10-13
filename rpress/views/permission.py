@@ -8,7 +8,7 @@ import flask
 from flask import request, redirect, url_for, flash
 from flask.ext.login import login_required
 
-from rpress.helpers.template import render_template
+from rpress.helpers.template.common import render_template
 from rpress.permission import login_user, logout_user
 from rpress.forms import LoginForm
 

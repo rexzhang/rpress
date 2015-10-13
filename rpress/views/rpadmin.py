@@ -10,7 +10,7 @@ from flask import g, request, redirect, url_for, flash
 from flask.ext.login import login_required, current_user
 
 from rpress import db
-from rpress.helpers.template import render_template
+from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
 from rpress.models import User, Site, Post
 from rpress.forms import PostEditForm, ProfilesForm, PasswordForm, SiteForm

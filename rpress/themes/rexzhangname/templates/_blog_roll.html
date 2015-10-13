@@ -13,7 +13,7 @@
               <a rel="author" title="由{{ post.author }}发布" href="{{ url_for('post.post_author', author=post.author) }}">{{ post.author }}</a>
             </span>
             <span>on</span>
-            <span class="stress" title="{{ post.create_date }}">{{ post.create_date|datetime_short }}</span> ·
+            <span class="stress" title="{{ post.create_date }}">{{ post.create_date|datetime2str_short }}</span> ·
             <span class="stress">
               <a href="http://rex.zhang.name/2014/11/987/#comments">Leave a Comment</a>
             </span>

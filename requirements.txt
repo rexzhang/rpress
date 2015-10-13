@@ -1,3 +1,5 @@
+gunicorn
+PyMySQL
 Flask==0.10.1
 Flask-Script
 Flask-SQLAlchemy
@@ -5,5 +7,4 @@ Flask-Themes2
 Flask-WTF
 Flask-Login
 feedparser
-gunicorn
-PyMySQL
+Pygments

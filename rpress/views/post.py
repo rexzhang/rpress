@@ -13,7 +13,7 @@ from flask.views import MethodView
 from flask.ext.login import login_required
 
 from rpress import db
-from rpress.helpers.template import render_template
+from rpress.helpers.template.common import render_template
 from rpress.models import Post, User, Term, Comment
 from rpress.permission import login_user, logout_user
 
