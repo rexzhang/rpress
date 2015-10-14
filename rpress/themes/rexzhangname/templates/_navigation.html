@@ -7,15 +7,5 @@
       <a href="/guestbook">GuestBook</a>
     </li>
   </ul>
-  <form class="searchform col-sm-3 padding0" onsubmit="this.submit();return false;" action="http://rex.zhang.name/" method="get">
-    <fieldset>
-    <div class="input-group" width="100px">
-      <input type="text" class="form-control" placeholder="Search for...">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Go!</button>
-      </span>
-    </div>
-    {#<span class="glyphicon glyphicon-search" aria-hidden="true"></span>#}
-    </fieldset>
-  </form>
+  {% include theme('_search_form.html') %}
 </div>

@@ -68,20 +68,29 @@ URL 规则
     * /blog/YYYY/MM/DD/uuid0001 
     * /blog/uuid0001
     * /blog/name
+    * /
+    * /page/1
 
 * page
     * /name - recommend
-    * /page/uuid0001
+    * /uuid0001
 
 * category
     * /category/xxxx
+    * /category/xxxx/page/1
 
 * tag
     * /tag/xxxx
+    * /tag/xxxx/page/1
 
 * archive
     * /date/YYYY/MM
     * /date/YYYY
+    * /date/YYYY/page/1
+
+* author
+	* /author/rex
+	* /author/rex/page/1    
 
 * rPress admin
 	* /rpadmin/xxxx

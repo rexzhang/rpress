@@ -6,6 +6,7 @@ import hashlib
 
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship  #, backref
+from flask.ext.sqlalchemy import BaseQuery
 
 from rpress.database import db
 from rpress.helpers.uuid1plus import uuid1, uuid1fromdatetime
@@ -62,8 +63,30 @@ post_term_relations = db.Table('post_term_relations',
 
 
 ########################################################################
+class PostQuery(BaseQuery):
+    """"""
+    #----------------------------------------------------------------------
+    def search(self, keywords):
+        """"""
+        criteria = []
+
+        for keyword in keywords.split():
+            keyword = '%' + keyword + '%'
+            criteria.append(db.or_(Post.title.ilike(keyword),
+                                   Post.name.ilike(keyword),
+                                   Post.content.ilike(keyword),
+                                   #Post.terms.ilike(keyword)
+                                   ))
+
+        query = reduce(db.and_, criteria)
+        return self.filter(query)
+
+
+########################################################################
 class Post(db.Model):
     """"""
+    query_class = PostQuery
+
     __tablename__ = 'posts'
 
     id = Column(Integer, primary_key=True)

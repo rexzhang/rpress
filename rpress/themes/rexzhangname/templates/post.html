@@ -11,10 +11,12 @@
   <div class="post-summary-box">
     <div class="post-summary-content">
       <div class="post-title-box">
+        {% if post.type=='blog' %}
         <div class="post-title">
           <h2>{{ post.title }}</h2>
         </div>
         {% include theme('_post_metabar.html') %}
+        {% endif %}
         <div class="post-content">{{ post.content|codeblock|safe }}</div>
       </div>
     </div>

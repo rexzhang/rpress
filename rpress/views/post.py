@@ -32,8 +32,8 @@ content = {
     'navigation': {
     },
 
-    'blog_roll': {
-        'blog_roll': [
+    'post_roll': {
+        'post_roll': [
             {
                 'title': 'aaaa',
                 'author': 'bbbb',
@@ -52,6 +52,14 @@ content = {
         'prev_page': 'ppppp',
         'next_page': 'nnnnn',
     },
+
+    'page': {
+        'curr_num': page_num,
+        'view_name': 'post.search',
+
+        'keywords': keywords, #search only
+    }
+
     'post': {
 
     },
@@ -69,22 +77,6 @@ content = {
     },
 }
 """
-
-
-#----------------------------------------------------------------------
-def _post_roll(posts):
-    """internal funtion"""
-    post_roll = []
-    for post in posts:
-        post_roll.append({
-            'title': post.title,
-            'author': post.creater.name,
-            'create_date': post.create_date,
-            'excerpt': post.content[:50],
-            'link': url_for('post.post_uuid', uuid=post.uuid),
-        })
-
-    return post_roll
 
 
 #----------------------------------------------------------------------
@@ -138,89 +130,141 @@ def _widget_date_year():
     return date_years
 
 
-@post.route('/', methods=['GET'])
 #----------------------------------------------------------------------
-def index():
+def _render_post_paginate(query, page):
     """"""
-    posts = Post.query.filter_by(type='blog', publish=True).order_by(desc('create_date')).limit(10)
-    post_roll = _post_roll(posts)
+    post_paginate = query.paginate(page['curr_num'], per_page=10)
+
+    post_roll = []
+    for post in post_paginate.items:
+        post_roll.append({
+            'title': post.title,
+            'author': post.creater.name,
+            'create_date': post.create_date,
+            'excerpt': post.content[:50],
+            'link': url_for('post.post_uuid', uuid=post.uuid),
+        })
+
+    page['has_prev'] = post_paginate.has_prev
+    page['has_next'] = post_paginate.has_next
+    page['prev_num'] = post_paginate.prev_num
+    page['next_num'] = post_paginate.next_num
 
     widgets = _sidebar()
 
     content = {
         'post_roll': post_roll,
+        'page': page,
         'widgets': widgets,
     }
 
-    return render_template('index.html', content=content)
+    return render_template('post_paginate.html', content=content)
+
+
+@post.route('/', methods=['GET'])
+@post.route('/page/<int:page_num>', methods=['GET'])
+#----------------------------------------------------------------------
+def post_page(page_num=1):
+    """"""
+    query = Post.query.filter_by(type='blog', publish=True).order_by(desc('create_date'))
+    page = {
+        'curr_num': page_num,
+        'view_name': 'post.post_page',
+    }
+
+    return _render_post_paginate(query, page)
 
 
 @post.route('/date/<int:year>', methods=['GET'])
+@post.route('/date/<int:year>/page/<int:page_num>', methods=['GET'])
 #----------------------------------------------------------------------
-def post_date(year):
+def post_date(year, page_num=1):
     """"""
-    posts = Post.query.filter_by(type='blog', publish=True) \
-        .filter(Post.create_date>=datetime(year, 1, 1),
-                Post.create_date<datetime(year+1, 1, 1)).order_by(desc('create_date')).all()
-    post_roll = _post_roll(posts)
-
-    widgets = _sidebar()
-
-    content = {
-        'post_roll': post_roll,
-        'widgets': widgets,
+    query = Post.query.filter_by(type='blog', publish=True) \
+        .filter(Post.create_date>=datetime(year, 1, 1), Post.create_date<datetime(year+1, 1, 1)) \
+        .order_by(desc('create_date'))
+    page = {
+        'curr_num': page_num,
+        'view_name': 'post.post_date',
     }
 
-    return render_template('index.html', content=content)
+    return _render_post_paginate(query, page)
 
 
 #----------------------------------------------------------------------
-def post_term(term):
+def post_term(term, page):
     """"""
-    posts = Post.query.filter_by(type='blog', publish=True).filter(Post.terms.any(Term.name==term)).order_by(desc('create_date')).all()
-    #
-    post_roll = _post_roll(posts)
+    query = Post.query.filter_by(type='blog', publish=True).filter(Post.terms.any(Term.name==term)).order_by(desc('create_date'))
 
-    widgets = _sidebar()
-
-    content = {
-        'post_roll': post_roll,
-        'widgets': widgets,
-    }
-
-    return render_template('index.html', content=content)
+    return _render_post_paginate(query, page)
 
 
 @post.route('/category/<string:term>', methods=['GET'])
+@post.route('/category/<string:term>/page/<int:page_num>', methods=['GET'])
 #----------------------------------------------------------------------
-def post_term_category(term):
+def post_term_category(term, page_num=1):
     """"""
-    return post_term(term)
+    page = {
+        'curr_num': page_num,
+        'view_name': 'post.post_term_category',
+    }
+
+    return post_term(term, page)
 
 
 @post.route('/tag/<string:term>', methods=['GET'])
+@post.route('/tag/<string:term>/page/<int:page_num>', methods=['GET'])
 #----------------------------------------------------------------------
-def post_term_tag(term):
+def post_term_tag(term, page_num=1):
     """"""
-    return post_term(term)
+    page = {
+        'curr_num': page_num,
+        'view_name': 'post.post_term_tag',
+    }
+
+    return post_term(term, page)
 
 
 @post.route('/author/<string:author>', methods=['GET'])
+@post.route('/author/<string:author>/page/<int:page_num>', methods=['GET'])
 #----------------------------------------------------------------------
-def post_author(author):
+def post_author(author, page_num=1):
     """"""
-    posts = Post.query.filter_by(type='blog', publish=True).filter(Post.creater.has(User.name==author)).order_by(desc('create_date')).all()
-
-    post_roll = _post_roll(posts)
-
-    widgets = _sidebar()
-
-    content = {
-        'post_roll': post_roll,
-        'widgets': widgets,
+    query = Post.query.filter_by(type='blog', publish=True).filter(Post.creater.has(User.name==author)).order_by(desc('create_date'))
+    page = {
+        'curr_num': page_num,
+        'view_name': 'post.post_author',
     }
 
-    return render_template('index.html', content=content)
+    return _render_post_paginate(query, page)
+
+
+@post.route("/search/")
+@post.route("/search/page/<int:page_num>/")
+#----------------------------------------------------------------------
+def search(page_num=1):
+    """"""
+    keywords = request.args.get('keywords', '').strip(',')
+
+    if not keywords:
+        return redirect(url_for("post.index"))
+
+    post_query = Post.query.search(keywords)  #!!!!当前搜索多个关键字有bug
+
+    if post_query.count() == 1:
+        #only one result
+        posts = post_query.all()
+        post = posts[0]
+        return redirect(url_for('post.post_uuid', uuid=post.uuid))
+
+    page = {
+        'curr_num': page_num,
+        'view_name': 'post.search',
+
+        'keywords': keywords,
+    }
+
+    return _render_post_paginate(post_query, page)
 
 
 #----------------------------------------------------------------------
@@ -229,6 +273,7 @@ def _render_post(post):
     content = {
         'post': {
             'title': post.title,
+            'type': post.type,
             'author': post.creater.name,
             'create_date': post.create_date,
             'content': post.content,
