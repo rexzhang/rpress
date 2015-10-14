@@ -1,4 +1,4 @@
-<form id="searchform" class="searchform col-sm-3 padding0" action="{{ url_for('post.search') }}" method="get">
+<form id="searchform" class="searchform" action="{{ url_for('post.search') }}" method="get">
   <fieldset>
   <div class="input-group">
     <input type="text" class="form-control" name="keywords" value="{{ request.args.get('keywords','') }}" placeholder="Search for...">

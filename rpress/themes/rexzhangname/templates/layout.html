@@ -5,17 +5,18 @@
 <link rel=stylesheet type=text/css href="{{ theme_static('highlight.css') }}">
 {% endblock %}
 
-{% block title %}Wellcome | {{ site.title }}{% endblock %}
+{% block title %} | {{ site.title }}{% endblock %}
 
 {% block body %}
-<div class="container padding0">
+<div class"fill-fullpage-wrapper">
   <div id="header" class="container padding0">{% block header %}{% include theme('_header.html') %}{% endblock %}</div>
 
   <div id="navigation" class="container padding0">{% block navigation %}{% include theme('_navigation.html') %}{% endblock %}</div>
 
-  <div class="container padding0">{% block carousel %}{% endblock %}</div>
+  <div id="carousel" class="container padding0">{% block carousel %}{% endblock %}</div>
 
   <div id="content" class="container padding0">{% block content %}{% endblock %}</div>
 </div>
+
 {% block footer %}{% include theme('_footer.html') %}{% endblock %}
 {% endblock %}

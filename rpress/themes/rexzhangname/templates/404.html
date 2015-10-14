@@ -1,0 +1,14 @@
+{% extends theme('layout.html') %}
+
+{% block title %}404{{ super() }}{% endblock %}
+
+{% block content %}
+<div id="error_handler">
+  <h1>404!</h1>
+  <div>
+    <p>Sorry, This page does not exist.
+      <br>Go <a href="/">Home</a> or try a search?</p>
+  </div>
+  <div class="row"><div class="col-sm-5 col-center">{% include theme('_search_form.html') %}</div></div>
+</div>
+{% endblock %}

@@ -10,6 +10,18 @@ $color-black: #000000;
 
 $base-page-blank-width: 1em;
 
+//for fill full page
+//155px;
+$fill-fullpage-footer-height: 16em;
+
+//for fill full page
+.fill-fullpage-wrapper {
+    min-height: 100%;
+
+    /* the bottom margin is the negative value of the footer's height */
+    margin: 0 auto $fill-fullpage-footer-height;
+}
+
 .font-common {
     font-style: normal;
     font-variant: normal;
@@ -31,23 +43,35 @@ $base-page-blank-width: 1em;
     padding: 0;
 }
 
+.col-center {
+    float: none;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .underline-box {
     border-bottom: 1px solid;
     border-bottom-color: $color-silver;
 }
 
 //------------------------------------------------------
+html, body {
+    //for fill full page
+    height: 100%;
+}
+
 body {
-    font: 100% $font-family-major;
+    //font: 100% $font-family-major;
+    font: 1em $font-family-major;
     margin: 0;
     border: 0 none;
     outline: 0 none;
     padding: 0;
 }
 
-//h1 site title
-//h2 post title
-//h3 post@rollcell title
+//h1 site title, error handler title
+//h2 post title, login etc...function page title
+//h3 post@rollcell title, site title@footer
 //h4 widget title/footer widget title
 //h5 sub-title
 //h6 site desc
@@ -86,7 +110,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     h3 {
-        font-size: 1.0em;
+        font-size: 1em;
         line-height: 1em;
         margin: 0.3em 0 0.15em;
     }
@@ -108,6 +132,8 @@ h1, h2, h3, h4, h5, h6 {
 #navigation {
     //padding-left: 0px;
     padding-right: 0px;
+
+    @extend .underline-box;
 }
 
 .nav-box-common {
@@ -260,7 +286,6 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     li {
-        //font-size: 95%;
         margin-top: 10px;
         margin-bottom: 10px;
     }
@@ -268,6 +293,12 @@ h1, h2, h3, h4, h5, h6 {
 
 //------------------------------------------------------
 // footer
+#footer-header {
+    color: $color-gray;
+    border-color: $color-gray;
+    background-color: $color-silver;
+}
+
 #footer {
     clear: both;
     font-size: 1em;
@@ -275,75 +306,67 @@ h1, h2, h3, h4, h5, h6 {
     text-align: left;
     position: relative;
     background-color: $color-black;
-    color: #999;
+    color: $color-gray;
+
+    //for fill full page
+    height: $fill-fullpage-footer-height;
+
+    h4 {
+        font-family: $font-family-second;
+        font-size: .9em;
+        text-transform: uppercase;
+    }
 
     a {
         color: $color-white;
+        font-size: 0.9em;
+
+        :hover {
+            text-decoration: underline;
+        }
     }
 
     ul {
         padding: 0 5px;
-    }
-
-    li {
-        list-style-type: none;
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        h5 {
-            a {
-                font-size: 1em;
-                color: $color-white;
-            }
-        }
-
-        .link-list {
-            a {}
-        }
-    }
-
-    .content-pad {
-        padding: 20px 0 1em;
-    }
-
-    .widget-title {
-        padding-left: 0;
-        border: 0;
-        margin-bottom: .6em;
-        font-size: .85em;
-        color: $color-white;
-    }
-
-    .findent {
-        padding: 0 5px 0 0;
-    }
-
-    .latest_posts {
-        padding: 0;
 
         li {
-            margin-bottom: .5em;
-
-            .list-excerpt {
-                font-size: .9em;
-                line-height: 1.5em;
-            }
+            list-style-type: none;
         }
     }
-}
 
-.terms {
-    font-size: 0.4em;
+    .terms {
+        font-size: 0.6em;
+    }
 }
 
 //------------------------------------------------------
 // login
 #login {
-    margin-top: 100px;
+    margin-top: 8em;
 
-    h3 {
+    h2 {
+        margin-bottom: 1em;
         text-align: center;
+        color: $color-gray;
+    }
+}
+
+//------------------------------------------------------
+// error handler
+#error_handler {
+    margin-bottom: 9em;
+    padding: 10em;
+    text-align: center;
+    align: center;
+
+    h1 {
+        font-family: $font-family-major;
+        font-size: 7em;
+        color: $color-black;
+    }
+
+    p {
+        margin: 1em;
+        color: $color-gray;
     }
 }

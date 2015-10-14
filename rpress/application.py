@@ -11,6 +11,7 @@ from flask.ext.themes2 import Themes
 from rpress import db
 from rpress import login_manager
 from rpress.helpers.template.filter import configure_filter
+from rpress.helpers.error_handler import configure_error_handler
 from rpress.configs import ConfigDev, ConfigRelease
 
 from rpress.views import permission as permission_view
@@ -31,7 +32,7 @@ REGISTER_BLUE_PRINTS = (
     # add your blue print here
 )
 
-
+from rpress.helpers.template.common import render_template
 def create_app(config=None,app_name=None):
     if app_name is None:
         app_name = DEFAULT_APP_NAME
@@ -41,11 +42,17 @@ def create_app(config=None,app_name=None):
     configure_app(app, config)
     configure_db(app)
     configure_theme(app)
-    configure_filter(app)
     configure_permission(app)
+
+    configure_filter(app)
+    configure_error_handler(app)
 
     configure_blueprints(app)
     #configure_cache(app)
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
     return app
 
 
