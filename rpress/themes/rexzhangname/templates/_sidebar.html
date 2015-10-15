@@ -26,8 +26,8 @@
 </div>
 #}
 
-<div id=tags class="widget">
-  <h4>标签</h4>
+<div id="tags" class="widget">
+  <h4>标签云</h4>
   <div>
     {% for tag in content.widgets.tags %}
     <a style="font-size: 8pt;" title="{{ tag.desc }}" href="{{ tag.link }}">{{ tag.display }}</a>
@@ -35,8 +35,8 @@
   </div>
 </div>
 
-<div id=category class="widget">
-  <h4>分类</h4>
+<div id="category" class="widget">
+  <h4>分类目录</h4>
   <div>
     <ul>
       {% for category in content.widgets.categories %}
@@ -46,6 +46,7 @@
   </div>
 </div>
 
+{#
 <div id=function class="widget">
   <h4>功能</h4>
   <div>
@@ -59,9 +60,10 @@
     </ul>
   </div>
 </div>
+#}
 
-<div id=accccc class="widget">
-  <h4>归档</h4>
+<div id="archive" class="widget">
+  <h4>文章归档</h4>
   <div>
     <ul>
     {% for _, year in content.widgets.date_years|dictsort|reverse %}

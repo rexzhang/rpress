@@ -6,12 +6,12 @@ $font-family-second: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", sans
 $color-white: #FFFFFF;
 $color-silver: #E9E9E9;
 $color-gray: #AFAFAF;
+$color-gray-light: #EFEFEF;
 $color-black: #000000;
 
 $base-page-blank-width: 1em;
 
 //for fill full page
-//155px;
 $fill-fullpage-footer-height: 10em;
 
 //for fill full page
@@ -19,7 +19,7 @@ $fill-fullpage-footer-height: 10em;
     min-height: 100%;
 
     /* the bottom margin is the negative value of the footer's height */
-    margin: 0 auto $fill-fullpage-footer-height;
+    margin: 0 (auto - $fill-fullpage-footer-height);
 }
 
 .font-common {
@@ -61,7 +61,6 @@ html, body {
 }
 
 body {
-    //font: 100% $font-family-major;
     font: 1em $font-family-major;
     margin: 0;
     border: 0 none;
@@ -130,7 +129,6 @@ h1, h2, h3, h4, h5, h6 {
 //------------------------------------------------------
 // navigation
 #navigation {
-    //padding-left: 0px;
     padding-right: 0px;
 
     @extend .underline-box;
@@ -171,7 +169,7 @@ h1, h2, h3, h4, h5, h6 {
     a:hover {
         @extend .nav-box-common;
 
-        color: #111;
+        color: $color-black;
         background: $color-silver;
         text-decoration: none;
     }
@@ -200,11 +198,9 @@ h1, h2, h3, h4, h5, h6 {
     .post-summary-content {}
 
     .post-title {
-        h2 {
-            margin-bottom: 0px;
+        h2, h3 {
+            margin-bottom: 2px;
         }
-
-        h3 {}
 
         a {
             color: $color-black;
@@ -215,7 +211,7 @@ h1, h2, h3, h4, h5, h6 {
         font-family: $font-family-second;
         font-size: 0.8em;
         color: $color-silver;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.15em;
 
         em {
             font-style: normal;
@@ -259,9 +255,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .widget {
-    margin-bottom: 14px;
+    margin-bottom: 1em;
 
     h4 {
+        padding-bottom: 0.5em;
+
+        @extend .underline-box;
+
         font-family: $font-family-second;
         font-size: .9em;
         color: $color-gray;
@@ -271,10 +271,6 @@ h1, h2, h3, h4, h5, h6 {
         letter-spacing: 0.10em;
         text-transform: uppercase;
         text-align: left;
-        padding: 6px 8px 3px 0px;
-        margin-bottom: .6em;
-
-        @extend .underline-box;
     }
 
     ul {
@@ -293,27 +289,28 @@ h1, h2, h3, h4, h5, h6 {
 
 //------------------------------------------------------
 // footer
-#footer-header {
+#one-word {
+    margin: 0px;
+    padding: 0.5em;
     color: $color-gray;
-    border-color: $color-gray;
-    background-color: $color-silver;
+    background-color: $color-gray-light;
+    text-align: center;
+    line-height: 1.8em;
 }
 
 #footer {
-    clear: both;
+    padding-top: 1em;
     font-size: 1em;
-    overflow: hidden;
     text-align: left;
-    position: relative;
-    background-color: $color-black;
     color: $color-gray;
+    background-color: $color-black;
 
     //for fill full page
     height: $fill-fullpage-footer-height;
 
     h4 {
         font-family: $font-family-second;
-        font-size: .9em;
+        font-size: 0.9em;
         text-transform: uppercase;
     }
 
@@ -354,7 +351,7 @@ h1, h2, h3, h4, h5, h6 {
 //------------------------------------------------------
 // error handler
 #error_handler {
-    margin-bottom: 9em;
+    margin-bottom: 2em;
     padding: 10em;
     text-align: center;
     align: center;
