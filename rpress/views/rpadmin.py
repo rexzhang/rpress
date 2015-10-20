@@ -4,6 +4,8 @@
 
 from __future__ import print_function, unicode_literals, absolute_import
 
+import re
+
 from sqlalchemy import desc
 import flask
 from flask import g, request, redirect, url_for, flash
@@ -70,6 +72,8 @@ def post_edit(uuid):
 
     if form.validate_on_submit():
         form.populate_obj(post)
+        post.content = re.sub(r'\r', '\n', re.sub(r'\r\n', '\n', form.data['content']))
+
         db.session.add(post)
         db.session.commit()
 
