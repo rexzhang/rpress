@@ -18,7 +18,7 @@ fi
 
 # start program
 cd $FLASK_DIR
-gunicorn -D -b unix:$SOCKET --pid $PIDFILE --log-level warning --log-file $PROJECT_DIR/log/gunicorn.log 'rpress.manager:create_app()'
+gunicorn -D -b unix:$SOCKET --pid $PIDFILE --log-level warning --log-file $PROJECT_DIR/log/gunicorn.log 'rpress:create_app(config_name="release")'
 chmod 777 $SOCKET
 
 #deactivate virtualenv

@@ -2,6 +2,8 @@
 #coding=utf-8
 
 
+from __future__ import print_function, unicode_literals, absolute_import
+
 import os
 import logging
 
@@ -12,7 +14,7 @@ from rpress import db
 from rpress import login_manager
 from rpress.helpers.template.filter import configure_filter
 from rpress.helpers.error_handler import configure_error_handler
-from rpress.configs import ConfigDev, ConfigRelease
+from rpress.configs import get_config_obj
 
 from rpress.views import permission as permission_view
 from rpress.views import rpadmin as rpadmin_view
@@ -33,13 +35,13 @@ REGISTER_BLUE_PRINTS = (
 )
 
 from rpress.helpers.template.common import render_template
-def create_app(config=None,app_name=None):
+def create_app(config_name=None,app_name=None):
     if app_name is None:
         app_name = DEFAULT_APP_NAME
 
     app = Flask(app_name)
 
-    configure_app(app, config)
+    configure_app(app, config_name)
     configure_db(app)
     configure_theme(app)
     configure_permission(app)
@@ -56,11 +58,8 @@ def create_app(config=None,app_name=None):
     return app
 
 
-def configure_app(app, config):
-    if config is not None:
-        app.config.from_object(config)
-    else:
-        app.config.from_object(ConfigDev())
+def configure_app(app, config_name):
+    app.config.from_object(get_config_obj(config_name))
 
     #app.config.from_envvar('APP_CONFIG',silent=True)
     return
