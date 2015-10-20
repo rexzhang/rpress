@@ -10,7 +10,6 @@ from sqlalchemy import desc, asc, func, extract
 import flask
 from flask import request, redirect, url_for, flash, abort
 from flask.views import MethodView
-from flask.ext.login import login_required
 
 from rpress import db
 from rpress.helpers.template.common import render_template
@@ -131,19 +130,28 @@ def _widget_date_year():
 
 
 #----------------------------------------------------------------------
+def _make_post_info(post):
+    """"""
+    return {
+        'title': post.title,
+        'uuid': post.uuid,
+        'type': post.type,
+        'author': post.creater.name,
+        'author_id': post.creater.id,
+        'create_date': post.create_date,
+        'excerpt': post.content[:50],
+        'content': post.content,
+        'link': url_for('post.post_uuid', uuid=post.uuid),
+    }
+
+#----------------------------------------------------------------------
 def _render_post_paginate(query, page):
     """"""
     post_paginate = query.paginate(page['curr_num'], per_page=10)
 
     post_roll = []
     for post in post_paginate.items:
-        post_roll.append({
-            'title': post.title,
-            'author': post.creater.name,
-            'create_date': post.create_date,
-            'excerpt': post.content[:50],
-            'link': url_for('post.post_uuid', uuid=post.uuid),
-        })
+        post_roll.append(_make_post_info(post))
 
     page['has_prev'] = post_paginate.has_prev
     page['has_next'] = post_paginate.has_next
@@ -168,6 +176,7 @@ def post_page(page_num=1):
     """"""
     query = Post.query.filter_by(type='blog', publish=True).order_by(desc('create_date'))
     page = {
+        'title': 'Home',  #!!!需要改为站点相关信息
         'curr_num': page_num,
         'view_name': 'post.post_page',
     }
@@ -184,6 +193,9 @@ def post_date(year, page_num=1):
         .filter(Post.create_date>=datetime(year, 1, 1), Post.create_date<datetime(year+1, 1, 1)) \
         .order_by(desc('create_date'))
     page = {
+        'title': year,
+        'key': year,
+        'desc': 'Viewing the date archives',
         'curr_num': page_num,
         'view_name': 'post.post_date',
     }
@@ -196,6 +208,7 @@ def post_term(term, page):
     """"""
     query = Post.query.filter_by(type='blog', publish=True).filter(Post.terms.any(Term.name==term)).order_by(desc('create_date'))
 
+    page['title'] = term  #!!!diaplay name?
     return _render_post_paginate(query, page)
 
 
@@ -205,6 +218,8 @@ def post_term(term, page):
 def post_term_category(term, page_num=1):
     """"""
     page = {
+        'key': term,
+        'desc': 'Viewing the category',
         'curr_num': page_num,
         'view_name': 'post.post_term_category',
     }
@@ -218,6 +233,8 @@ def post_term_category(term, page_num=1):
 def post_term_tag(term, page_num=1):
     """"""
     page = {
+        'key': term,
+        'desc': 'Viewing the tag',
         'curr_num': page_num,
         'view_name': 'post.post_term_tag',
     }
@@ -232,6 +249,7 @@ def post_author(author, page_num=1):
     """"""
     query = Post.query.filter_by(type='blog', publish=True).filter(Post.creater.has(User.name==author)).order_by(desc('create_date'))
     page = {
+        'title': author,  #!!!display name
         'curr_num': page_num,
         'view_name': 'post.post_author',
     }
@@ -258,6 +276,9 @@ def search(page_num=1):
         return redirect(url_for('post.post_uuid', uuid=post.uuid))
 
     page = {
+        'title': keywords,
+        'key': keywords,
+        'desc': 'Search results for',
         'curr_num': page_num,
         'view_name': 'post.search',
 
@@ -271,13 +292,7 @@ def search(page_num=1):
 def _render_post(post):
     """render one post"""
     content = {
-        'post': {
-            'title': post.title,
-            'type': post.type,
-            'author': post.creater.name,
-            'create_date': post.create_date,
-            'content': post.content,
-        },
+        'post': _make_post_info(post),
     }
 
     comment_list = []

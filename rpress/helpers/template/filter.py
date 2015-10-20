@@ -41,9 +41,8 @@ def configure_filter(app):
         return string
 
     @app.template_filter('post_content')
-    def filter_codeblock(string):
+    def post_content(string):
         str_list = r1.split(string)
-
         for index, str_x in enumerate(str_list):
             if len(r2.findall(str_x)) == 0:
                 #text area
@@ -77,7 +76,7 @@ def text_area(string):
     for index, str_x in enumerate(str_list):
         if len(re_html_block.findall(str_x)) == 0:
             #text
-            str_list[index] = re.sub('\n', '<br>', re.sub('^\n+', '\n', str_x))
+            str_list[index] = re.sub('\n', '<br>', re.sub('\n+', '\n', str_x))
         else:
             #html_block
             pass

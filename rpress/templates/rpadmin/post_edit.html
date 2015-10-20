@@ -1,5 +1,6 @@
 {% extends theme('/rpadmin/layout.html') %}
 {% block content %}
+<a href="{{ url_for('post.post_uuid', uuid=uuid) }}">查看文章</a>
 <form method="POST" action="{{ url_for('rpadmin.post_edit', uuid=uuid) }}">
   {{ form.csrf_token }}
   <div>
@@ -9,7 +10,7 @@
     {{ form.name.label }}: {{ form.name }}
   </div>
   <div>
-    {{ form.content.label }}: {{ form.content(rows=20, cols=120) }}
+    {{ form.content.label }}: {{ form.content(rows=15, cols=120) }}
   </div>
   {{ form.submit }}
 </form>

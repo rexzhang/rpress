@@ -1,6 +1,6 @@
 {% extends theme('layout.html') %}
 
-{% block title %}{{ super() }}{% endblock %}
+{% block title %}{{ content.page.title }}{{ super() }}{% endblock %}
 
 {% block carousel %}{% include theme('_carousel_home.html') %}{% endblock %}
 
@@ -8,6 +8,9 @@
 <div class="row margin0">
   <div id="post" class="col-sm-9">
     <div>
+      {% if content.page.key %}
+        <div id="pagination-desc">{{ content.page.desc }}:<b>{{ content.page.key }}</b></div>
+      {% endif %}
       {% for post in content.post_roll %}
       <div class="post-summary-box">
         <div class="post-summary-content">

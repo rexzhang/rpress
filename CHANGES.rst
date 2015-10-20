@@ -6,8 +6,8 @@ Version 0.2
 - code hightlight(by pygments)
 - add search
 - add 404, 500 page
-- fix bug, etc:init database 
-
+- fix bug, etc:init database
+- post editor newline format convert 
 
 Version 0.1
 -----------

@@ -7,7 +7,9 @@
     <span>on</span>
     <span class="stress" title="{{ post.create_date }}">{{ post.create_date|datetime2str_short }}</span> ·
     <span class="stress">
-      {#<a href="http://rex.zhang.name/2014/11/987/#comments">Leave a Comment</a>#}
+    {% if post.author_id==user.id %}
+      <a href="{{ url_for('rpadmin.post_edit', uuid=post.uuid) }}">[EDIT]</a>
+    {% endif %}
     </span>
   </em>
 </div>
