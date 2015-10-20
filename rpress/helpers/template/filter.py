@@ -19,8 +19,8 @@ _code_block_begin_html = '<pre><code>\n'
 _code_block_end_re = '\n\[/code\]'
 _code_block_end_html = '\n</code></pre>'
 
-r1 = re.compile('\[code(?P<code>:[a-z]+\]\n[\w\W]+?)\n\[/code\]')
-r2 = re.compile('^:(?P<lang>[a-z]+?)\](?P<code>\n[\w\W]+)')
+r1 = re.compile(r'\[code(?P<code>:[a-z]+\]\n[\w\W]+?)\n\[/code\]')
+r2 = re.compile(r'^:(?P<lang>[a-z]+?)\](?P<code>\n[\w\W]+)')
 #----------------------------------------------------------------------
 def configure_filter(app):
     """"""
@@ -40,16 +40,19 @@ def configure_filter(app):
                 string += _code_block_end_html
         return string
 
-    @app.template_filter('codeblock')
+    @app.template_filter('post_content')
     def filter_codeblock(string):
         str_list = r1.split(string)
 
         for index, str_x in enumerate(str_list):
             if len(r2.findall(str_x)) == 0:
-                continue
+                #text area
+                str_list[index] = text_area(str_x)
 
-            code_block_list = r2.findall(str_x)[0]
-            str_list[index] = highlight_code(code_block_list[1], code_block_list[0])
+            else:
+                #code_block
+                code_block_list = r2.findall(str_x)[0]
+                str_list[index] = code_area_highlight(code_block_list[1], code_block_list[0])
 
         return ''.join(str_list)
 
@@ -57,9 +60,26 @@ def configure_filter(app):
 
 
 #----------------------------------------------------------------------
-def highlight_code(string, lang):
+def code_area_highlight(string, lang):
     """"""
     lexer = get_lexer_by_name(lang, stripall=True)
     formatter = HtmlFormatter()
 
     return pygments.highlight(string, lexer, formatter)
+
+
+
+re_html_block = re.compile(r'(?P<html_block>\n<[a-z]+>\n.+\n</[a-z]+>)', flags=re.S)
+#----------------------------------------------------------------------
+def text_area(string):
+    """"""
+    str_list = re_html_block.split(string)
+    for index, str_x in enumerate(str_list):
+        if len(re_html_block.findall(str_x)) == 0:
+            #text
+            str_list[index] = re.sub('\n', '<br>', re.sub('^\n+', '\n', str_x))
+        else:
+            #html_block
+            pass
+
+    return ''.join(str_list)

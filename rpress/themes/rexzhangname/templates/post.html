@@ -16,7 +16,7 @@
         </div>
         {% include theme('_post_metabar.html') %}
         {% endif %}
-        <div class="post-content">{{ post.content|codeblock|safe }}</div>
+        <div class="post-content">{{ post.content|post_content|safe }}</div>
       </div>
     </div>
   </div>
