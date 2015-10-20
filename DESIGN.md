@@ -140,13 +140,14 @@ URL 规则
 * id
 * site_id
 
-* creater_user_id
-* create_date
-* updater_user_id
-* update_date
+* author_user_id
 
 * publish       #True/False
 * publish_ext   #publish / history/draft/auto-draft/trash
+* publish_date
+
+* updater_user_id
+* update_date
 
 * allow_comment #True/False
 

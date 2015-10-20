@@ -9,7 +9,7 @@
   <thead>
     <tr>
       <th>status</th>
-      <th>create date</th>
+      <th>publish date</th>
       <th>title</th>
     </tr>
   </thead>
@@ -17,7 +17,7 @@
     {% for post in posts %}
     <tr>
       <td><a href="/rpadmin/post/{{ post.uuid }}/publish/turn">{{ post.publish_ext }}</a></td>
-      <td>{{ post.create_date }}</td>
+      <td>{{ post.publish_date }}</td>
       <td><a href="{{ url_for('rpadmin.post_edit', uuid=post.uuid) }}">{{ post.title }}</a></td>
     </tr>
 

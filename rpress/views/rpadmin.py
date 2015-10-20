@@ -37,7 +37,7 @@ def post_list(type):
     if not is_valid_post_type(type):
         return  #!!!
 
-    posts = Post.query.filter_by(type=type).order_by(desc('create_date')).all()
+    posts = Post.query.filter_by(type=type).order_by(desc('publish_date')).all()
 
     return render_template("/rpadmin/post_list.html", posts=posts, post_type=type)
 

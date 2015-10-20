@@ -7,7 +7,8 @@ Version 0.2
 - add search
 - add 404, 500 page
 - fix bug, etc:init database
-- post editor newline format convert 
+- post editor newline format convert
+- UI update
 
 Version 0.1
 -----------

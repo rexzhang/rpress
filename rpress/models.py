@@ -93,15 +93,16 @@ class Post(db.Model):
     uuid = Column(String(36), unique=True)
     #site id
 
-    creater_id = Column(Integer, ForeignKey('users.id'), default=0)  #暂时定义 user_id＝＝0 为异常归属
-    updater_id = Column(Integer, ForeignKey('users.id'))
-    creater = relationship('User', foreign_keys=[creater_id])
-    updater = relationship('User', foreign_keys=[updater_id])
-    create_date = Column(DateTime)
-    update_date = Column(DateTime)
+    author_id = Column(Integer, ForeignKey('users.id'), default=0)  #暂时定义 user_id＝＝0 为异常归属
+    author = relationship('User', foreign_keys=[author_id])
 
     publish = Column(Boolean, default=False)
     publish_ext = Column(String(8), default='unknow')  #publish 为 True 时才有意义。unknow, publish, draft/autosave/history/trash #修改过程版本存放在另外一个表中
+    publish_date = Column(DateTime)
+
+    updater_id = Column(Integer, ForeignKey('users.id'))
+    updater = relationship('User', foreign_keys=[updater_id])
+    update_date = Column(DateTime)
 
     allow_comment = Column(Boolean, default=True)
 
@@ -115,28 +116,28 @@ class Post(db.Model):
     content = Column(Text)
 
     #----------------------------------------------------------------------
-    def __init__(self, creater, uuid=None, create_date=None, publish=False, publish_ext='draft', type='blog', name=None, title=None, content=None):
+    def __init__(self, author, uuid=None, publish_date=None, publish=False, publish_ext='draft', type='blog', name=None, title=None, content=None):
         """Constructor"""
-        if uuid is None and create_date is None:
+        if uuid is None and publish_date is None:
             uuid = uuid1()
-            create_date = uuid.datetime
+            publish_date = uuid.datetime
 
-        elif uuid is not None and create_date is None:
-            create_date = uuid.datetime
+        elif uuid is not None and publish_date is None:
+            publish_date = uuid.datetime
 
-        elif uuid is None and create_date is not None:
-            uuid = uuid1fromdatetime(create_date)
+        elif uuid is None and publish_date is not None:
+            uuid = uuid1fromdatetime(publish_date)
 
         self.uuid = str(uuid)
 
-        self.creater = creater
-        self.updater = creater
-
-        self.create_date = create_date
-        self.update_date = create_date
+        self.author = author
 
         self.publish = publish
         self.publish_ext = publish_ext
+        self.publish_date = publish_date
+
+        self.updater = author
+        self.update_date = publish_date
 
         self.type = type
         self.name = name  #!!!convert title to %xx if name==None
@@ -196,11 +197,11 @@ class Comment(db.Model):
     author_ip = Column(String(19))
     author_url = Column(Text)
 
-    create_date = Column(DateTime)
+    publish_date = Column(DateTime)
     content = Column(Text)
 
     #----------------------------------------------------------------------
-    def __init__(self, post, author_name, create_date, content, author_email=None, author_ip=None, author_url=None):
+    def __init__(self, post, author_name, publish_date, content, author_email=None, author_ip=None, author_url=None):
         """Constructor"""
         self.post = post
 
@@ -209,7 +210,7 @@ class Comment(db.Model):
         self.author_ip = author_ip
         self.author_url = author_url
 
-        self.create_date = create_date
+        self.publish_date = publish_date
         self.content = content
         return
 

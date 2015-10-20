@@ -120,7 +120,7 @@ def _widget_date_year():
 
     posts = Post.query.filter_by(type='blog', publish=True).all()
     for post in posts:
-        year = post.create_date.year
+        year = post.publish_date.year
 
         if year not in date_years:
             date_years[year] = {
@@ -137,15 +137,25 @@ def _widget_date_year():
 #----------------------------------------------------------------------
 def _make_post_info(post):
     """"""
+    categorys = []
+    tags = []
+    for term in post.terms:
+        if term.type == 'category':
+            categorys.append(term.name)
+        elif term.type == 'tag':
+            tags.append(term.name)
+
     return {
         'title': post.title,
         'uuid': post.uuid,
         'type': post.type,
-        'author': post.creater.name,
-        'author_id': post.creater.id,
-        'create_date': post.create_date,
+        'author': post.author.name,
+        'author_id': post.author.id,
+        'publish_date': post.publish_date,
         'excerpt': post.content[:50],
         'content': post.content,
+        'categorys': categorys,
+        'tags': tags,
         'link': url_for('post.post_uuid', uuid=post.uuid),
     }
 
@@ -179,7 +189,7 @@ def _render_post_paginate(query, paginate):
 #----------------------------------------------------------------------
 def post_paginate(page_num=1):
     """"""
-    query = Post.query.filter_by(type='blog', publish=True).order_by(desc('create_date'))
+    query = Post.query.filter_by(type='blog', publish=True).order_by(desc('publish_date'))
     paginate = {
         'title': 'Home',  #!!!需要改为站点相关信息
         'curr_num': page_num,
@@ -195,8 +205,8 @@ def post_paginate(page_num=1):
 def post_date(year, page_num=1):
     """"""
     query = Post.query.filter_by(type='blog', publish=True) \
-        .filter(Post.create_date>=datetime(year, 1, 1), Post.create_date<datetime(year+1, 1, 1)) \
-        .order_by(desc('create_date'))
+        .filter(Post.publish_date>=datetime(year, 1, 1), Post.publish_date<datetime(year+1, 1, 1)) \
+        .order_by(desc('publish_date'))
     paginate = {
         'title': year,
         'key': year,
@@ -211,7 +221,7 @@ def post_date(year, page_num=1):
 #----------------------------------------------------------------------
 def post_term(term, paginate):
     """"""
-    query = Post.query.filter_by(type='blog', publish=True).filter(Post.terms.any(Term.name==term)).order_by(desc('create_date'))
+    query = Post.query.filter_by(type='blog', publish=True).filter(Post.terms.any(Term.name==term)).order_by(desc('publish_date'))
 
     paginate['key'] = term
     paginate['title'] = term  #!!!diaplay name?
@@ -251,7 +261,7 @@ def post_term_tag(term, page_num=1):
 #----------------------------------------------------------------------
 def post_author(author, page_num=1):
     """"""
-    query = Post.query.filter_by(type='blog', publish=True).filter(Post.creater.has(User.name==author)).order_by(desc('create_date'))
+    query = Post.query.filter_by(type='blog', publish=True).filter(Post.author.has(User.name==author)).order_by(desc('publish_date'))
     paginate = {
         'title': author,  #!!!display name
         'curr_num': page_num,
@@ -300,14 +310,14 @@ def _render_post(post):
     }
 
     comment_list = []
-    comments = Comment.query.filter_by(post=post).order_by(desc('create_date')).all()
+    comments = Comment.query.filter_by(post=post).order_by(desc('publish_date')).all()
     for comment in comments:
         comment_list.append({
             'author_name': comment.author_name,
-            'create_date': comment.create_date,
+            'publish_date': comment.publish_date,
             'content': comment.content,
         })
-        print(comment_list)
+        #print(comment_list)
     content['comments'] = comment_list
 
     return render_template('post.html', content=content)
@@ -322,10 +332,10 @@ def post_uuid(uuid):
     return _render_post(post)
 
 
+# /about
 @post.route('/<string:name>', methods=['GET', ])
 #----------------------------------------------------------------------
 def page_name(name):
     """"""
     post = Post.query.filter_by(name=name, publish=True, type='page').first_or_404()
-
     return _render_post(post)

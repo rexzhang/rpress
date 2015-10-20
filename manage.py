@@ -35,7 +35,7 @@ def init_db(init_default_date):
         site = Site(name='rexzhangname', title='Rex.Zhang.name', desc='从记录到不仅仅是记录')
         db.session.add(site)
 
-        post = Post(creater=user, publish=True, publish_ext='publish', title=u'这是第一篇博客', content=u'我是博客内容')
+        post = Post(author=user, publish=True, publish_ext='publish', title=u'这是第一篇博客', content=u'我是博客内容')
         db.session.add(post)
         db.session.commit()
 
@@ -98,10 +98,10 @@ def importer(disable_convert_code_tag):
             continue
 
         #create datetime
-        post_create_date = datetime_from_str(entry.wp_post_date)
+        post_publish_date = datetime_from_str(entry.wp_post_date)
 
-        #skip duplicate post: title + post_create_date
-        exist_posts = Post.query.filter_by(title=entry.title, create_date=post_create_date).all()
+        #skip duplicate post: title + post_publish_date
+        exist_posts = Post.query.filter_by(title=entry.title, publish_date=post_publish_date).all()
         if len(exist_posts) >= 1:
             print('[wrong] skip duplicate post:%s' % entry.title)
             continue
@@ -147,9 +147,8 @@ def importer(disable_convert_code_tag):
             content = convert_content(entry.content[0].value)
 
         print('+ %s %s' % (publish_ext, entry.title))
-        post = Post(creater=user,
-                    create_date=post_create_date,
-                    publish=publish, publish_ext=publish_ext,
+        post = Post(author=user,
+                    publish=publish, publish_ext=publish_ext, publish_date=post_publish_date,
                     type=type,
                     name=entry.wp_post_name.lower(),
                     title=entry.title,
@@ -200,16 +199,16 @@ def importer(disable_convert_code_tag):
             continue
 
         #comment create date
-        comment_create_date=datetime_from_str(entry.wp_comment_date)
+        comment_publish_date=datetime_from_str(entry.wp_comment_date)
 
-        #skip duplicate comment: author + comment_create_date
-        exist_commnets = Comment.query.filter_by(author_name=entry.wp_comment_author, create_date=comment_create_date).all()
+        #skip duplicate comment: author + comment_publish_date
+        exist_commnets = Comment.query.filter_by(author_name=entry.wp_comment_author, publish_date=comment_publish_date).all()
         if len(exist_commnets) >= 1:
             print('[wrong] skip duplicate comment:[%s] %s' % (entry.wp_comment_author, entry.wp_comment_date))
             continue
 
-        post_create_date = datetime_from_str(entry.wp_post_date)
-        post = Post.query.filter_by(title=entry.title, create_date=post_create_date).first()
+        post_publish_date = datetime_from_str(entry.wp_post_date)
+        post = Post.query.filter_by(title=entry.title, publish_date=post_publish_date).first()
         if post is None:
             print('[wrong] miss post, comment:[%s] %s' % (entry.wp_comment_author, entry.wp_comment_date))
             continue
@@ -217,7 +216,7 @@ def importer(disable_convert_code_tag):
         print('+ comment %s %s' % (entry.wp_comment_date, entry.wp_comment_author))
         comment = Comment(post=post,
                 author_name=entry.wp_comment_author,
-                create_date=comment_create_date,
+                publish_date=comment_publish_date,
                 content=convert_content(entry.wp_comment_content),
                 author_email=entry.wp_comment_author_email,
                 author_ip=entry.wp_comment_author_ip,

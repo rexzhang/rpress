@@ -5,7 +5,9 @@
       <a rel="author" title="由{{ post.author }}发布" href="{{ url_for('post.post_author', author=post.author) }}">{{ post.author }}</a>
     </span>
     <span>on</span>
-    <span class="stress" title="{{ post.create_date }}">{{ post.create_date|datetime2str_short }}</span> ·
+    <span class="stress" title="{{ post.publish_date }}">{{ post.publish_date|datetime2str_short }}</span> ·
+    <span class="stress">{% for category in post.categorys %}<a href="{{ url_for('post.post_term_category', term=category) }}"> #{{ category }}</a>{% endfor %}</span>
+    <span>{% for tag in post.tags %}<a href="{{ url_for('post.post_term_tag', term=tag) }}"> #{{ tag }}</a>{% endfor %}</span>
     <span class="stress">
     {% if post.author_id==user.id %}
       <a href="{{ url_for('rpadmin.post_edit', uuid=post.uuid) }}">[EDIT]</a>
