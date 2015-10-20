@@ -1,6 +1,6 @@
 {% extends theme('layout.html') %}
 
-{% block title %}{{ content.page.title }}{{ super() }}{% endblock %}
+{% block title %}{{ content.paginate.title }}{{ super() }}{% endblock %}
 
 {% block carousel %}{% include theme('_carousel_home.html') %}{% endblock %}
 
@@ -8,10 +8,10 @@
 <div class="row margin0">
   <div id="post" class="col-sm-9">
     <div>
-      {% if content.page.key %}
-        <div id="pagination-desc">{{ content.page.desc }}:<b>{{ content.page.key }}</b></div>
+      {% if content.paginate.key %}
+        <div id="paginate-desc">{{ content.paginate.desc }}:<b>{{ content.paginate.key }}</b></div>
       {% endif %}
-      {% for post in content.post_roll %}
+      {% for post in content.paginate.posts %}
       <div class="post-summary-box">
         <div class="post-summary-content">
           <div class="post-title-box">
@@ -27,8 +27,7 @@
       {% endfor %}
     </div>
 
-    <div id="pagination">
-      {% set page=content.page %}
+    <div id="paginate">
       {% set view_args = request.view_args %}
 
       {#!!!   {% do view_args.pop('page_num') %}   jinja's bug! !!!#}
@@ -38,15 +37,15 @@
 
       {% set keywords=request.args.get('keywords') %}
 
-      {% if page.has_prev %}
+      {% if content.paginate.has_prev %}
       <span class="prev-entries">
-        <a href="{% if keywords == None %}{{ url_for(page.view_name, page_num=page.prev_num, **view_args) }}{% else %}{{ url_for(page.view_name, page_num=page.prev_num, **view_args) }}?keywords={{keywords}}{% endif %}">← Previous Entries</a>
+        <a href="{% if keywords == None %}{{ url_for(content.paginate.view_name, page_num=content.paginate.prev_num, **view_args) }}{% else %}{{ url_for(content.paginate.view_name, page_num=content.paginate.prev_num, **view_args) }}?keywords={{keywords}}{% endif %}">← Previous Entries</a>
       </span>
       {% endif %}
 
-      {% if page.has_next %}
+      {% if content.paginate.has_next %}
       <span class="next-entries">
-        <a href="{% if keywords == None %}{{ url_for(page.view_name, page_num=page.next_num, **view_args) }}{% else %}{{ url_for(page.view_name, page_num=page.next_num, **view_args) }}?keywords={{keywords}}{% endif %}">Next Entries →</a>
+        <a href="{% if keywords == None %}{{ url_for(content.paginate.view_name, page_num=content.paginate.next_num, **view_args) }}{% else %}{{ url_for(content.paginate.view_name, page_num=content.paginate.next_num, **view_args) }}?keywords={{keywords}}{% endif %}">Next Entries →</a>
       </span>
       {% endif %}
     </div>

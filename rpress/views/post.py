@@ -31,8 +31,22 @@ content = {
     'navigation': {
     },
 
-    'post_roll': {
-        'post_roll': [
+    'paginate': {
+        'title': year,
+        'key': year,
+        'desc': 'Viewing the date archives',
+
+        'curr_num': page_num,
+        'has_prev': post_paginate.has_prev
+        'has_next': post_paginate.has_next
+        'prev_num': post_paginate.prev_num
+        'next_num': post_paginate.next_num
+
+        'view_name': 'post.search',
+
+        'keywords': keywords, #search only
+
+        'posts':[
             {
                 'title': 'aaaa',
                 'author': 'bbbb',
@@ -48,15 +62,6 @@ content = {
                 'link': 'eee222',
             },
         ],
-        'prev_page': 'ppppp',
-        'next_page': 'nnnnn',
-    },
-
-    'page': {
-        'curr_num': page_num,
-        'view_name': 'post.search',
-
-        'keywords': keywords, #search only
     }
 
     'post': {
@@ -145,24 +150,24 @@ def _make_post_info(post):
     }
 
 #----------------------------------------------------------------------
-def _render_post_paginate(query, page):
+def _render_post_paginate(query, paginate):
     """"""
-    post_paginate = query.paginate(page['curr_num'], per_page=10)
+    post_paginate = query.paginate(paginate['curr_num'], per_page=10)
 
-    post_roll = []
+    paginate['has_prev'] = post_paginate.has_prev
+    paginate['has_next'] = post_paginate.has_next
+    paginate['prev_num'] = post_paginate.prev_num
+    paginate['next_num'] = post_paginate.next_num
+
+    paginate_posts = []
     for post in post_paginate.items:
-        post_roll.append(_make_post_info(post))
-
-    page['has_prev'] = post_paginate.has_prev
-    page['has_next'] = post_paginate.has_next
-    page['prev_num'] = post_paginate.prev_num
-    page['next_num'] = post_paginate.next_num
+        paginate_posts.append(_make_post_info(post))
+    paginate['posts'] = paginate_posts
 
     widgets = _sidebar()
 
     content = {
-        'post_roll': post_roll,
-        'page': page,
+        'paginate': paginate,
         'widgets': widgets,
     }
 
@@ -170,29 +175,29 @@ def _render_post_paginate(query, page):
 
 
 @post.route('/', methods=['GET'])
-@post.route('/page/<int:page_num>', methods=['GET'])
+@post.route('/paginate/<int:page_num>', methods=['GET'])
 #----------------------------------------------------------------------
-def post_page(page_num=1):
+def post_paginate(page_num=1):
     """"""
     query = Post.query.filter_by(type='blog', publish=True).order_by(desc('create_date'))
-    page = {
+    paginate = {
         'title': 'Home',  #!!!需要改为站点相关信息
         'curr_num': page_num,
-        'view_name': 'post.post_page',
+        'view_name': 'post.post_paginate',
     }
 
-    return _render_post_paginate(query, page)
+    return _render_post_paginate(query, paginate)
 
 
 @post.route('/date/<int:year>', methods=['GET'])
-@post.route('/date/<int:year>/page/<int:page_num>', methods=['GET'])
+@post.route('/date/<int:year>/paginate/<int:page_num>', methods=['GET'])
 #----------------------------------------------------------------------
 def post_date(year, page_num=1):
     """"""
     query = Post.query.filter_by(type='blog', publish=True) \
         .filter(Post.create_date>=datetime(year, 1, 1), Post.create_date<datetime(year+1, 1, 1)) \
         .order_by(desc('create_date'))
-    page = {
+    paginate = {
         'title': year,
         'key': year,
         'desc': 'Viewing the date archives',
@@ -200,65 +205,64 @@ def post_date(year, page_num=1):
         'view_name': 'post.post_date',
     }
 
-    return _render_post_paginate(query, page)
+    return _render_post_paginate(query, paginate)
 
 
 #----------------------------------------------------------------------
-def post_term(term, page):
+def post_term(term, paginate):
     """"""
     query = Post.query.filter_by(type='blog', publish=True).filter(Post.terms.any(Term.name==term)).order_by(desc('create_date'))
 
-    page['title'] = term  #!!!diaplay name?
-    return _render_post_paginate(query, page)
+    paginate['key'] = term
+    paginate['title'] = term  #!!!diaplay name?
+    return _render_post_paginate(query, paginate)
 
 
 @post.route('/category/<string:term>', methods=['GET'])
-@post.route('/category/<string:term>/page/<int:page_num>', methods=['GET'])
+@post.route('/category/<string:term>/paginate/<int:page_num>', methods=['GET'])
 #----------------------------------------------------------------------
 def post_term_category(term, page_num=1):
     """"""
-    page = {
-        'key': term,
+    paginate = {
         'desc': 'Viewing the category',
         'curr_num': page_num,
         'view_name': 'post.post_term_category',
     }
 
-    return post_term(term, page)
+    return post_term(term, paginate)
 
 
 @post.route('/tag/<string:term>', methods=['GET'])
-@post.route('/tag/<string:term>/page/<int:page_num>', methods=['GET'])
+@post.route('/tag/<string:term>/paginate/<int:page_num>', methods=['GET'])
 #----------------------------------------------------------------------
 def post_term_tag(term, page_num=1):
     """"""
-    page = {
-        'key': term,
+    paginate = {
         'desc': 'Viewing the tag',
         'curr_num': page_num,
         'view_name': 'post.post_term_tag',
     }
 
-    return post_term(term, page)
+    return post_term(term, paginate)
 
 
 @post.route('/author/<string:author>', methods=['GET'])
-@post.route('/author/<string:author>/page/<int:page_num>', methods=['GET'])
+@post.route('/author/<string:author>/paginate/<int:page_num>', methods=['GET'])
 #----------------------------------------------------------------------
 def post_author(author, page_num=1):
     """"""
     query = Post.query.filter_by(type='blog', publish=True).filter(Post.creater.has(User.name==author)).order_by(desc('create_date'))
-    page = {
+    paginate = {
         'title': author,  #!!!display name
         'curr_num': page_num,
         'view_name': 'post.post_author',
     }
 
-    return _render_post_paginate(query, page)
+    return _render_post_paginate(query, paginate)
 
 
 @post.route("/search/")
-@post.route("/search/page/<int:page_num>/")
+@post.route("/search/paginate/<int:page_num>/")
 #----------------------------------------------------------------------
 def search(page_num=1):
     """"""
@@ -275,7 +279,7 @@ def search(page_num=1):
         post = posts[0]
         return redirect(url_for('post.post_uuid', uuid=post.uuid))
 
-    page = {
+    paginate = {
         'title': keywords,
         'key': keywords,
         'desc': 'Search results for',
@@ -285,7 +289,7 @@ def search(page_num=1):
         'keywords': keywords,
     }
 
-    return _render_post_paginate(post_query, page)
+    return _render_post_paginate(post_query, paginate)
 
 
 #----------------------------------------------------------------------
