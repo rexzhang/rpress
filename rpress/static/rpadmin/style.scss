@@ -1,0 +1,26 @@
+// import rPress common css define
+@import "../common";
+
+//------------------------------------------------------
+// login
+#login {
+    min-height: 100%;
+    background-color: $color-silver;
+
+    h2 {
+        margin-bottom: 1em;
+        text-align: center;
+        color: $color-gray;
+    }
+
+    em {
+        color: $color-gray-dark;
+    }
+
+    .box {
+        margin-top: 8em;
+        padding: 3em;
+        background-color: $color-white;
+        box-shadow: 0 0 1em $color-gray;
+    }
+}

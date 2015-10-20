@@ -1,0 +1,55 @@
+//------------------------------------------------------
+// global variables
+$font-family-major: Georgia, "Times New Roman", Times, serif;
+$font-family-second: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", sans-serif;
+
+$color-white: #FFFFFF;
+$color-silver: #E9E9E9;
+$color-gray-light: #EFEFEF;
+$color-gray: #AFAFAF;
+$color-gray-dark: #5F5F5F;
+$color-black: #000000;
+
+$base-page-blank-width: 1em;
+
+//for fill full page
+$fill-fullpage-footer-height: 10em;
+
+//for fill full page
+.fill-fullpage-wrapper {
+    min-height: 100%;
+
+    /* the bottom margin is the negative value of the footer's height */
+    margin: 0 (auto - $fill-fullpage-footer-height);
+}
+
+html, body {
+    //for fill full page
+    height: 100%;
+}
+
+body {
+    font: 1em $font-family-major;
+    margin: 0;
+    border: 0 none;
+    outline: 0 none;
+    padding: 0;
+}
+
+.margin0 {
+    margin: 0;
+}
+
+.padding0 {
+    padding: 0;
+}
+
+.col-center {
+    float: none;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+}

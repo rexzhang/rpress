@@ -1,27 +1,8 @@
+// import rPress common css define
+@import "../../../static/common";
+
 //------------------------------------------------------
 // global variables
-$font-family-major: Georgia, "Times New Roman", Times, serif;
-$font-family-second: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", sans-serif;
-
-$color-white: #FFFFFF;
-$color-silver: #E9E9E9;
-$color-gray: #AFAFAF;
-$color-gray-light: #EFEFEF;
-$color-black: #000000;
-
-$base-page-blank-width: 1em;
-
-//for fill full page
-$fill-fullpage-footer-height: 10em;
-
-//for fill full page
-.fill-fullpage-wrapper {
-    min-height: 100%;
-
-    /* the bottom margin is the negative value of the footer's height */
-    margin: 0 (auto - $fill-fullpage-footer-height);
-}
-
 .font-common {
     font-style: normal;
     font-variant: normal;
@@ -35,38 +16,12 @@ $fill-fullpage-footer-height: 10em;
     padding-right: $base-page-blank-width;
 }
 
-.margin0 {
-    margin: 0;
-}
-
-.padding0 {
-    padding: 0;
-}
-
-.col-center {
-    float: none;
-    margin-right: auto;
-    margin-left: auto;
-}
-
 .underline-box {
     border-bottom: 1px solid;
     border-bottom-color: $color-silver;
 }
 
 //------------------------------------------------------
-html, body {
-    //for fill full page
-    height: 100%;
-}
-
-body {
-    font: 1em $font-family-major;
-    margin: 0;
-    border: 0 none;
-    outline: 0 none;
-    padding: 0;
-}
 
 //h1 site title, error handler title
 //h2 post title, login etc...function page title
@@ -75,8 +30,6 @@ body {
 //h5 sub-title
 //h6 site desc
 h1, h2, h3, h4, h5, h6 {
-    font-family: Georgia, "Times New Roman", Times, serif;
-
     @extend .font-common;
 
     letter-spacing: 0;
@@ -333,18 +286,6 @@ h1, h2, h3, h4, h5, h6 {
 
     .terms {
         font-size: 0.6em;
-    }
-}
-
-//------------------------------------------------------
-// login
-#login {
-    margin-top: 8em;
-
-    h2 {
-        margin-bottom: 1em;
-        text-align: center;
-        color: $color-gray;
     }
 }
 

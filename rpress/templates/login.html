@@ -1,19 +1,21 @@
 {% extends theme('/rpadmin/layout.html') %}
 {% block body %}
-<div class="row">
-  <div id="login" class="col-sm-3 col-center">
-    <div><h2>rPress</h2></div>
+<div id="login" class="row">
+  <div class="col-sm-4 col-center">
+  <div class="box">
+    <h2><em>r</em>Press</h2>
 
     <form method="POST" action="{{ url_for('permission.login') }}">
       {{ form.csrf_token }}
       <fieldset class="form-group">
-        {{ form.username.label }} {{ form.username }}
+        {{ form.username.label }}<br>{{ form.username }}
       </fieldset>
       <fieldset class="form-group">
-        {{ form.password.label }} {{ form.password }}
+        {{ form.password.label }}<br>{{ form.password }}
       </fieldset>
       {{ form.submit }}
     </form>
+    </div>
   </div>
 </div>
 {% endblock %}
