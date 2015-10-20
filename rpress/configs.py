@@ -10,8 +10,6 @@ import ConfigParser
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-config_name_list = []
-
 
 #----------------------------------------------------------------------
 def get_config_obj(name):
@@ -60,4 +58,7 @@ class ConfigRelease(ConfigDefault):
         if len(config.read(config_filename)) == 0:
             raise Exception("can't read [%s], please check it" % config_filename)
 
+        self.SECRET_KEY = config.get('common', 'SECRET_KEY')
         self.SQLALCHEMY_DATABASE_URI = config.get('db', 'SQLALCHEMY_DATABASE_URI')
+
+        return
