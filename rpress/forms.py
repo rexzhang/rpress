@@ -42,3 +42,11 @@ class SiteForm(Form):
     title = StringField(u'站点名称')
     desc = StringField(u'站点描述')
     submit = SubmitField("submit")
+
+
+########################################################################
+class TermEditFrom(Form):
+    """"""
+    name = StringField(u'名字')
+    desc = StringField(u'描述')
+    submit = SubmitField("submit")

@@ -15,8 +15,8 @@ from rpress import db
 from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm import PublishFSM
-from rpress.models import User, Site, Post
-from rpress.forms import PostEditForm, ProfilesForm, PasswordForm, SiteForm
+from rpress.models import User, Site, Post, Term
+from rpress.forms import PostEditForm, ProfilesForm, PasswordForm, SiteForm, TermEditFrom
 
 
 rpadmin = flask.Blueprint('rpadmin', __name__)
@@ -30,7 +30,7 @@ def index():
     return render_template("/rpadmin/index.html")
 
 
-@rpadmin.route('/post/<string:type>/list', methods=['GET'])
+@rpadmin.route('/post/list/<string:type>', methods=['GET'])
 @login_required
 #----------------------------------------------------------------------
 def post_list(type):
@@ -94,7 +94,7 @@ def post_edit(uuid):
         pass
 
     post_publish_fsm = PublishFSM(post.publish_state)
-    return render_template("/rpadmin/post_edit.html", uuid=str(uuid), form=form, post=post, publish_actions=post_publish_fsm.possible_triggers)
+    return render_template("/rpadmin/post_edit.html", form=form, post=post, publish_actions=post_publish_fsm.possible_triggers)
 
 
 @rpadmin.route('/post/<string:type>/new', methods=['GET',])
@@ -185,3 +185,38 @@ def site():
         pass  #!!!
 
     return render_template('rpadmin/site.html', form=form)
+
+
+@rpadmin.route('/term/list/<string:type>', methods=['GET', ])
+@login_required
+#----------------------------------------------------------------------
+def term_list(type):
+    """"""
+    if type not in ['category', 'tag']:
+        return  #!!!
+
+    terms = Term.query.filter_by(type=type).order_by(desc('name')).all()
+    return render_template('rpadmin/term_list.html', terms=terms)
+
+
+@rpadmin.route('/term/<string:name>/edit', methods=['GET', 'POST'])
+@login_required
+#----------------------------------------------------------------------
+def term_edit(name):
+    """"""
+    term = Term.query.filter_by(name=name).first_or_404()  #!!!
+    form = TermEditFrom(obj=term)
+
+    if form.validate_on_submit():
+        form.populate_obj(term)
+
+        db.session.add(term)
+        db.session.commit()
+
+        flash("term updated", "success")
+        #return redirect(url_for('.blog'))
+    else:
+        flash('term edit error')
+        pass
+
+    return render_template("/rpadmin/term_edit.html", form=form, term=term)
