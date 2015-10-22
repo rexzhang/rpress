@@ -19,7 +19,7 @@ from rpress.helpers.fsm import PublishFSM
 manager = Manager(create_app())
 
 
-@manager.option('-d', '--init_default_date', default=False)
+@manager.option('-d', '--init-default-date', default=False)
 #----------------------------------------------------------------------
 def init_db(init_default_date):
     """不能正常工作，可能是当前缺少 model 关联操作"""
@@ -43,9 +43,10 @@ def init_db(init_default_date):
     return
 
 
-@manager.option('-c', '--disable_convert_code_tag', default=False)
+@manager.option('-f', '--filename', required=True)
+@manager.option('-c', '--disable-convert-code-tag', default=False)
 #----------------------------------------------------------------------
-def importer(disable_convert_code_tag):
+def importer(disable_convert_code_tag, filename):
     """"""
     import HTMLParser
     from datetime import datetime
@@ -86,7 +87,7 @@ def importer(disable_convert_code_tag):
     import_wp_past_type_list = ['post', 'page']
 
     print('loading RSS file...')
-    wordpress_data = feedparser.parse('rexzhangname.wordpress.2015-09-18.xml')
+    wordpress_data = feedparser.parse(filename)
 
     print('parsering RSS file...')
     skip_author_set = set()
