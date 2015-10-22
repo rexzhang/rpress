@@ -19,9 +19,9 @@ from rpress.helpers.fsm import PublishFSM
 manager = Manager(create_app())
 
 
-@manager.option('-d', '--init-default-date', default=False)
+@manager.option('-d', '--init-default-data', default=False)
 #----------------------------------------------------------------------
-def init_db(init_default_date):
+def init_db(init_default_data):
     """不能正常工作，可能是当前缺少 model 关联操作"""
 ##    app.request_context()
 ##    with app.app_context():
@@ -29,7 +29,7 @@ def init_db(init_default_date):
 
     db.create_all()
 
-    if init_default_date:
+    if init_default_data:
         user = User(name='rex', password='rexzhang')
         db.session.add(user)
 
