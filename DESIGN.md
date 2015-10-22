@@ -12,7 +12,7 @@ a mulit-site and mulit-user blog system.
 
 所有 post 均使用类 uuid 的唯一编号
 
-####所有 name 
+####所有 name
 
 * 均只支持小写字母、数字、减号组合，同时字母开头
 	* 导入是将所有 name 小写化处理
@@ -65,7 +65,7 @@ URL 规则
 * blog
     * /YYYY/MM/DD/uuid0001 - recommend
     * /YYYY/MM/DD/name - second recommend
-    * /blog/YYYY/MM/DD/uuid0001 
+    * /blog/YYYY/MM/DD/uuid0001
     * /blog/uuid0001
     * /blog/name
     * /
@@ -90,7 +90,7 @@ URL 规则
 
 * author
 	* /author/rex
-	* /author/rex/page/1    
+	* /author/rex/page/1
 
 * rPress admin
 	* /rpadmin/xxxx
@@ -142,8 +142,8 @@ URL 规则
 
 * author_user_id
 
-* publish       #True/False
-* publish_ext   #publish / history/draft/auto-draft/trash
+* published       #True/False
+* publish_state   #publish / history/draft/auto-draft/trash
 * publish_date
 
 * updater_user_id
@@ -173,3 +173,18 @@ URL 规则
 * site_id
 * past_id
 * term_id
+
+post发布状态机
+-------------
+~~~
+@startuml
+digraph pic2 {
+  draft -> published
+  published -> unpublish
+  unpublish -> published[label="更新发布时间"]
+  published -> trash
+  trash -> published
+  published -> history
+}
+@enduml
+~~~

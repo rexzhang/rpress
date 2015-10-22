@@ -1,6 +1,13 @@
 {% extends theme('/rpadmin/layout.html') %}
 {% block content %}
-<a href="{{ url_for('post.post_uuid', uuid=uuid) }}">查看文章</a>
+<ul>
+  <li><a href="{{ url_for('post.post_uuid', uuid=uuid) }}">查看文章</a></li>
+  <li>publish state:{{ post.publish_state }}</li>
+  {% for action in publish_actions %}
+  <li><a href="/rpadmin/post/{{ post.uuid }}/publish/{{ action }}">{{ action }}</a></li>
+  {% endfor %}
+</ul>
+
 <form method="POST" action="{{ url_for('rpadmin.post_edit', uuid=uuid) }}">
   {{ form.csrf_token }}
   <div>

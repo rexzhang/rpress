@@ -10,6 +10,7 @@ from flask.ext.sqlalchemy import BaseQuery
 
 from rpress.database import db
 from rpress.helpers.uuid1plus import uuid1, uuid1fromdatetime
+from rpress.helpers.fsm import PublishFSM
 
 
 ########################################################################
@@ -96,8 +97,8 @@ class Post(db.Model):
     author_id = Column(Integer, ForeignKey('users.id'), default=0)  #暂时定义 user_id＝＝0 为异常归属
     author = relationship('User', foreign_keys=[author_id])
 
-    publish = Column(Boolean, default=False)
-    publish_ext = Column(String(8), default='unknow')  #publish 为 True 时才有意义。unknow, publish, draft/autosave/history/trash #修改过程版本存放在另外一个表中
+    published = Column(Boolean, default=False)
+    publish_state = Column(String(8), default=PublishFSM.STATE_DEFAULT)  #published 为 True 时才有意义 #修改过程版本存放在另外一个表中
     publish_date = Column(DateTime)
 
     updater_id = Column(Integer, ForeignKey('users.id'))
@@ -116,7 +117,7 @@ class Post(db.Model):
     content = Column(Text)
 
     #----------------------------------------------------------------------
-    def __init__(self, author, uuid=None, publish_date=None, publish=False, publish_ext='draft', type='blog', name=None, title=None, content=None):
+    def __init__(self, author, uuid=None, publish_date=None, published=False, publish_state=PublishFSM.STATE_DRAFT, type='blog', name=None, title=None, content=None):
         """Constructor"""
         if uuid is None and publish_date is None:
             uuid = uuid1()
@@ -132,8 +133,8 @@ class Post(db.Model):
 
         self.author = author
 
-        self.publish = publish
-        self.publish_ext = publish_ext
+        self.published = published
+        self.publish_state = publish_state
         self.publish_date = publish_date
 
         self.updater = author

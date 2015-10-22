@@ -118,7 +118,7 @@ def _widget_date_year():
     """"""
     date_years = {}
 
-    posts = Post.query.filter_by(type='blog', publish=True).all()
+    posts = Post.query.filter_by(type='blog', published=True).all()
     for post in posts:
         year = post.publish_date.year
 
@@ -189,7 +189,7 @@ def _render_post_paginate(query, paginate):
 #----------------------------------------------------------------------
 def post_paginate(page_num=1):
     """"""
-    query = Post.query.filter_by(type='blog', publish=True).order_by(desc('publish_date'))
+    query = Post.query.filter_by(type='blog', published=True).order_by(desc('publish_date'))
     paginate = {
         'title': 'Home',  #!!!需要改为站点相关信息
         'curr_num': page_num,
@@ -204,7 +204,7 @@ def post_paginate(page_num=1):
 #----------------------------------------------------------------------
 def post_date(year, page_num=1):
     """"""
-    query = Post.query.filter_by(type='blog', publish=True) \
+    query = Post.query.filter_by(type='blog', published=True) \
         .filter(Post.publish_date>=datetime(year, 1, 1), Post.publish_date<datetime(year+1, 1, 1)) \
         .order_by(desc('publish_date'))
     paginate = {
@@ -221,7 +221,7 @@ def post_date(year, page_num=1):
 #----------------------------------------------------------------------
 def post_term(term, paginate):
     """"""
-    query = Post.query.filter_by(type='blog', publish=True).filter(Post.terms.any(Term.name==term)).order_by(desc('publish_date'))
+    query = Post.query.filter_by(type='blog', published=True).filter(Post.terms.any(Term.name==term)).order_by(desc('publish_date'))
 
     paginate['key'] = term
     paginate['title'] = term  #!!!diaplay name?
@@ -261,7 +261,7 @@ def post_term_tag(term, page_num=1):
 #----------------------------------------------------------------------
 def post_author(author, page_num=1):
     """"""
-    query = Post.query.filter_by(type='blog', publish=True).filter(Post.author.has(User.name==author)).order_by(desc('publish_date'))
+    query = Post.query.filter_by(type='blog', published=True).filter(Post.author.has(User.name==author)).order_by(desc('publish_date'))
     paginate = {
         'title': author,  #!!!display name
         'curr_num': page_num,
@@ -328,7 +328,7 @@ def _render_post(post):
 #----------------------------------------------------------------------
 def post_uuid(uuid):
     """"""
-    post = Post.query.filter_by(uuid=str(uuid), publish=True).first_or_404()
+    post = Post.query.filter_by(uuid=str(uuid), published=True).first_or_404()
     return _render_post(post)
 
 
@@ -337,5 +337,5 @@ def post_uuid(uuid):
 #----------------------------------------------------------------------
 def page_name(name):
     """"""
-    post = Post.query.filter_by(name=name, publish=True, type='page').first_or_404()
+    post = Post.query.filter_by(name=name, published=True, type='page').first_or_404()
     return _render_post(post)

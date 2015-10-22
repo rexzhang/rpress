@@ -13,6 +13,7 @@ from rpress import create_app
 from rpress import db
 from rpress.helpers.uuid1plus import uuid1fromdatetime
 from rpress.helpers.importer import convert_code_tag
+from rpress.helpers.fsm import PublishFSM
 
 
 manager = Manager(create_app())
@@ -35,7 +36,7 @@ def init_db(init_default_date):
         site = Site(name='rexzhangname', title='Rex.Zhang.name', desc='从记录到不仅仅是记录')
         db.session.add(site)
 
-        post = Post(author=user, publish=True, publish_ext='publish', title=u'这是第一篇博客', content=u'我是博客内容')
+        post = Post(author=user, published=True, publish_state=PublishFSM.STATE_PUBLISHED, title=u'这是第一篇博客', content=u'我是博客内容')
         db.session.add(post)
         db.session.commit()
 
@@ -126,11 +127,11 @@ def importer(disable_convert_code_tag):
 
         #publish status
         if entry.wp_status == 'publish':
-            publish = True
-            publish_ext = 'publish'
+            published = True
+            publish_state = PublishFSM.STATE_PUBLISHED
         elif entry.wp_status == 'draft':
-            publish = False
-            publish_ext = 'draft'
+            published = False
+            publish_state = PublishFSM.STATE_DRAFT
         else:
             continue
 
@@ -146,9 +147,9 @@ def importer(disable_convert_code_tag):
         if entry.content[0].type == 'text/html':
             content = convert_content(entry.content[0].value)
 
-        print('+ %s %s' % (publish_ext, entry.title))
+        print('+ %s %s' % (publish_state, entry.title))
         post = Post(author=user,
-                    publish=publish, publish_ext=publish_ext, publish_date=post_publish_date,
+                    published=published, publish_state=publish_state, publish_date=post_publish_date,
                     type=type,
                     name=entry.wp_post_name.lower(),
                     title=entry.title,

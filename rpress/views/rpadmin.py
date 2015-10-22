@@ -14,6 +14,7 @@ from flask.ext.login import login_required, current_user
 from rpress import db
 from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
+from rpress.helpers.fsm import PublishFSM
 from rpress.models import User, Site, Post
 from rpress.forms import PostEditForm, ProfilesForm, PasswordForm, SiteForm
 
@@ -42,24 +43,33 @@ def post_list(type):
     return render_template("/rpadmin/post_list.html", posts=posts, post_type=type)
 
 
-@rpadmin.route('/post/<uuid:uuid>/publish/turn', methods=['GET'])
+@rpadmin.route('/post/<uuid:uuid>/publish/<string:trigger>', methods=['GET'])
 @login_required
 #----------------------------------------------------------------------
-def post_publish_status_turn(uuid):
+def post_publish_state(uuid, trigger):
     """"""
     post = Post.query.filter_by(uuid=str(uuid)).first_or_404()  #!!!
-    if post.publish == True:
-        post.publish = False
-        post.publish_ext = 'draft'
+    if post.publish_state not in PublishFSM.states:
+        return  #!!!
+
+    post_publish_fsm = PublishFSM(init_state=post.publish_state)
+    if trigger not in post_publish_fsm.triggers:
+        return  #!!!
+
+    if not post_publish_fsm.do_trigger(trigger_name=trigger):
+        return  #!!!
+
+    print('Done......')
+    post.publish_state = post_publish_fsm.state
+    if post_publish_fsm.state == PublishFSM.STATE_PUBLISHED:
+        post.published = True
     else:
-        post.publish = True
-        post.publish_ext = 'publish'
+        post.published = False
 
     db.session.add(post)
     db.session.commit()
 
-    next = request.args.get('next')  #!!!
-    return redirect(next or url_for('.index'))
+    return redirect(url_for('rpadmin.post_edit', uuid=uuid))
 
 
 @rpadmin.route('/post/<uuid:uuid>/edit', methods=['GET', 'POST'])
@@ -83,7 +93,8 @@ def post_edit(uuid):
         flash('post edit error')
         pass
 
-    return render_template("/rpadmin/post_edit.html", uuid=str(uuid), form=form)
+    post_publish_fsm = PublishFSM(post.publish_state)
+    return render_template("/rpadmin/post_edit.html", uuid=str(uuid), form=form, post=post, publish_actions=post_publish_fsm.possible_triggers)
 
 
 @rpadmin.route('/post/<string:type>/new', methods=['GET',])
