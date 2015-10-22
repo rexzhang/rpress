@@ -98,7 +98,7 @@ class Post(db.Model):
     author = relationship('User', foreign_keys=[author_id])
 
     published = Column(Boolean, default=False)
-    publish_state = Column(String(8), default=PublishFSM.STATE_DEFAULT)  #published 为 True 时才有意义 #修改过程版本存放在另外一个表中
+    publish_state = Column(String(20), default=PublishFSM.STATE_DEFAULT)  #published 为 True 时才有意义 #修改过程版本存放在另外一个表中
     publish_date = Column(DateTime)
 
     updater_id = Column(Integer, ForeignKey('users.id'))

@@ -70,7 +70,9 @@ class BaseFSM(object):
 # publish FSM
 ########################################################################
 class PublishFSM(BaseFSM):
-    """publish Finite State Machine"""
+    """publish Finite State Machine
+    state string's length must less than 20, more info check file:models.py
+    """
     STATE_DRAFT = 'draft'
     STATE_PUBLISHED = 'published'
     STATE_UNPUBLISHED = 'unpublished'
