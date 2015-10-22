@@ -165,7 +165,7 @@ def importer(disable_convert_code_tag):
 
         for term in entry.tags:
             new_term = False
-            term_name = term.term.lower()
+            term_name = term.term
 
             if term.scheme == 'category':
                 term_type = 'category'
@@ -186,7 +186,7 @@ def importer(disable_convert_code_tag):
                 continue
 
             if new_term:
-                term = Term(term_name, type=term_type, display=term.term)
+                term = Term(term_name, type=term_type)
                 db.session.add(term)
             else:
                 term = Term.query.filter_by(name=term_name).first()

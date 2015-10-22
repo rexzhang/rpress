@@ -162,19 +162,14 @@ class Term(db.Model):
 
     name = Column(String(50), unique=True)
     type = Column(String(50))  #tag/category
-    display = Column(String(50))
+    desc = Column(Text)
 
     #----------------------------------------------------------------------
-    def __init__(self, name, type='tag', display=None):
+    def __init__(self, name, type='tag', desc=None):
         """Constructor"""
         self.name = name
         self.type = type
-
-        if display is None:
-            self.display = name
-        else:
-            self.display = display
-
+        self.desc = desc
         return
 
     #----------------------------------------------------------------------

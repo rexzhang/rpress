@@ -30,7 +30,7 @@
   <h4>标签云</h4>
   <div>
     {% for tag in content.widgets.tags %}
-    <a style="font-size: 8pt;" title="{{ tag.desc }}" href="{{ tag.link }}">{{ tag.display }}</a>
+    <a style="font-size: 8pt;" title="{{ tag.desc }}" href="{{ tag.link }}">{{ tag.name }}</a>
     {% endfor %}
   </div>
 </div>
@@ -40,7 +40,7 @@
   <div>
     <ul>
       {% for category in content.widgets.categories %}
-      <li><a title="{{ category.desc }}" href="{{ category.link }}">{{ category.display }}</a></li>
+      <li><a title="{{ category.desc }}" href="{{ category.link }}">{{ category.name }}</a></li>
       {% endfor %}
     </ul>
   </div>

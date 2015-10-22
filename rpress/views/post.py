@@ -90,8 +90,8 @@ def _sidebar():
     terms = Term.query.filter_by(type='category').order_by('name').all()
     for term in terms:
         categories.append({
-            'display': term.display,
-            'desc': term.name,
+            'name': term.name,
+            'desc': term.desc,
             'link': url_for('post.post_term_category', term=term.name),
         })
 
@@ -99,8 +99,8 @@ def _sidebar():
     terms = Term.query.filter_by(type='tag').order_by('name').all()
     for term in terms:
         tags.append({
-            'display': term.display,
-            'desc': term.name,
+            'name': term.name,
+            'desc': term.desc,
             'link': url_for('post.post_term_tag', term=term.name),
         })
 
