@@ -2,6 +2,37 @@
 @import "../common";
 
 //------------------------------------------------------
+// header
+#header {
+    margin: 1em;
+}
+
+//------------------------------------------------------
+// content
+
+#content-nav {
+    margin-bottom: 1.5em;
+}
+
+#content-main {}
+
+//------------------------------------------------------
+// footer
+#footer {
+    margin: 1em;
+
+    .box {
+        border-top: 1px solid $color-silver;
+        text-align: right;
+        color: $color-gray;
+
+        a {
+            color: $color-gray-dark;
+        }
+    }
+}
+
+//------------------------------------------------------
 // login
 #login {
     min-height: 100%;

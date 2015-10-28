@@ -1,8 +1,12 @@
 {% extends theme('/rpadmin/layout.html') %}
 
-{% block content %}
-<a href="{{ url_for('rpadmin.profiles_password') }}">Change Password</a>
-<hr>
+{% block contentnav %}
+<ul class="nav nav-pills">
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('rpadmin.profiles_password') }}">Change Password</a></li>
+</ul>
+{% endblock %}
+
+{% block contentmain %}
 <form method="POST" action="{{ url_for('rpadmin.profiles') }}">
   {{ form.csrf_token }}
   <div>
@@ -12,5 +16,5 @@
     {{ form.display.label }}: {{ form.display }}
   </div>
   {{ form.submit }}
-  </form>
+</form>
 {% endblock %}

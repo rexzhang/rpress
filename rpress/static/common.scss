@@ -53,3 +53,11 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-family: Georgia, "Times New Roman", Times, serif;
 }
+
+#message-flash {
+    margin: 1em;
+
+    li {
+        border: 1px solid $color-silver;
+    }
+}

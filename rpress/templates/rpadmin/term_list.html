@@ -1,7 +1,12 @@
 {% extends theme('/rpadmin/layout.html') %}
-{% block content %}
-<a href="{{ url_for('rpadmin.post_new', type=post_type) }}">New post</a>
 
+{% block contentnav %}
+<ul class="nav nav-pills">
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('rpadmin.post_new', type=post_type) }}">New post</a>
+</ul>
+{% endblock %}
+
+{% block contentmain %}
 <table class="table">
   {#
   <caption>table title and/or explanatory text</caption>

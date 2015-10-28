@@ -1,13 +1,16 @@
 {% extends theme('/rpadmin/layout.html') %}
-{% block content %}
-<ul>
-  <li><a href="{{ url_for('post.post_uuid', uuid=post.uuid ) }}">查看文章</a></li>
-  <li>publish state:{{ post.publish_state }}</li>
+
+{% block contentnav %}
+<ul class="nav nav-pills">
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('post.post_uuid', uuid=post.uuid ) }}">查看文章</a></li>
+  <li class="nav-item"><a class="nav-link disabled">publish state:{{ post.publish_state }}</a></li>
   {% for action in publish_actions %}
-  <li><a href="/rpadmin/post/{{ post.uuid }}/publish/{{ action }}">{{ action }}</a></li>
+  <li class="nav-item"><a class="nav-link" href="/rpadmin/post/{{ post.uuid }}/publish/{{ action }}">{{ action }}</a></li>
   {% endfor %}
 </ul>
+{% endblock %}
 
+{% block contentmain %}
 <form method="POST" action="{{ url_for('rpadmin.post_edit', uuid=post.uuid) }}">
   {{ form.csrf_token }}
   <div>
@@ -17,8 +20,9 @@
     {{ form.name.label }}: {{ form.name }}
   </div>
   <div>
-    {{ form.content.label }}: {{ form.content(rows=15, cols=120) }}
+    {{ form.content(rows=15, cols=120) }}
   </div>
   {{ form.submit }}
 </form>
+</div>
 {% endblock %}

@@ -1,30 +1,24 @@
 {% extends theme('layout_base.html') %}
 
 {% block head %}{{ super() }}
-<link rel=stylesheet type=text/css href="static/rpadmin/style.css">
+<link rel=stylesheet type=text/css href="/static/rpadmin/style.css">
 {% endblock %}
 
 {% block title %}{{ site.title }} | rPress{% endblock %}
 
+<div class="container-fluid">{% include theme('/rpadmin/_message_flash.html') %}</div>
+
 {% block body %}
 <div class="container-fluid">
-{% block header %}
-  <div><h2><a href="/">{{ site.title }}</a> - rPress Admin</h2></div>
-{% endblock %}
+  {% block header %}{% include theme('/rpadmin/_header.html') %}{% endblock %}
 
-{% block navigation %}{% include theme('/rpadmin/_navigation.html') %}{% endblock %}
+  {% block navigation %}{% include theme('/rpadmin/_navigation.html') %}{% endblock %}
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
-{% block content %}{% endblock %}
+  {% block content %}
+  <div id="content-nav" class="container-fluid">{% block contentnav %}{% endblock %}</div>
+  <div id="content-main" class="container-fluid">{% block contentmain %}{% endblock %}</div>
+  {% endblock %}
 </div>
+
 {% block footer %}{% include theme('/rpadmin/_footer.html') %}{% endblock %}
 {% endblock %}
