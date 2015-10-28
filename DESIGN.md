@@ -108,7 +108,7 @@ URL 规则
 * id            #需要规避 0 ，可以在初始化的时候初始化一个 id 为 0 来占位，如果要支持 subdir 模式，需要为 0 号站点设置 domain_name
 * name          #同时作为子目录名 subdir_name
 
-* domain_name   #域名，可选？
+* domain   #域名，可选？
 
 
 ###设置 settings
