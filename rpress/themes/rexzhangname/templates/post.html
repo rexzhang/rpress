@@ -5,18 +5,18 @@
 {% block carousel %}{% include theme('_carousel_post.html') %}{% endblock %}
 
 {% block content %}
-{% set post=content.post %}
 <div id="post">
   <div class="post-summary-box">
     <div class="post-summary-content">
       <div class="post-title-box">
-        {% if post.type=='blog' %}
+        {% if content.post.type=='blog' %}
         <div class="post-title">
-          <h2>{{ post.title }}</h2>
+          <h2>{{ content.post.title }}</h2>
         </div>
+        {% set post=content.post %}
         {% include theme('_post_metabar.html') %}
         {% endif %}
-        <div class="post-content">{{ post.content|post_content|safe }}</div>
+        <div class="post-content">{{ content.post.content|post_content|safe }}</div>
       </div>
     </div>
   </div>
@@ -27,5 +27,6 @@
     <div>{{ comment.content|safe }}</div>
     {% endfor %}
   </div>
+  {% if content.post.allow_comment %}{% include theme('_disqus_thread.html') %}{% endif %}
 </div>
 {% endblock %}

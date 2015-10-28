@@ -59,38 +59,32 @@ URL 规则
 -------
 特色子类均用固定子目录来区分 blog/archive/category/tag/date/
 
-* post(blog/page)
-    * /post/uuid0001
-
 * blog
-    * /YYYY/MM/DD/uuid0001 - recommend
-    * /YYYY/MM/DD/name - second recommend
-    * /blog/YYYY/MM/DD/uuid0001
-    * /blog/uuid0001
-    * /blog/name
+		* /post/uuid0001 recommend
+
     * /
-    * /page/1
+    * /paginate/1
 
 * page
     * /name - recommend
-    * /uuid0001
+		* /post/uuid0001
 
 * category
     * /category/xxxx
-    * /category/xxxx/page/1
+    * /category/xxxx/paginate/1
 
 * tag
     * /tag/xxxx
-    * /tag/xxxx/page/1
+    * /tag/xxxx/paginate/1
 
 * archive
     * /date/YYYY/MM
     * /date/YYYY
-    * /date/YYYY/page/1
+    * /date/YYYY/paginate/1
 
 * author
 	* /author/rex
-	* /author/rex/page/1
+	* /author/rex/paginate/1
 
 * rPress admin
 	* /rpadmin/xxxx
@@ -179,9 +173,9 @@ post发布状态机
 ~~~
 @startuml
 digraph pic2 {
-  draft -> published
+  draft -> published[label="更新发布时间"]
   published -> unpublish
-  unpublish -> published[label="更新发布时间"]
+  unpublish -> published
   published -> trash
   trash -> published
   published -> history

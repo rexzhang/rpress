@@ -145,6 +145,11 @@ def _make_post_info(post):
         elif term.type == 'tag':
             tags.append(term.name)
 
+    if post.type == 'page':
+        link = url_for('post.page_name', name=post.name)
+    else:
+        link = url_for('post.post_uuid', uuid=post.uuid)
+
     return {
         'title': post.title,
         'uuid': post.uuid,
@@ -156,7 +161,8 @@ def _make_post_info(post):
         'content': post.content,
         'categorys': categorys,
         'tags': tags,
-        'link': url_for('post.post_uuid', uuid=post.uuid),
+        'allow_comment': post.allow_comment,
+        'link': link,
     }
 
 #----------------------------------------------------------------------
