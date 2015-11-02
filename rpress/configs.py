@@ -34,7 +34,7 @@ class ConfigDefault(object):
     SECRET_KEY = 'this is secret key, please change for product environment'
 
     SQLALCHEMY_DATABASE_URI = ''
-    SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
+    #SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 
 
 class ConfigDev(ConfigDefault):
