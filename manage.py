@@ -19,27 +19,36 @@ from rpress.helpers.fsm import PublishFSM
 manager = Manager(create_app())
 
 
-@manager.option('-d', '--init-default-data', default=False)
+@manager.command
 #----------------------------------------------------------------------
-def init_db(init_default_data):
-    """不能正常工作，可能是当前缺少 model 关联操作"""
-##    app.request_context()
-##    with app.app_context():
-    from rpress.models import User, Site, Post
+def init_db():
+    """create database schema, first site, first blog and page, admin user"""
+    #如果不能正常工作，可能是当前缺少 model 关联操作
+    from rpress.models import User, Site, SiteSetting, Post
+
+    user_name = prompt('user name:')
+    site_name = prompt('site name:')
+    site_domain = prompt('site domain:')
 
     db.create_all()
 
-    if init_default_data:
-        user = User(name='rex', password='rexzhang')
-        db.session.add(user)
+    user = User(name=user_name, password='password')
+    db.session.add(user)
 
-        site = Site(name='rexzhangname', title='Rex.Zhang.name', desc='从记录到不仅仅是记录')
-        db.session.add(site)
+    site = Site(name=site_name, domain=site_domain)
+    db.session.add(site)
 
-        post = Post(author=user, published=True, publish_state=PublishFSM.STATE_PUBLISHED, title=u'这是第一篇博客', content=u'我是博客内容')
-        db.session.add(post)
-        db.session.commit()
+    site_titel = SiteSetting(site=site, key='title', value='rPress Site')
+    db.session.add(site_titel)
+    site_desc = SiteSetting(site=site, key='desc', value='a new rPress site')
+    db.session.add(site_desc)
 
+    blog = Post(author=user, published=True, publish_state=PublishFSM.STATE_PUBLISHED, type='blog', title=u'this is first blog', content=u'i am blog content')
+    db.session.add(blog)
+    page = Post(author=user, published=True, publish_state=PublishFSM.STATE_PUBLISHED, type='page', name='sample', title=u'this is first page', content=u'i am page')
+    db.session.add(page)
+
+    db.session.commit()
     return
 
 
@@ -67,9 +76,9 @@ def importer(disable_convert_code_tag, filename):
 
     def create_new_user(username):
         """create a user with cannot login"""
-        prompt('user name:', default=username)
+        user_name = prompt('user name:', default=username)
 
-        user = User(name=username)
+        user = User(name=user_name)
         db.session.add(user)
         return user
 

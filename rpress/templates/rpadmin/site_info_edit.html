@@ -1,0 +1,14 @@
+{% extends theme('/rpadmin/layout.html') %}
+
+{% block contentmain %}
+<form method="POST" action="{{ url_for('rpadmin.site') }}">
+  {{ form.csrf_token }}
+  <div>
+    {{ form.name.label }}: {{ form.name }}
+  </div>
+  <div>
+    {{ form.domain.label }}: {{ form.domain }}
+  </div>
+  {{ form.submit }}
+  </form>
+{% endblock %}

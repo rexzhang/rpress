@@ -15,7 +15,7 @@ from rpress import db
 from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm import PublishFSM
-from rpress.models import User, Site, Post, Term
+from rpress.models import User, Site, Post, Term, SiteSetting
 from rpress.forms import PostEditForm, ProfilesForm, PasswordForm, SiteForm, TermEditFrom
 
 
@@ -166,10 +166,42 @@ def profiles_password():
     return render_template('rpadmin/profiles_password.html', form=form)
 
 
-@rpadmin.route('/site', methods=['GET', 'POST'])
+#----------------------------------------------------------------------
+def _make_site_settings_info(site):
+    """"""
+    SITE_SETTINGS_KEY_LIST = ['title', 'desc']
+
+    site_settings = {}
+
+    for key in SITE_SETTINGS_KEY_LIST:
+        site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
+
+        site_settings[key] = site_setting.value
+
+    return site_settings
+
+
+@rpadmin.route('/site', methods=['GET',])
 @login_required
 #----------------------------------------------------------------------
 def site():
+    """"""
+    site = Site.query.filter_by(id=1).first()
+    if site is None:
+        return
+
+    content = {
+        'site': site,
+        'site_settings': _make_site_settings_info(site),
+    }
+
+    return render_template('rpadmin/site.html', content=content)
+
+
+@rpadmin.route('/site/edit', methods=['GET', 'POST'])
+@login_required
+#----------------------------------------------------------------------
+def site_info_edit():
     """"""
     site = Site.query.filter_by(id=1).first()
     if site is None:
@@ -184,7 +216,7 @@ def site():
     else:
         pass  #!!!
 
-    return render_template('rpadmin/site.html', form=form)
+    return render_template('rpadmin/site_info_edit.html', form=form)
 
 
 @rpadmin.route('/term/list/<string:type>', methods=['GET', ])

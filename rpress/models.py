@@ -22,7 +22,7 @@ class User(db.Model):
 
     _password = Column('password', String(256))
     email = Column(String(32), unique=True)
-    display = Column(String(50))
+    display = Column(String(50), unique=True)
 
     def __init__(self, name=None, password=None):
         self.name = name
@@ -222,21 +222,44 @@ class Site(db.Model):
     __tablename__ = 'sites'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(50))
-
-    title = Column(String(50))
-    desc = Column(String(128))
+    name = Column(String(50), unique=True)
+    domain = Column(String(50), unique=True)
 
     #----------------------------------------------------------------------
-    def __init__(self, name, title, desc=None):
+    def __init__(self, name, domain):
         """Constructor"""
         self.name = name
-
-        self.title = title
-        self.desc = desc
+        self.domain = domain
         return
 
     #----------------------------------------------------------------------
     def __repr__(self):
         """"""
         return '<Site %r>' % (self.title)
+
+
+########################################################################
+class SiteSetting(db.Model):
+    """"""
+    __tablename__ = 'site_settings'
+
+    id = Column(Integer, primary_key=True)
+    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  #暂时定义 user_id＝＝0 为异常归属
+    site = relationship('Site', foreign_keys=[site_id])
+
+    key = Column(String(128))
+    value = Column(Text())
+
+    #----------------------------------------------------------------------
+    def __init__(self, site, key, value):
+        """Constructor"""
+        self.site = site
+        self.key = key
+        self.value = value
+        return
+
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        return '<SiteSetting %r>' % (self.name)
+

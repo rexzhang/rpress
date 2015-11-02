@@ -6,18 +6,20 @@
 from flask.ext.themes2 import render_theme_template  #, get_themes_list
 from flask.ext.login import current_user
 
-from rpress.models import Site
+from rpress.models import Site, SiteSetting
 
 
 #----------------------------------------------------------------------
 def _site_info():
     """"""
     site = Site.query.filter_by(id=1).first()
+    site_title = SiteSetting.query.filter_by(site=site, key='title').first()
+    site_desc = SiteSetting.query.filter_by(site=site, key='desc').first()
 
     site_info = {
         'name': site.name,
-        'title': site.title,
-        'desc': site.desc,
+        'title': site_title.value,
+        'desc': site_desc.value,
     }
     return site_info
 

@@ -1,14 +1,47 @@
 {% extends theme('/rpadmin/layout.html') %}
 
 {% block contentmain %}
-<form method="POST" action="{{ url_for('rpadmin.site') }}">
-  {{ form.csrf_token }}
-  <div>
-    {{ form.title.label }}: {{ form.title }}
-  </div>
-  <div>
-    {{ form.desc.label }}: {{ form.desc }}
-  </div>
-  {{ form.submit }}
-  </form>
+<a href="{{ url_for('rpadmin.site_info_edit') }}">Site Info</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>{{ content.site.id }}</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>{{ content.site.name }}</td>
+    </tr>
+    <tr>
+      <td>domain</td>
+      <td>{{ content.site.domain }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+Site Settings
+<table class="table">
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for k in content.site_settings %}
+    <tr>
+      <td>{{ k }}</td>
+      <td>{{ content.site_settings[k] }}</td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

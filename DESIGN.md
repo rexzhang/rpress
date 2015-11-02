@@ -105,10 +105,9 @@ URL 规则
 
 ###站点信息表结构 sites
 
-* id            #需要规避 0 ，可以在初始化的时候初始化一个 id 为 0 来占位，如果要支持 subdir 模式，需要为 0 号站点设置 domain_name
-* name          #同时作为子目录名 subdir_name
-
-* domain   #域名，可选？
+* id      #需要规避 0 ，可以在初始化的时候初始化一个 id 为 0 来占位，如果要支持 subdir 模式，需要为 0 号站点设置 domain_name
+* name    #同时作为子目录名 subdir_name
+* domain	#域名，可选？
 
 
 ###设置 settings
@@ -182,3 +181,29 @@ digraph pic2 {
 }
 @enduml
 ~~~
+
+html render namespace
+---------------------
+###site
+current site info
+
+###user
+current user account info
+
+###head
+html head block
+
+###title
+html title block
+
+###header
+html header block
+
+###navigation
+html navigation block
+
+###content
+html content block, mostly
+
+###footer
+html footer block

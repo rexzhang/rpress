@@ -4,6 +4,12 @@ TODO
 
 * 0.3 发布要素
 	* settings model
+	* 将站点具体配置信息迁移到 settings 中去
+	* 数据库版本 merge 脚本／工具？
+
+* 0.4
+	* 基于域名的多站点模式支持
+	* 基于网页的wordpress数据导入
 
 * 0.X
 	* 数据导入

@@ -39,8 +39,8 @@ class PasswordForm(Form):
 ########################################################################
 class SiteForm(Form):
     """"""
-    title = StringField(u'站点名称')
-    desc = StringField(u'站点描述')
+    name = StringField(u'站点标示')
+    domain = StringField(u'网站域名')
     submit = SubmitField("submit")
 
 
