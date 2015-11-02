@@ -8,6 +8,7 @@ from __future__ import print_function, unicode_literals, absolute_import
 #from flask import Flask
 #from flask import current_app
 from flask.ext.script import Manager, prompt_bool, prompt
+from flask.ext.migrate import MigrateCommand
 
 from rpress import create_app
 from rpress import db
@@ -17,6 +18,7 @@ from rpress.helpers.fsm import PublishFSM
 
 
 manager = Manager(create_app())
+manager.add_command('db', MigrateCommand)
 
 
 @manager.option('-d', '--init-default-data', default=False)

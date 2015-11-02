@@ -9,6 +9,7 @@ import logging
 
 from flask import Flask
 from flask.ext.themes2 import Themes
+from flask.ext.migrate import Migrate
 
 from rpress import db
 from rpress import login_manager
@@ -68,6 +69,7 @@ def configure_app(app, config_name):
 def configure_db(app):
     """"""
     db.init_app(app)
+    migrate = Migrate(app, db)
     return
 
 

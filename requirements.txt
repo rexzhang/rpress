@@ -6,6 +6,7 @@ Flask-SQLAlchemy
 Flask-Themes2
 Flask-WTF
 Flask-Login
+Flask-Migrate
 feedparser
 Pygments
 transitions
