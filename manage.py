@@ -17,22 +17,31 @@ from rpress.helpers.importer import convert_code_tag
 from rpress.helpers.fsm import PublishFSM
 
 
-manager = Manager(create_app())
+manager = Manager(create_app(config_name='dev'))
 manager.add_command('db', MigrateCommand)
+
 
 
 @manager.command
 #----------------------------------------------------------------------
-def init_db():
-    """create database schema, first site, first blog and page, admin user"""
+def db_create():
+    """create db's schema, alembic (0.8.3) can't support sqlite for upgrade
+    (NotImplementedError: No support for ALTER of constraints in SQLite dialect)"""
     #如果不能正常工作，可能是当前缺少 model 关联操作
     from rpress.models import User, Site, SiteSetting, Post
 
-    user_name = prompt('user name:')
-    site_name = prompt('site name:')
-    site_domain = prompt('site domain:')
-
     db.create_all()
+    return
+
+@manager.command
+#----------------------------------------------------------------------
+def init():
+    """create first site, first blog and page, admin user"""
+    from rpress.models import User, Site, SiteSetting, Post
+
+    user_name = prompt('user name')
+    site_name = prompt('site name')
+    site_domain = prompt('site domain')
 
     user = User(name=user_name, password='password')
     db.session.add(user)

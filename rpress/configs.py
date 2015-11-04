@@ -19,6 +19,9 @@ def get_config_obj(name):
     if name is None or name == 'dev':
         config = ConfigDev()
 
+    elif name == 'dev_mysql':
+        config = ConfigDevMySQL()
+
     elif name == 'release':
         config = ConfigRelease()
 
@@ -42,6 +45,12 @@ class ConfigDev(ConfigDefault):
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'rpress_dev.db')
     #SQLALCHEMY_ECHO = True
+
+
+########################################################################
+class ConfigDevMySQL(ConfigDev):
+    """"""
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/rpress?charset=utf8'
 
 
 ########################################################################
