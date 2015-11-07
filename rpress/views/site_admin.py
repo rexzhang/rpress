@@ -75,6 +75,27 @@ def post_publish_state(uuid, trigger):
     return redirect(url_for('site_admin.post_edit', uuid=uuid))
 
 
+@site_admin.route('/post/<string:type>/new', methods=['GET',])
+@login_required
+#----------------------------------------------------------------------
+def post_new(type):
+    """"""
+    if not is_valid_post_type(type):
+        return  #!!!
+
+    user = User.query.filter_by(id=current_user.id).first()
+    if user is None:
+        return  #!!!
+
+    site = get_current_request_site()
+
+    post = Post(author=user, site=site)
+    db.session.add(post)
+    db.session.commit()
+
+    return redirect(url_for('.post_edit', uuid=post.uuid))
+
+
 @site_admin.route('/post/<uuid:uuid>/edit', methods=['GET', 'POST'])
 @login_required
 #----------------------------------------------------------------------
@@ -98,59 +119,6 @@ def post_edit(uuid):
 
     post_publish_fsm = PublishFSM(post.publish_state)
     return render_template("rp/site_admin/post_edit.html", form=form, post=post, publish_actions=post_publish_fsm.possible_triggers)
-
-
-@site_admin.route('/post/<string:type>/new', methods=['GET',])
-@login_required
-#----------------------------------------------------------------------
-def post_new(type):
-    """"""
-    if not is_valid_post_type(type):
-        return  #!!!
-
-    user = User.query.filter_by(id=current_user.id).first()
-    if user is None:
-        return  #!!!
-
-    site = get_current_request_site()
-
-    post = Post(author=user, site=site)
-    db.session.add(post)
-    db.session.commit()
-
-    return redirect(url_for('.post_edit', uuid=post.uuid))
-
-
-#----------------------------------------------------------------------
-def _make_site_settings_info(site):
-    """"""
-    SITE_SETTINGS_KEY_LIST = ['title', 'desc']
-
-    site_settings = {}
-
-    for key in SITE_SETTINGS_KEY_LIST:
-        site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
-
-        site_settings[key] = site_setting.value
-
-    return site_settings
-
-
-@site_admin.route('/site', methods=['GET',])
-@login_required
-#----------------------------------------------------------------------
-def settings():
-    """"""
-    site = Site.query.filter_by(id=1).first()
-    if site is None:
-        return
-
-    content = {
-        'site': site,
-        'site_settings': _make_site_settings_info(site),
-    }
-
-    return render_template('rp/site_admin/site.html', content=content)
 
 
 @site_admin.route('/term/list/<string:type>', methods=['GET', ])
@@ -190,3 +158,35 @@ def term_edit(name):
         pass
 
     return render_template("rp/site_admin/term_edit.html", form=form, term=term)
+
+
+#----------------------------------------------------------------------
+def _make_site_settings_info(site):
+    """"""
+    SITE_SETTINGS_KEY_LIST = ['title', 'desc']
+
+    site_settings = {}
+
+    for key in SITE_SETTINGS_KEY_LIST:
+        site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
+
+        site_settings[key] = site_setting.value
+
+    return site_settings
+
+
+@site_admin.route('/settings', methods=['GET',])
+@login_required
+#----------------------------------------------------------------------
+def settings():
+    """"""
+    site = Site.query.filter_by(id=1).first()
+    if site is None:
+        return
+
+    content = {
+        'site': site,
+        'site_settings': _make_site_settings_info(site),
+    }
+
+    return render_template('rp/site_admin/settings.html', content=content)
