@@ -19,6 +19,7 @@ from rpress.configs import get_config_obj
 
 from rpress.views import permission as permission_view
 from rpress.views import rpadmin as rpadmin_view
+from rpress.views import mulit_site
 from rpress.views import post as post_view
 
 
@@ -30,6 +31,7 @@ DEFAULT_APP_NAME = 'rpress'
 REGISTER_BLUE_PRINTS = (
     (post_view.post, ''),
     (rpadmin_view.rpadmin, '/rpadmin'),
+    (mulit_site.mulit_site, '/rp/mulitsite'),
     (permission_view.permission, ''),
 
     # add your blue print here

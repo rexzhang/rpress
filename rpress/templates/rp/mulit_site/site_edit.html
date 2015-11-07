@@ -1,11 +1,8 @@
 {% extends theme('/rpadmin/layout.html') %}
 
 {% block contentmain %}
-<form method="POST" action="{{ url_for('rpadmin.site') }}">
+<form method="POST" action="{{ url_for('mulit_site.site_edit', site_id=site_id) }}">
   {{ form.csrf_token }}
-  <div>
-    {{ form.name.label }}: {{ form.name }}
-  </div>
   <div>
     {{ form.domain.label }}: {{ form.domain }}
   </div>

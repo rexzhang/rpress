@@ -15,6 +15,7 @@ from rpress import db
 from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm import PublishFSM
+from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import User, Site, Post, Term, SiteSetting
 from rpress.forms import PostEditForm, ProfilesForm, PasswordForm, SiteForm, TermEditFrom
 
@@ -38,7 +39,9 @@ def post_list(type):
     if not is_valid_post_type(type):
         return  #!!!
 
-    posts = Post.query.filter_by(type=type).order_by(desc('publish_date')).all()
+    site = get_current_request_site()
+
+    posts = Post.query.filter_by(site=site, type=type).order_by(desc('publish_date')).all()
 
     return render_template("/rpadmin/post_list.html", posts=posts, post_type=type)
 
@@ -109,7 +112,9 @@ def post_new(type):
     if user is None:
         return  #!!!
 
-    post = Post(user)
+    site = get_current_request_site()
+
+    post = Post(author=user, site=site)
     db.session.add(post)
     db.session.commit()
 
@@ -198,27 +203,6 @@ def site():
     return render_template('rpadmin/site.html', content=content)
 
 
-@rpadmin.route('/site/edit', methods=['GET', 'POST'])
-@login_required
-#----------------------------------------------------------------------
-def site_info_edit():
-    """"""
-    site = Site.query.filter_by(id=1).first()
-    if site is None:
-        return
-
-    form = SiteForm(obj=site)
-
-    if form.validate_on_submit():
-        form.populate_obj(site)
-        db.session.add(site)
-        db.session.commit()
-    else:
-        pass  #!!!
-
-    return render_template('rpadmin/site_info_edit.html', form=form)
-
-
 @rpadmin.route('/term/list/<string:type>', methods=['GET', ])
 @login_required
 #----------------------------------------------------------------------
@@ -227,7 +211,9 @@ def term_list(type):
     if type not in ['category', 'tag']:
         return  #!!!
 
-    terms = Term.query.filter_by(type=type).order_by(desc('name')).all()
+    site = get_current_request_site()
+
+    terms = Term.query.filter_by(site=site, type=type).order_by(desc('name')).all()
     return render_template('rpadmin/term_list.html', terms=terms)
 
 
@@ -236,7 +222,9 @@ def term_list(type):
 #----------------------------------------------------------------------
 def term_edit(name):
     """"""
-    term = Term.query.filter_by(name=name).first_or_404()  #!!!
+    site = get_current_request_site()
+
+    term = Term.query.filter_by(site=site, name=name).first_or_404()  #!!!
     form = TermEditFrom(obj=term)
 
     if form.validate_on_submit():

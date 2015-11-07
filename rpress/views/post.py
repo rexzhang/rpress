@@ -8,11 +8,12 @@ from datetime import datetime
 from sqlalchemy import desc, asc, func, extract
 
 import flask
-from flask import request, redirect, url_for, flash, abort
+from flask import g, request, redirect, url_for, flash, abort
 from flask.views import MethodView
 
 from rpress import db
 from rpress.helpers.template.common import render_template
+from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import Post, User, Term, Comment
 from rpress.permission import login_user, logout_user
 
@@ -86,8 +87,10 @@ content = {
 #----------------------------------------------------------------------
 def _sidebar():
     """"""
+    site = get_current_request_site()  #!!!应该传进来
+
     categories = []
-    terms = Term.query.filter_by(type='category').order_by('name').all()
+    terms = Term.query.filter_by(site=site, type='category').order_by('name').all()
     for term in terms:
         categories.append({
             'name': term.name,
@@ -96,7 +99,7 @@ def _sidebar():
         })
 
     tags = []
-    terms = Term.query.filter_by(type='tag').order_by('name').all()
+    terms = Term.query.filter_by(site=site, type='tag').order_by('name').all()
     for term in terms:
         tags.append({
             'name': term.name,
@@ -195,7 +198,9 @@ def _render_post_paginate(query, paginate):
 #----------------------------------------------------------------------
 def post_paginate(page_num=1):
     """"""
-    query = Post.query.filter_by(type='blog', published=True).order_by(desc('publish_date'))
+    site = get_current_request_site()
+
+    query = Post.query.filter_by(site=site, type='blog', published=True).order_by(desc('publish_date'))
     paginate = {
         'title': 'Home',  #!!!需要改为站点相关信息
         'curr_num': page_num,
@@ -210,7 +215,9 @@ def post_paginate(page_num=1):
 #----------------------------------------------------------------------
 def post_date(year, page_num=1):
     """"""
-    query = Post.query.filter_by(type='blog', published=True) \
+    site = get_current_request_site()
+
+    query = Post.query.filter_by(site=site, type='blog', published=True) \
         .filter(Post.publish_date>=datetime(year, 1, 1), Post.publish_date<datetime(year+1, 1, 1)) \
         .order_by(desc('publish_date'))
     paginate = {
@@ -225,9 +232,11 @@ def post_date(year, page_num=1):
 
 
 #----------------------------------------------------------------------
-def post_term(term, paginate):
+def _post_term(term, paginate):
     """"""
-    query = Post.query.filter_by(type='blog', published=True).filter(Post.terms.any(Term.name==term)).order_by(desc('publish_date'))
+    site = get_current_request_site()
+
+    query = Post.query.filter_by(site=site, type='blog', published=True).filter(Post.terms.any(Term.name==term)).order_by(desc('publish_date'))
 
     paginate['key'] = term
     paginate['title'] = term  #!!!diaplay name?
@@ -245,7 +254,7 @@ def post_term_category(term, page_num=1):
         'view_name': 'post.post_term_category',
     }
 
-    return post_term(term, paginate)
+    return _post_term(term, paginate)
 
 
 @post.route('/tag/<string:term>', methods=['GET'])
@@ -259,7 +268,7 @@ def post_term_tag(term, page_num=1):
         'view_name': 'post.post_term_tag',
     }
 
-    return post_term(term, paginate)
+    return _post_term(term, paginate)
 
 
 @post.route('/author/<string:author>', methods=['GET'])
@@ -267,7 +276,9 @@ def post_term_tag(term, page_num=1):
 #----------------------------------------------------------------------
 def post_author(author, page_num=1):
     """"""
-    query = Post.query.filter_by(type='blog', published=True).filter(Post.author.has(User.name==author)).order_by(desc('publish_date'))
+    site = get_current_request_site()
+
+    query = Post.query.filter_by(site=site, type='blog', published=True).filter(Post.author.has(User.name==author)).order_by(desc('publish_date'))
     paginate = {
         'title': author,  #!!!display name
         'curr_num': page_num,
@@ -282,12 +293,13 @@ def post_author(author, page_num=1):
 #----------------------------------------------------------------------
 def search(page_num=1):
     """"""
+    site = get_current_request_site()
     keywords = request.args.get('keywords', '').strip(',')
 
     if not keywords:
         return redirect(url_for("post.index"))
 
-    post_query = Post.query.search(keywords)  #!!!!当前搜索多个关键字有bug
+    post_query = Post.query.search(site=site, keywords=keywords)  #!!!!当前搜索多个关键字有bug
 
     if post_query.count() == 1:
         #only one result
@@ -334,7 +346,9 @@ def _render_post(post):
 #----------------------------------------------------------------------
 def post_uuid(uuid):
     """"""
-    post = Post.query.filter_by(uuid=str(uuid), published=True).first_or_404()
+    site = get_current_request_site()
+
+    post = Post.query.filter_by(site=site, uuid=str(uuid), published=True).first_or_404()
     return _render_post(post)
 
 
@@ -343,5 +357,7 @@ def post_uuid(uuid):
 #----------------------------------------------------------------------
 def page_name(name):
     """"""
-    post = Post.query.filter_by(name=name, published=True, type='page').first_or_404()
+    site = get_current_request_site()
+
+    post = Post.query.filter_by(site=site, name=name, published=True, type='page').first_or_404()
     return _render_post(post)

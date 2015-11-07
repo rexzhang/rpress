@@ -1,0 +1,30 @@
+{% extends theme('/rpadmin/layout.html') %}
+
+{% block contentnav %}
+<ul class="nav nav-pills">
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('mulit_site.site_new') }}">Add New Site</a>
+</ul>
+{% endblock %}
+
+{% block contentmain %}
+Site List
+<table class="table">
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>domain</th>
+      <th>DELETE</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for site in sites %}
+    <tr>
+      <td>{{ site.id }}</td>
+      <td><a href="{{ url_for('mulit_site.site_edit', site_id=site.id) }}">{{ site.domain }}</a></td>
+      <td><a href="{{ url_for('mulit_site.site_delete', site_id=site.id) }}">delete</a></td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

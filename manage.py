@@ -13,11 +13,10 @@ from flask.ext.migrate import MigrateCommand
 from rpress import create_app
 from rpress import db
 from rpress.helpers.uuid1plus import uuid1fromdatetime
-from rpress.helpers.importer import convert_code_tag
-from rpress.helpers.fsm import PublishFSM
+from rpress.helpers.data_init import add_site_sample_data, import_site_from_wordpress
 
 
-manager = Manager(create_app(config_name='dev'))
+manager = Manager(create_app(config_name='dev'))  #!!!
 manager.add_command('db', MigrateCommand)
 
 
@@ -25,40 +24,34 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 #----------------------------------------------------------------------
 def db_create():
-    """create db's schema, alembic (0.8.3) can't support sqlite for upgrade
+    """create db's schema, create first/admin user
+    alembic (0.8.3) can't support sqlite for upgrade:
     (NotImplementedError: No support for ALTER of constraints in SQLite dialect)"""
     #如果不能正常工作，可能是当前缺少 model 关联操作
-    from rpress.models import User, Site, SiteSetting, Post
+    from rpress.models import User
 
     db.create_all()
+
+    admin_user_name = prompt('user(admin) name')
+    user = User(name=admin_user_name, password='password')
+
+    db.session.add(user)
+    db.session.commit()
     return
 
 @manager.command
 #----------------------------------------------------------------------
-def init():
+def db_add_site():
     """create first site, first blog and page, admin user"""
-    from rpress.models import User, Site, SiteSetting, Post
+    from rpress.models import User
 
-    user_name = prompt('user name')
     site_name = prompt('site name')
     site_domain = prompt('site domain')
+    admin_user_name = prompt('user(admin) name')
 
-    user = User(name=user_name, password='password')
-    db.session.add(user)
+    admin_user = User.query.filter_by(name=admin_user_name).first()
 
-    site = Site(name=site_name, domain=site_domain)
-    db.session.add(site)
-
-    site_titel = SiteSetting(site=site, key='title', value='rPress Site')
-    db.session.add(site_titel)
-    site_desc = SiteSetting(site=site, key='desc', value='a new rPress site')
-    db.session.add(site_desc)
-
-    blog = Post(author=user, published=True, publish_state=PublishFSM.STATE_PUBLISHED, type='blog', title=u'this is first blog', content=u'i am blog content')
-    db.session.add(blog)
-    page = Post(author=user, published=True, publish_state=PublishFSM.STATE_PUBLISHED, type='page', name='sample', title=u'this is first page', content=u'i am page')
-    db.session.add(page)
-
+    add_site_sample_data(db_session=db.session, site_name=site_name, site_domain=site_domain, admin_user=admin_user)
     db.session.commit()
     return
 
@@ -68,183 +61,12 @@ def init():
 #----------------------------------------------------------------------
 def importer(disable_convert_code_tag, filename):
     """"""
-    import HTMLParser
-    from datetime import datetime
-    import feedparser
+    from rpress.models import Site
 
-    from rpress.models import User, Post, Term, Comment
+    site_name = prompt('site name')
+    site = Site.query.filter_by(name=site_name).first()  #!!!!!!!!!!!!!!!!
 
-    def datetime_from_str(string):
-        return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
-
-    def convert_content(content):
-        html_parser = HTMLParser.HTMLParser()
-        content = html_parser.unescape(content)
-
-        if not disable_convert_code_tag:
-            content = convert_code_tag(content)
-        return content
-
-    def create_new_user(username):
-        """create a user with cannot login"""
-        user_name = prompt('user name:', default=username)
-
-        user = User(name=user_name)
-        db.session.add(user)
-        return user
-
-    #init data
-    term_name_category_list = []
-    categorys = Term.query.filter_by(type='category').all()
-    for category in categorys:
-        term_name_category_list.append(category.name)
-
-    term_name_tag_list = []
-    tags = Term.query.filter_by(type='tag').all()
-    for tag in tags:
-        term_name_tag_list.append(tag.name)
-
-    import_wp_past_type_list = ['post', 'page']
-
-    print('loading RSS file...')
-    wordpress_data = feedparser.parse(filename)
-
-    print('parsering RSS file...')
-    skip_author_set = set()
-    for entry in wordpress_data.entries:
-        #print(entry.wp_post_id, entry.wp_post_type, entry.wp_status, entry.author, entry.title, ' --- ', entry.wp_post_name)
-        #某些条目内同时包含 post 和 comment 信息
-
-        if entry.wp_post_type not in import_wp_past_type_list:
-            #skip some post
-            continue
-
-        #create datetime
-        post_publish_date = datetime_from_str(entry.wp_post_date)
-
-        #skip duplicate post: title + post_publish_date
-        exist_posts = Post.query.filter_by(title=entry.title, publish_date=post_publish_date).all()
-        if len(exist_posts) >= 1:
-            print('[wrong] skip duplicate post:%s' % entry.title)
-            continue
-
-        #check author
-        is_skip_author = False
-        if entry.author in skip_author_set:
-            is_skip_author = True
-        else:
-            user = User.query.filter_by(name=entry.author).first()
-            if user is None:
-                if prompt_bool('Found new author:[%s], did you create user?' % entry.author, default=True):
-                    user = create_new_user(entry.author)
-                else:
-                    skip_author_set.add(entry.author)
-                    is_skip_author = True
-
-        #skip author
-        if is_skip_author:
-            print('[wrong] miss user:[%s], skip post;%s' % (entry.author, entry.title))
-            continue
-
-        #publish status
-        if entry.wp_status == 'publish':
-            published = True
-            publish_state = PublishFSM.STATE_PUBLISHED
-        elif entry.wp_status == 'draft':
-            published = False
-            publish_state = PublishFSM.STATE_DRAFT
-        else:
-            continue
-
-        #post type
-        if entry.wp_post_type == 'post':
-            type = 'blog'
-        elif entry.wp_post_type == 'page':
-            type = 'page'
-        else:
-            continue
-
-        #post content
-        if entry.content[0].type == 'text/html':
-            content = convert_content(entry.content[0].value)
-
-        print('+ %s %s' % (publish_state, entry.title))
-        post = Post(author=user,
-                    published=published, publish_state=publish_state, publish_date=post_publish_date,
-                    type=type,
-                    name=entry.wp_post_name.lower(),
-                    title=entry.title,
-                    content=content)
-
-        db.session.add(post)
-
-        #terms
-        #允许 category 与 tag 之间重名, rPress 不允许重名
-        if not hasattr(entry, 'tags'):
-            #can not found tags item
-            continue
-
-        for term in entry.tags:
-            new_term = False
-            term_name = term.term
-
-            if term.scheme == 'category':
-                term_type = 'category'
-
-                if term_name not in term_name_category_list:
-                    term_name_category_list.append(term_name)
-                    new_term = True
-
-            elif term.scheme == 'post_tag':
-                term_type = 'tag'
-
-                if term_name not in term_name_tag_list:
-                    term_name_tag_list.append(term_name)
-                    new_term = True
-
-            else:
-                #some error
-                continue
-
-            if new_term:
-                term = Term(term_name, type=term_type)
-                db.session.add(term)
-            else:
-                term = Term.query.filter_by(name=term_name).first()
-
-            post.terms.append(term)
-
-    #comment
-    for entry in wordpress_data.entries:
-        if not hasattr(entry, 'wp_comment_date'):
-            #skip, if it is't comment
-            continue
-
-        #comment create date
-        comment_publish_date=datetime_from_str(entry.wp_comment_date)
-
-        #skip duplicate comment: author + comment_publish_date
-        exist_commnets = Comment.query.filter_by(author_name=entry.wp_comment_author, publish_date=comment_publish_date).all()
-        if len(exist_commnets) >= 1:
-            print('[wrong] skip duplicate comment:[%s] %s' % (entry.wp_comment_author, entry.wp_comment_date))
-            continue
-
-        post_publish_date = datetime_from_str(entry.wp_post_date)
-        post = Post.query.filter_by(title=entry.title, publish_date=post_publish_date).first()
-        if post is None:
-            print('[wrong] miss post, comment:[%s] %s' % (entry.wp_comment_author, entry.wp_comment_date))
-            continue
-
-        print('+ comment %s %s' % (entry.wp_comment_date, entry.wp_comment_author))
-        comment = Comment(post=post,
-                author_name=entry.wp_comment_author,
-                publish_date=comment_publish_date,
-                content=convert_content(entry.wp_comment_content),
-                author_email=entry.wp_comment_author_email,
-                author_ip=entry.wp_comment_author_ip,
-                author_url=entry.wp_comment_author_url)
-
-        db.session.add(comment)
+    import_site_from_wordpress(db_session=db.session, site=site, disable_convert_code_tag=disable_convert_code_tag, filename=filename)
 
     #commit
     db.session.commit()

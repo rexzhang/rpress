@@ -67,7 +67,7 @@ post_term_relations = db.Table('post_term_relations',
 class PostQuery(BaseQuery):
     """"""
     #----------------------------------------------------------------------
-    def search(self, keywords):
+    def search(self, site, keywords):
         """"""
         criteria = []
 
@@ -80,7 +80,7 @@ class PostQuery(BaseQuery):
                                    ))
 
         query = reduce(db.and_, criteria)
-        return self.filter(query)
+        return self.filter_by(site=site).filter(query)
 
 
 ########################################################################
@@ -92,7 +92,9 @@ class Post(db.Model):
 
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True)
-    #site id
+
+    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  #暂时定义 site_id 为异常归属
+    site = relationship('Site', foreign_keys=[site_id])
 
     author_id = Column(Integer, ForeignKey('users.id'), default=0)  #暂时定义 user_id＝＝0 为异常归属
     author = relationship('User', foreign_keys=[author_id])
@@ -117,8 +119,12 @@ class Post(db.Model):
     content = Column(Text)
 
     #----------------------------------------------------------------------
-    def __init__(self, author, uuid=None, publish_date=None, published=False, publish_state=PublishFSM.STATE_DRAFT, type='blog', name=None, title=None, content=None):
+    def __init__(self, author, site, uuid=None, published=False, publish_state=PublishFSM.STATE_DRAFT, publish_date=None, type='blog', name=None, title=None, content=None):
         """Constructor"""
+        self.author = author
+
+        self.site = site
+
         if uuid is None and publish_date is None:
             uuid = uuid1()
             publish_date = uuid.datetime
@@ -130,8 +136,6 @@ class Post(db.Model):
             uuid = uuid1fromdatetime(publish_date)
 
         self.uuid = str(uuid)
-
-        self.author = author
 
         self.published = published
         self.publish_state = publish_state
@@ -160,13 +164,18 @@ class Term(db.Model):
 
     id = Column(Integer, primary_key=True)
 
+    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  #暂时定义 site_id 为异常归属
+    site = relationship('Site', foreign_keys=[site_id])
+
     name = Column(String(50), unique=True)
     type = Column(String(50))  #tag/category
     desc = Column(Text)
 
     #----------------------------------------------------------------------
-    def __init__(self, name, type='tag', desc=None):
+    def __init__(self, site, name, type='tag', desc=None):
         """Constructor"""
+        self.site = site
+
         self.name = name
         self.type = type
         self.desc = desc
@@ -235,7 +244,7 @@ class Site(db.Model):
     #----------------------------------------------------------------------
     def __repr__(self):
         """"""
-        return '<Site %r>' % (self.title)
+        return '<Site %r>' % (self.domain)
 
 
 ########################################################################
@@ -254,6 +263,7 @@ class SiteSetting(db.Model):
     def __init__(self, site, key, value):
         """Constructor"""
         self.site = site
+
         self.key = key
         self.value = value
         return

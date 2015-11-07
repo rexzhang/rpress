@@ -39,7 +39,7 @@ class PasswordForm(Form):
 ########################################################################
 class SiteForm(Form):
     """"""
-    name = StringField(u'站点标示')
+    name = StringField(u'站点标示')  #!!!废弃
     domain = StringField(u'网站域名')
     submit = SubmitField("submit")
 
