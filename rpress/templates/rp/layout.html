@@ -1,18 +1,18 @@
 {% extends theme('layout_base.html') %}
 
 {% block head %}{{ super() }}
-<link rel=stylesheet type=text/css href="/static/rpadmin/style.css">
+<link rel=stylesheet type=text/css href="/static/rp/style.css">
 {% endblock %}
 
 {% block title %}{{ site.title }} | rPress{% endblock %}
 
-<div class="container-fluid">{% include theme('/rpadmin/_message_flash.html') %}</div>
+<div class="container-fluid">{% include theme('/rp/_message_flash.html') %}</div>
 
 {% block body %}
 <div class="container-fluid">
-  {% block header %}{% include theme('/rpadmin/_header.html') %}{% endblock %}
+  {% block header %}{% include theme('/rp/_header.html') %}{% endblock %}
 
-  {% block navigation %}{% include theme('/rpadmin/_navigation.html') %}{% endblock %}
+  {% block navigation %}{% include theme('/rp/_navigation.html') %}{% endblock %}
 
   {% block content %}
   <div id="content-nav" class="container-fluid">{% block contentnav %}{% endblock %}</div>
@@ -20,5 +20,5 @@
   {% endblock %}
 </div>
 
-{% block footer %}{% include theme('/rpadmin/_footer.html') %}{% endblock %}
+{% block footer %}{% include theme('/rp/_footer.html') %}{% endblock %}
 {% endblock %}
