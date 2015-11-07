@@ -28,7 +28,7 @@ site_admin = flask.Blueprint('site_admin', __name__)
 #----------------------------------------------------------------------
 def index():
     """"""
-    return render_template("/rpadmin/index.html")
+    return render_template("rp/site_admin/index.html")
 
 
 @site_admin.route('/post/list/<string:type>', methods=['GET'])
@@ -43,7 +43,7 @@ def post_list(type):
 
     posts = Post.query.filter_by(site=site, type=type).order_by(desc('publish_date')).all()
 
-    return render_template("/rpadmin/post_list.html", posts=posts, post_type=type)
+    return render_template("rp/site_admin/post_list.html", posts=posts, post_type=type)
 
 
 @site_admin.route('/post/<uuid:uuid>/publish/<string:trigger>', methods=['GET'])
@@ -97,7 +97,7 @@ def post_edit(uuid):
         pass
 
     post_publish_fsm = PublishFSM(post.publish_state)
-    return render_template("/rpadmin/post_edit.html", form=form, post=post, publish_actions=post_publish_fsm.possible_triggers)
+    return render_template("rp/site_admin/post_edit.html", form=form, post=post, publish_actions=post_publish_fsm.possible_triggers)
 
 
 @site_admin.route('/post/<string:type>/new', methods=['GET',])
@@ -150,7 +150,7 @@ def settings():
         'site_settings': _make_site_settings_info(site),
     }
 
-    return render_template('rpadmin/site.html', content=content)
+    return render_template('rp/site_admin/site.html', content=content)
 
 
 @site_admin.route('/term/list/<string:type>', methods=['GET', ])
@@ -164,7 +164,7 @@ def term_list(type):
     site = get_current_request_site()
 
     terms = Term.query.filter_by(site=site, type=type).order_by(desc('name')).all()
-    return render_template('rpadmin/term_list.html', terms=terms)
+    return render_template('rp/site_admin/term_list.html', terms=terms)
 
 
 @site_admin.route('/term/<string:name>/edit', methods=['GET', 'POST'])
@@ -189,4 +189,4 @@ def term_edit(name):
         flash('term edit error')
         pass
 
-    return render_template("/rpadmin/term_edit.html", form=form, term=term)
+    return render_template("rp/site_admin/term_edit.html", form=form, term=term)

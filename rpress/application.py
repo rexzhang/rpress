@@ -17,7 +17,7 @@ from rpress.helpers.template.filter import configure_filter
 from rpress.helpers.error_handler import configure_error_handler
 from rpress.configs import get_config_obj
 
-from rpress.views import permission as permission_view
+from rpress.views import permission
 from rpress.views import site_admin
 from rpress.views import profiles_admin
 from rpress.views import mulit_site_admin
@@ -31,10 +31,10 @@ DEFAULT_APP_NAME = 'rpress'
 
 REGISTER_BLUE_PRINTS = (
     (post_view.post, ''),
+    (permission.permission, ''),
     (site_admin.site_admin, '/rp/admin'),
     (profiles_admin.profiles_admin, '/rp/profiles'),
     (mulit_site_admin.mulit_site_admin, '/rp/mulitsite'),
-    (permission_view.permission, ''),
 
     # add your blue print here
 )
