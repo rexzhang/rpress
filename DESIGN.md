@@ -9,12 +9,8 @@ a mulit-site and mulit-user blog system.
 
 * 不同域名
 		* 需要每个 view 可以感知这次调用的域名信息，然后即时转换为 site
-		* 备用方案 nginx 使用一个字典，将 site1.sample.com/ppp 映射为 rpress.sample.com/site1/ppp
-				* 可以映射为 int 也可以是 string
 				* 还需要解决引发的权限问题
-* 不同子目录？？
-		* sample.com/site_name/ppp
-		* sample.com/site_name/rpadmin/rrr
+				* 不同站点对应不同 themem
 
 所有 post 均使用类 uuid 的唯一编号
 

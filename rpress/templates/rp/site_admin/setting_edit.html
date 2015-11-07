@@ -1,0 +1,12 @@
+{% extends theme('/rp/layout.html') %}
+
+{% block contentmain %}
+key: {{ site_setting.key }}
+<form method="POST" action="{{ url_for('site_admin.setting_edit', key=site_setting.key) }}">
+  {{ form.csrf_token }}
+  <div>
+    {{ form.value.label }}: {{ form.value }}
+  </div>
+  {{ form.submit }}
+</form>
+{% endblock %}

@@ -17,7 +17,7 @@ from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm import PublishFSM
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import User, Site, Post, Term, SiteSetting
-from rpress.forms import PostEditForm, TermEditFrom
+from rpress.forms import PostEditForm, TermEditFrom, SettingsForm
 
 
 site_admin = flask.Blueprint('site_admin', __name__)
@@ -180,7 +180,7 @@ def _make_site_settings_info(site):
 #----------------------------------------------------------------------
 def settings():
     """"""
-    site = Site.query.filter_by(id=1).first()
+    site = get_current_request_site()
     if site is None:
         return
 
@@ -190,3 +190,28 @@ def settings():
     }
 
     return render_template('rp/site_admin/settings.html', content=content)
+
+
+@site_admin.route('/setting/<string:key>/edit', methods=['GET', 'POST'])
+@login_required
+#----------------------------------------------------------------------
+def setting_edit(key):
+    """"""
+    site = get_current_request_site()
+    site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
+
+    form = SettingsForm(obj=site_setting)
+
+    if form.validate_on_submit():
+        form.populate_obj(site_setting)
+
+        db.session.add(site_setting)
+        db.session.commit()
+
+        flash("setting updated", "success")
+        #return redirect(url_for('.blog'))
+    else:
+        flash('setting edit error')
+        pass
+
+    return render_template("rp/site_admin/setting_edit.html", form=form, site_setting=site_setting)
