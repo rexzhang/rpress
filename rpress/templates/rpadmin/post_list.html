@@ -2,7 +2,7 @@
 
 {% block contentnav %}
 <ul class="nav nav-pills">
-  <li class="nav-item"><a class="nav-link" href="{{ url_for('rpadmin.post_new', type=post_type) }}">New post</a>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.post_new', type=post_type) }}">New post</a>
 </ul>
 {% endblock %}
 
@@ -23,7 +23,7 @@
     <tr>
       <td>{{ post.publish_state }}</td>
       <td>{{ post.publish_date }}</td>
-      <td><a href="{{ url_for('rpadmin.post_edit', uuid=post.uuid) }}">{{ post.title }}</a></td>
+      <td><a href="{{ url_for('site_admin.post_edit', uuid=post.uuid) }}">{{ post.title }}</a></td>
     </tr>
 
     {% endfor %}

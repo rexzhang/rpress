@@ -12,6 +12,7 @@ from rpress.helpers.template.common import render_template
 from rpress.models import Site
 from rpress.forms import SiteForm
 
+
 mulit_site = Blueprint('mulit_site', __name__)
 
 

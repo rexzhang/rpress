@@ -18,9 +18,6 @@ from rpress.models import Post, User, Term, Comment
 from rpress.permission import login_user, logout_user
 
 
-post = flask.Blueprint('post', __name__)
-
-
 ##class TestView(MethodView):
 ##    def get(self):
 ##        return 'hello world'
@@ -82,6 +79,9 @@ content = {
     },
 }
 """
+
+
+post = flask.Blueprint('post', __name__)
 
 
 #----------------------------------------------------------------------

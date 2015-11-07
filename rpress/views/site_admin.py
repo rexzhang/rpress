@@ -20,10 +20,10 @@ from rpress.models import User, Site, Post, Term, SiteSetting
 from rpress.forms import PostEditForm, ProfilesForm, PasswordForm, SiteForm, TermEditFrom
 
 
-rpadmin = flask.Blueprint('rpadmin', __name__)
+site_admin = flask.Blueprint('site_admin', __name__)
 
 
-@rpadmin.route('/', methods=['GET'])
+@site_admin.route('', methods=['GET'])
 @login_required
 #----------------------------------------------------------------------
 def index():
@@ -31,7 +31,7 @@ def index():
     return render_template("/rpadmin/index.html")
 
 
-@rpadmin.route('/post/list/<string:type>', methods=['GET'])
+@site_admin.route('/post/list/<string:type>', methods=['GET'])
 @login_required
 #----------------------------------------------------------------------
 def post_list(type):
@@ -46,7 +46,7 @@ def post_list(type):
     return render_template("/rpadmin/post_list.html", posts=posts, post_type=type)
 
 
-@rpadmin.route('/post/<uuid:uuid>/publish/<string:trigger>', methods=['GET'])
+@site_admin.route('/post/<uuid:uuid>/publish/<string:trigger>', methods=['GET'])
 @login_required
 #----------------------------------------------------------------------
 def post_publish_state(uuid, trigger):
@@ -72,10 +72,10 @@ def post_publish_state(uuid, trigger):
     db.session.add(post)
     db.session.commit()
 
-    return redirect(url_for('rpadmin.post_edit', uuid=uuid))
+    return redirect(url_for('site_admin.post_edit', uuid=uuid))
 
 
-@rpadmin.route('/post/<uuid:uuid>/edit', methods=['GET', 'POST'])
+@site_admin.route('/post/<uuid:uuid>/edit', methods=['GET', 'POST'])
 @login_required
 #----------------------------------------------------------------------
 def post_edit(uuid):
@@ -100,7 +100,7 @@ def post_edit(uuid):
     return render_template("/rpadmin/post_edit.html", form=form, post=post, publish_actions=post_publish_fsm.possible_triggers)
 
 
-@rpadmin.route('/post/<string:type>/new', methods=['GET',])
+@site_admin.route('/post/<string:type>/new', methods=['GET',])
 @login_required
 #----------------------------------------------------------------------
 def post_new(type):
@@ -121,7 +121,7 @@ def post_new(type):
     return redirect(url_for('.post_edit', uuid=post.uuid))
 
 
-@rpadmin.route('/profiles', methods=['GET', 'POST'])
+@site_admin.route('/profiles', methods=['GET', 'POST'])
 @login_required
 #----------------------------------------------------------------------
 def profiles():
@@ -141,7 +141,7 @@ def profiles():
     return render_template('rpadmin/profiles.html', form=form)
 
 
-@rpadmin.route('/profiles/password', methods=['GET', 'POST'])
+@site_admin.route('/profiles/password', methods=['GET', 'POST'])
 @login_required
 #----------------------------------------------------------------------
 def profiles_password():
@@ -160,7 +160,7 @@ def profiles_password():
             db.session.commit()
 
             flash('password is changed!')
-            return redirect(url_for('rpadmin.profiles'))
+            return redirect(url_for('site_admin.profiles'))
 
         else:
             flash("old password is NOT correct")
@@ -186,7 +186,7 @@ def _make_site_settings_info(site):
     return site_settings
 
 
-@rpadmin.route('/site', methods=['GET',])
+@site_admin.route('/site', methods=['GET',])
 @login_required
 #----------------------------------------------------------------------
 def site():
@@ -203,7 +203,7 @@ def site():
     return render_template('rpadmin/site.html', content=content)
 
 
-@rpadmin.route('/term/list/<string:type>', methods=['GET', ])
+@site_admin.route('/term/list/<string:type>', methods=['GET', ])
 @login_required
 #----------------------------------------------------------------------
 def term_list(type):
@@ -217,7 +217,7 @@ def term_list(type):
     return render_template('rpadmin/term_list.html', terms=terms)
 
 
-@rpadmin.route('/term/<string:name>/edit', methods=['GET', 'POST'])
+@site_admin.route('/term/<string:name>/edit', methods=['GET', 'POST'])
 @login_required
 #----------------------------------------------------------------------
 def term_edit(name):

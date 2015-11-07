@@ -2,12 +2,12 @@
 
 {% block contentnav %}
 <ul class="nav nav-pills">
-  <li class="nav-item"><a class="nav-link" href="{{ url_for('rpadmin.profiles_password') }}">Change Password</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.profiles_password') }}">Change Password</a></li>
 </ul>
 {% endblock %}
 
 {% block contentmain %}
-<form method="POST" action="{{ url_for('rpadmin.profiles') }}">
+<form method="POST" action="{{ url_for('site_admin.profiles') }}">
   {{ form.csrf_token }}
   <div>
     {{ form.email.label }}: {{ form.email }}

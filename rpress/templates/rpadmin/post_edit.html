@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block contentmain %}
-<form method="POST" action="{{ url_for('rpadmin.post_edit', uuid=post.uuid) }}">
+<form method="POST" action="{{ url_for('site_admin.post_edit', uuid=post.uuid) }}">
   {{ form.csrf_token }}
   <div>
     {{ form.title.label }}: {{ form.title }}
