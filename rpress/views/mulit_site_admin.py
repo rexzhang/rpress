@@ -13,23 +13,23 @@ from rpress.models import Site
 from rpress.forms import SiteForm
 
 
-mulit_site = Blueprint('mulit_site', __name__)
+mulit_site_admin = Blueprint('mulit_site_admin', __name__)
 
 
-@mulit_site.route('', methods=['GET',])
+@mulit_site_admin.route('', methods=['GET',])
 @login_required
 #----------------------------------------------------------------------
 def index():
     """mulit-site home page"""
     sites = Site.query.all()
 
-    return render_template('rp/mulit_site/index.html', sites=sites)
+    return render_template('rp/mulit_site_admin/index.html', sites=sites)
 
 
-@mulit_site.route('/new', methods=['GET',])
+@mulit_site_admin.route('/new', methods=['GET',])
 @login_required
 #----------------------------------------------------------------------
-def site_new():
+def new():
     """"""
     site = Site(name="newsite", domain="new.sample.com")
     db.session.add(site)
@@ -38,10 +38,10 @@ def site_new():
     return redirect(url_for('.site_edit', site_id=site.id))
 
 
-@mulit_site.route('/<int:site_id>/edit', methods=['GET', 'POST'])
+@mulit_site_admin.route('/<int:site_id>/edit', methods=['GET', 'POST'])
 @login_required
 #----------------------------------------------------------------------
-def site_edit(site_id):
+def edit(site_id):
     """"""
     site = Site.query.filter_by(id=site_id).first()
     if site is None:
@@ -56,13 +56,13 @@ def site_edit(site_id):
     else:
         pass  #!!!
 
-    return render_template('rp/mulit_site/site_edit.html', site_id=site_id, form=form)
+    return render_template('rp/mulit_site_admin/edit.html', site_id=site_id, form=form)
 
 
-@mulit_site.route('/<int:site_id>/delete', methods=['GET',])
+@mulit_site_admin.route('/<int:site_id>/delete', methods=['GET',])
 @login_required
 #----------------------------------------------------------------------
-def site_delete(site_id):
+def delete(site_id):
     """"""
     print(site_id)  #!!!!!
 

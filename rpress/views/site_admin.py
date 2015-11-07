@@ -17,7 +17,7 @@ from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm import PublishFSM
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import User, Site, Post, Term, SiteSetting
-from rpress.forms import PostEditForm, ProfilesForm, PasswordForm, SiteForm, TermEditFrom
+from rpress.forms import PostEditForm, TermEditFrom
 
 
 site_admin = flask.Blueprint('site_admin', __name__)
@@ -121,56 +121,6 @@ def post_new(type):
     return redirect(url_for('.post_edit', uuid=post.uuid))
 
 
-@site_admin.route('/profiles', methods=['GET', 'POST'])
-@login_required
-#----------------------------------------------------------------------
-def profiles():
-    """"""
-    user = User.query.filter_by(id=current_user.id).first()
-    if user is None:
-        return  #!!!
-    form = ProfilesForm(obj=user)
-
-    if form.validate_on_submit():
-        form.populate_obj(user)
-        db.session.add(user)
-        db.session.commit()
-    else:
-        pass  #!!!
-
-    return render_template('rpadmin/profiles.html', form=form)
-
-
-@site_admin.route('/profiles/password', methods=['GET', 'POST'])
-@login_required
-#----------------------------------------------------------------------
-def profiles_password():
-    """"""
-    user = User.query.filter_by(id=current_user.id).first()
-    if user is None:
-        return  #!!!
-
-    form = PasswordForm()
-
-    if form.validate_on_submit():
-        if user.password_validate(form.data['password_old']):
-            user.password = form.data['password_new']
-
-            db.session.add(user)
-            db.session.commit()
-
-            flash('password is changed!')
-            return redirect(url_for('site_admin.profiles'))
-
-        else:
-            flash("old password is NOT correct")
-
-    else:
-        pass  #!!!
-
-    return render_template('rpadmin/profiles_password.html', form=form)
-
-
 #----------------------------------------------------------------------
 def _make_site_settings_info(site):
     """"""
@@ -189,7 +139,7 @@ def _make_site_settings_info(site):
 @site_admin.route('/site', methods=['GET',])
 @login_required
 #----------------------------------------------------------------------
-def site():
+def settings():
     """"""
     site = Site.query.filter_by(id=1).first()
     if site is None:

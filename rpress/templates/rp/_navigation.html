@@ -1,8 +1,8 @@
 <div>
   <ul class="nav nav-tabs">
-    <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.profiles') }}">Profiles</a></li>
-    <li class="nav-item"><a class="nav-link" href="{{ url_for('mulit_site.index') }}">MulitSite</a></li>
-    <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.site') }}">Site</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('profiles_admin.edit') }}">Profiles</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('mulit_site_admin.index') }}">MulitSite</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.settings') }}">Settings</a></li>
     <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.post_list', type='blog') }}">Blogs</a></li>
     <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.post_list', type='page') }}">Pages</a></li>
     <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.term_list', type='category') }}">Categories</a></li>
