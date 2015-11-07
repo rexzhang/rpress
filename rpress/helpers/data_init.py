@@ -147,7 +147,7 @@ def import_site_from_wordpress(db_session, site, disable_convert_code_tag, filen
             content = convert_content(entry.content[0].value)
 
         print('+ %s %s' % (publish_state, entry.title))
-        post = Post(author=user,
+        post = Post(author=user, site=site,
                     published=published, publish_state=publish_state, publish_date=post_publish_date,
                     type=type,
                     name=entry.wp_post_name.lower(),
@@ -185,7 +185,7 @@ def import_site_from_wordpress(db_session, site, disable_convert_code_tag, filen
                 continue
 
             if new_term:
-                term = Term(term_name, type=term_type)
+                term = Term(site, term_name, type=term_type)
                 db_session.add(term)
             else:
                 term = Term.query.filter_by(name=term_name).first()

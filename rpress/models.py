@@ -231,13 +231,12 @@ class Site(db.Model):
     __tablename__ = 'sites'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True)
+
     domain = Column(String(50), unique=True)
 
     #----------------------------------------------------------------------
-    def __init__(self, name, domain):
+    def __init__(self, domain):
         """Constructor"""
-        self.name = name
         self.domain = domain
         return
 

@@ -20,7 +20,6 @@ manager = Manager(create_app(config_name='dev'))  #!!!
 manager.add_command('db', MigrateCommand)
 
 
-
 @manager.command
 #----------------------------------------------------------------------
 def db_create():
@@ -63,8 +62,8 @@ def importer(disable_convert_code_tag, filename):
     """"""
     from rpress.models import Site
 
-    site_name = prompt('site name')
-    site = Site.query.filter_by(name=site_name).first()  #!!!!!!!!!!!!!!!!
+    site_domain = prompt('site domain')
+    site = Site.query.filter_by(domain=site_domain).first()  #!!!!!!!!!!!!!!!!
 
     import_site_from_wordpress(db_session=db.session, site=site, disable_convert_code_tag=disable_convert_code_tag, filename=filename)
 

@@ -17,7 +17,6 @@ def _site_info():
     site_desc = SiteSetting.query.filter_by(site=site, key='desc').first()
 
     site_info = {
-        'name': site.name,
         'title': site_title.value,
         'desc': site_desc.value,
     }
