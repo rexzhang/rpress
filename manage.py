@@ -50,7 +50,7 @@ def db_add_site():
 
     admin_user = User.query.filter_by(name=admin_user_name).first()
 
-    add_site_sample_data(db_session=db.session, site_name=site_name, site_domain=site_domain, admin_user=admin_user)
+    add_site_sample_data(db_session=db.session, site_domain=site_domain, admin_user=admin_user)
     db.session.commit()
     return
 

@@ -31,7 +31,7 @@ def index():
 #----------------------------------------------------------------------
 def new():
     """"""
-    site = Site(name="newsite", domain="new.sample.com")
+    site = Site(domain='new.sample.com')
     db.session.add(site)
     db.session.commit()
 

@@ -15,9 +15,9 @@ from rpress.helpers.fsm import PublishFSM
 
 
 #----------------------------------------------------------------------
-def add_site_sample_data(db_session, site_name, site_domain, admin_user):
+def add_site_sample_data(db_session, site_domain, admin_user):
     """add site's sample data into db"""
-    site = Site(name=site_name, domain=site_domain)
+    site = Site(domain=site_domain)
     db_session.add(site)
 
     site_titel = SiteSetting(site=site, key='title', value='rPress Site')
