@@ -36,6 +36,7 @@ class ConfigDefault(object):
     THEME_DEFAULT = 'rexzhangname'
     SECRET_KEY = 'this is secret key, please change for product environment'
 
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_DATABASE_URI = ''
     #SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 
