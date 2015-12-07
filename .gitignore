@@ -55,9 +55,9 @@ docs/_build/
 
 # PyBuilder
 target/
-vent
+vent-rpress
 rpress.wpu
-*.db
+*.sqlite3
 *.css
 *.css.map
 deploy.ini

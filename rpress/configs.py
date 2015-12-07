@@ -44,7 +44,7 @@ class ConfigDefault(object):
 class ConfigDev(ConfigDefault):
     DEBUG = True
 
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'rpress_dev.db')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'rpress.sqlite3')
     #SQLALCHEMY_ECHO = True
 
 
