@@ -163,14 +163,17 @@ def term_edit(name):
 #----------------------------------------------------------------------
 def _make_site_settings_info(site):
     """"""
-    SITE_SETTINGS_KEY_LIST = ['title', 'desc']
+    SITE_SETTINGS_KEY_LIST = ['title', 'desc', 'disqus']
 
     site_settings = {}
 
     for key in SITE_SETTINGS_KEY_LIST:
         site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
 
-        site_settings[key] = site_setting.value
+        if site_setting is not None:
+            site_settings[key] = site_setting.value
+        else:
+            site_settings[key] = None
 
     return site_settings
 
@@ -199,6 +202,8 @@ def setting_edit(key):
     """"""
     site = get_current_request_site()
     site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
+    if site_setting is None:
+        site_setting = SiteSetting(site, key, None)
 
     form = SettingsForm(obj=site_setting)
 
@@ -209,9 +214,7 @@ def setting_edit(key):
         db.session.commit()
 
         flash("setting updated", "success")
-        #return redirect(url_for('.blog'))
     else:
         flash('setting edit error')
-        pass
 
     return render_template("rp/site_admin/setting_edit.html", form=form, site_setting=site_setting)

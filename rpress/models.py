@@ -167,7 +167,7 @@ class Term(db.Model):
     site_id = Column(Integer, ForeignKey('sites.id'), default=0)  #暂时定义 site_id 为异常归属
     site = relationship('Site', foreign_keys=[site_id])
 
-    name = Column(String(50), unique=True)
+    name = Column(String(50))
     type = Column(String(50))  #tag/category
     desc = Column(Text)
 

@@ -9,6 +9,7 @@ import HTMLParser
 from datetime import datetime
 
 import feedparser
+from flask.ext.script import prompt_bool, prompt
 
 from rpress.models import User, Site, SiteSetting, Post, Term, Comment
 from rpress.helpers.fsm import PublishFSM
@@ -49,8 +50,9 @@ def convert_code_tag(string):
     return string
 
 
+response_msg = ''
 #----------------------------------------------------------------------
-def import_site_from_wordpress(db_session, site, disable_convert_code_tag, filename):
+def import_data_from_wordpress_xml(db_session, site, disable_convert_code_tag, filename, is_cli_mode=True, is_skip_unknow_author=False):
     """"""
     def datetime_from_str(string):
         return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
@@ -63,13 +65,20 @@ def import_site_from_wordpress(db_session, site, disable_convert_code_tag, filen
             content = convert_code_tag(content)
         return content
 
-    def create_new_user(username):
-        """create a user with cannot login"""
-        user_name = prompt('user name:', default=username)
-
+    def create_new_user_without_login(username):
+        """create a user without login"""
         user = User(name=user_name)
         db_session.add(user)
         return user
+
+    def print_message(msg):
+        if is_cli_mode:
+            print(msg)
+            return
+
+        global response_msg
+        response_msg += msg + '<br>'
+        return
 
     #init data
     term_name_category_list = []
@@ -84,11 +93,11 @@ def import_site_from_wordpress(db_session, site, disable_convert_code_tag, filen
 
     import_wp_past_type_list = ['post', 'page']
 
-    print('loading RSS file...')
+    print_message('loading RSS file...')
     wordpress_data = feedparser.parse(filename)
 
-    print('parsering RSS file...')
-    skip_author_set = set()
+    print_message('parsering RSS file...')
+    skiped_author_set = set()
     for entry in wordpress_data.entries:
         #print(entry.wp_post_id, entry.wp_post_type, entry.wp_status, entry.author, entry.title, ' --- ', entry.wp_post_name)
         #某些条目内同时包含 post 和 comment 信息
@@ -103,26 +112,41 @@ def import_site_from_wordpress(db_session, site, disable_convert_code_tag, filen
         #skip duplicate post: title + post_publish_date
         exist_posts = Post.query.filter_by(title=entry.title, publish_date=post_publish_date).all()
         if len(exist_posts) >= 1:
-            print('[wrong] skip duplicate post:%s' % entry.title)
+            print_message('[wrong] skip duplicate post:{}'.format(entry.title))
             continue
 
         #check author
         is_skip_author = False
-        if entry.author in skip_author_set:
+        is_new_user = False
+        if entry.author in skiped_author_set:
             is_skip_author = True
         else:
             user = User.query.filter_by(name=entry.author).first()
             if user is None:
-                if prompt_bool('Found new author:[%s], did you create user?' % entry.author, default=True):
-                    user = create_new_user(entry.author)
+                #found new user
+                is_new_user = True
+
+                if is_cli_mode == True:
+                    if prompt_bool('Found new author:[%s], did you create user?' % entry.author, default=True):
+                        user_name = prompt('user name:', default=entry.author)
+                    else:
+                        is_skip_author = True
+
                 else:
-                    skip_author_set.add(entry.author)
-                    is_skip_author = True
+                    if not is_skip_unknow_author:
+                        user_name = entry.author
+                    else:
+                        is_skip_author = True
 
         #skip author
         if is_skip_author:
-            print('[wrong] miss user:[%s], skip post;%s' % (entry.author, entry.title))
+            skiped_author_set.add(entry.author)
+            print_message('[wrong] miss user:[{}], skip post:{}'.format(entry.author, entry.title))
             continue
+
+        #create new user
+        if is_new_user:
+            user = create_new_user_without_login(user_name)
 
         #publish status
         if entry.wp_status == 'publish':
@@ -146,7 +170,7 @@ def import_site_from_wordpress(db_session, site, disable_convert_code_tag, filen
         if entry.content[0].type == 'text/html':
             content = convert_content(entry.content[0].value)
 
-        print('+ %s %s' % (publish_state, entry.title))
+        print_message('+ {} {}'.format(publish_state, entry.title))
         post = Post(author=user, site=site,
                     published=published, publish_state=publish_state, publish_date=post_publish_date,
                     type=type,
@@ -204,16 +228,16 @@ def import_site_from_wordpress(db_session, site, disable_convert_code_tag, filen
         #skip duplicate comment: author + comment_publish_date
         exist_commnets = Comment.query.filter_by(author_name=entry.wp_comment_author, publish_date=comment_publish_date).all()
         if len(exist_commnets) >= 1:
-            print('[wrong] skip duplicate comment:[%s] %s' % (entry.wp_comment_author, entry.wp_comment_date))
+            print_message('[wrong] skip duplicate comment:[{}] {}'.format(entry.wp_comment_author, entry.wp_comment_date))
             continue
 
         post_publish_date = datetime_from_str(entry.wp_post_date)
         post = Post.query.filter_by(title=entry.title, publish_date=post_publish_date).first()
         if post is None:
-            print('[wrong] miss post, comment:[%s] %s' % (entry.wp_comment_author, entry.wp_comment_date))
+            print_message('[wrong] miss post, comment:[{}] {}'.format(entry.wp_comment_author, entry.wp_comment_date))
             continue
 
-        print('+ comment %s %s' % (entry.wp_comment_date, entry.wp_comment_author))
+        print_message('+ comment {} {}'.format(entry.wp_comment_date, entry.wp_comment_author))
         comment = Comment(post=post,
                 author_name=entry.wp_comment_author,
                 publish_date=comment_publish_date,
@@ -223,4 +247,6 @@ def import_site_from_wordpress(db_session, site, disable_convert_code_tag, filen
                 author_url=entry.wp_comment_author_url)
 
         db_session.add(comment)
-    return
+
+    global response_msg
+    return response_msg

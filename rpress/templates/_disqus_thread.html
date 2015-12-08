@@ -1,3 +1,4 @@
+{% if site.disqus %}
 <div id="disqus_thread"></div>
 <script>
   /**
@@ -6,7 +7,7 @@
    */
 
   var disqus_config = function () {
-      this.page.url = "http://rex.zhang.name{{ content.post.link }}";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.url = "http://{{ site.domain }}{{ content.post.link }}";  // Replace PAGE_URL with your page's canonical URL variable
       this.page.identifier = "{{ content.post.uuid }}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
   };
 
@@ -20,3 +21,4 @@
   })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+{% endif %}

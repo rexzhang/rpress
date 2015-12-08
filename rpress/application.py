@@ -19,6 +19,7 @@ from rpress.configs import get_config_obj
 
 from rpress.views import permission
 from rpress.views import site_admin
+from rpress.views import site_tools
 from rpress.views import profiles_admin
 from rpress.views import mulit_site_admin
 from rpress.views import post as post_view
@@ -33,6 +34,7 @@ REGISTER_BLUE_PRINTS = (
     (post_view.post, ''),
     (permission.permission, ''),
     (site_admin.site_admin, '/rp/admin'),
+    (site_tools.site_tools, '/rp/tools'),
     (profiles_admin.profiles_admin, '/rp/profiles'),
     (mulit_site_admin.mulit_site_admin, '/rp/mulitsite'),
 

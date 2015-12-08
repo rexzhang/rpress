@@ -12,9 +12,8 @@ from rpress.models import Site
 #----------------------------------------------------------------------
 def get_current_request_site():
     """return site object for current request"""
-    from pprint import pprint
-
-    pprint(request.environ['HTTP_HOST'])
+##    from pprint import pprint
+##    pprint(request.environ['HTTP_HOST'])
 
     site = Site.query.filter_by(domain=request.environ['HTTP_HOST'].split(':')[0]).first()
     return site
