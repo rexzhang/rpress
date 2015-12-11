@@ -11,7 +11,7 @@ import flask
 from flask import g, request, redirect, url_for, flash
 from flask.ext.login import login_required, current_user
 
-from rpress.constants import PUBLISH_FSM_DEFINE
+from rpress.constants import PUBLISH_FSM_DEFINE, SITE_SETTINGS_KEY_LIST
 from rpress import db
 from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
@@ -164,8 +164,6 @@ def term_edit(name):
 #----------------------------------------------------------------------
 def _make_site_settings_info(site):
     """"""
-    SITE_SETTINGS_KEY_LIST = ['title', 'desc', 'disqus']
-
     site_settings = {}
 
     for key in SITE_SETTINGS_KEY_LIST:

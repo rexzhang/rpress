@@ -27,3 +27,10 @@ class PUBLISH_FSM_DEFINE(object):
         {'trigger': TRIGGER.UNPUBLISH, 'source': STATE.PUBLISHED, 'dest': STATE.UNPUBLISHED,},
         {'trigger': TRIGGER.DELETE, 'source': STATE.PUBLISHED, 'dest': STATE.TRASH,},
     ]
+
+
+SITE_SETTINGS_KEY_LIST = [
+    'title', 'desc',
+    'theme',
+    'disqus',
+]

@@ -1,0 +1,32 @@
+{% extends theme('layout.html') %}
+
+{% block title %}{{ content.post.title }}{{ super() }}{% endblock %}
+
+{% block carousel %}{% include theme('_carousel_post.html') %}{% endblock %}
+
+{% block content %}
+<div id="post">
+  <div class="post-summary-box">
+    <div class="post-summary-content">
+      <div class="post-title-box">
+        {% if content.post.type=='blog' %}
+        <div class="post-title">
+          <h2>{{ content.post.title }}</h2>
+        </div>
+        {% set post=content.post %}
+        {% include theme('_post_metabar.html') %}
+        {% endif %}
+        <div class="post-content">{{ content.post.content|post_content|safe }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    {% for comment in content.comments %}
+    <div>{{ comment.author_name }}</div>
+    <div>{{ comment.content|safe }}</div>
+    {% endfor %}
+  </div>
+  {% if content.post.allow_comment %}{% include theme('_disqus_thread.html') %}{% endif %}
+</div>
+{% endblock %}

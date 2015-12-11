@@ -1,0 +1,54 @@
+{% extends theme('layout.html') %}
+
+{% block title %}{{ content.paginate.title }}{{ super() }}{% endblock %}
+
+{% block content %}
+<div class="row margin0">
+  <div id="post" class="col-sm-9">
+    <div>
+      {% if content.paginate.key %}
+        <div id="paginate-desc">{{ content.paginate.desc }}:<b>{{ content.paginate.key }}</b></div>
+      {% endif %}
+      {% for post in content.paginate.posts %}
+      <div class="post-summary-box">
+        <div class="post-summary-content">
+          <div class="post-title-box">
+            <div class="post-title">
+              <h3><a rel="bookmark" title="{{ post.title }}" href="{{ post.link }}">{{ post.title }}</a></h3>
+            </div>
+            {% include theme('_post_metabar.html') %}
+            <div class="post-excerpt">{{ post.excerpt|post_content|safe }}</div>
+          </div>
+          <a class="continue_reading_link" title="查看 <<{{ post.title }}>> 全文" href="{{ post.link }}"> Continue Reading →</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div id="paginate">
+      {% set view_args = request.view_args %}
+
+      {#!!!   {% do view_args.pop('page_num') %}   jinja's bug! !!!#}
+      {% if 'page_num' in view_args %}
+      {% set none_none=view_args.pop('page_num') %}
+      {% endif %}
+
+      {% set keywords=request.args.get('keywords') %}
+
+      {% if content.paginate.has_prev %}
+      <span class="prev-entries">
+        <a href="{% if keywords == None %}{{ url_for(content.paginate.view_name, page_num=content.paginate.prev_num, **view_args) }}{% else %}{{ url_for(content.paginate.view_name, page_num=content.paginate.prev_num, **view_args) }}?keywords={{keywords}}{% endif %}">← Previous Entries</a>
+      </span>
+      {% endif %}
+
+      {% if content.paginate.has_next %}
+      <span class="next-entries">
+        <a href="{% if keywords == None %}{{ url_for(content.paginate.view_name, page_num=content.paginate.next_num, **view_args) }}{% else %}{{ url_for(content.paginate.view_name, page_num=content.paginate.next_num, **view_args) }}?keywords={{keywords}}{% endif %}">Next Entries →</a>
+      </span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="sidebar" class="col-sm-3"> {% include theme('_sidebar.html') %}</div>
+</div>
+{% endblock %}

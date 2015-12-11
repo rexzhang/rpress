@@ -19,6 +19,7 @@ def _site_settings():
 
     site_title = SiteSetting.query.filter_by(site=site, key='title').first()
     site_desc = SiteSetting.query.filter_by(site=site, key='desc').first()
+    site_theme = SiteSetting.query.filter_by(site=site, key='theme').first()
     site_disqus = SiteSetting.query.filter_by(site=site, key='disqus').first()
 
     site_info = {
@@ -26,6 +27,11 @@ def _site_settings():
         'desc': site_desc.value,
         'disqus': site_disqus,
     }
+    if site_theme is None:
+        site_info['theme'] = 'default'
+    else:
+        site_info['theme'] = site_theme.value
+
     return site_info
 
 
@@ -48,6 +54,4 @@ def render_template(template, **context):
     context['site'] = _site_settings()
     context['user'] = _user_info()
 
-    #theme = session.get('theme', app.config['THEME_DEFAULT'])
-    #return render_theme_template(theme, template, **context)
-    return render_theme_template('rexzhangname', template, **context)
+    return render_theme_template(context['site']['theme'], template, **context)

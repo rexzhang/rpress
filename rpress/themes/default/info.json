@@ -1,0 +1,13 @@
+{
+    "application": "rpress",
+    "identifier": "default",
+
+    "name": "default",
+    "author": "Rex Zhang",
+    "description": "rPress Default theme",
+    "website": "https://github.com/rexzhang/rpress",
+    "license": "GPL",
+
+    "doctype": "html5"
+}
+
