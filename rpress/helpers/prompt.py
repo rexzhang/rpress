@@ -15,6 +15,13 @@ from rpress.models import User
 
 
 #----------------------------------------------------------------------
+def ask_user_name():
+    """ask user name"""
+    user_name = prompt('user name')
+    return user_name
+
+
+#----------------------------------------------------------------------
 def create_new_user_with_default_password(user_name=None):
     """ask did you create it
 

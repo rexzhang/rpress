@@ -14,7 +14,7 @@ from rpress import create_app
 from rpress import db
 from rpress.helpers.uuid1plus import uuid1fromdatetime
 from rpress.helpers.data_init import add_site_sample_data, import_data_from_wordpress_xml
-from rpress.helpers.prompt import create_new_user_with_default_password
+from rpress.helpers.prompt import ask_user_name, create_new_user_with_default_password
 
 manager = Manager(create_app(config_name='dev'))  #!!!
 manager.add_command('db', MigrateCommand)
@@ -48,9 +48,14 @@ def db_add_site():
     print('create site...')
     site_domain_name = prompt('site domain')
 
-    user = create_new_user_with_default_password()
+    print('site admin user name...')
+    user_name = ask_user_name()
+    user = User.query.filter_by(name=user_name).first()
     if user is None:
-        return
+        user = create_new_user_with_default_password(user_name)
+        if user is None:
+            print('error!!')
+            return
 
     add_site_sample_data(db_session=db.session, site_domain=site_domain_name, admin_user=user)
     db.session.commit()
