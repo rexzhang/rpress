@@ -4,8 +4,8 @@
 <ul class="nav nav-pills">
   <li class="nav-item"><a class="nav-link" href="{{ url_for('post.post_uuid', uuid=post.uuid ) }}">查看文章</a></li>
   <li class="nav-item"><a class="nav-link disabled">publish state:{{ post.publish_state }}</a></li>
-  {% for action in publish_actions %}
-  <li class="nav-item"><a class="nav-link" href="/rpadmin/post/{{ post.uuid }}/publish/{{ action }}">{{ action }}</a></li>
+  {% for triggers in publish_triggers %}
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.post_publish_state', uuid=post.uuid, trigger=triggers) }}">{{ triggers }}</a></li>
   {% endfor %}
 </ul>
 {% endblock %}

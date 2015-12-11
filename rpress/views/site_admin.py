@@ -11,10 +11,11 @@ import flask
 from flask import g, request, redirect, url_for, flash
 from flask.ext.login import login_required, current_user
 
+from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress import db
 from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
-from rpress.helpers.fsm import PublishFSM
+from rpress.helpers.fsm_publish import PublishFSM
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import User, Site, Post, Term, SiteSetting
 from rpress.forms import PostEditForm, TermEditFrom, SettingsForm
@@ -64,7 +65,7 @@ def post_publish_state(uuid, trigger):
 
     print('Done......')
     post.publish_state = post_publish_fsm.state
-    if post_publish_fsm.state == PublishFSM.STATE_PUBLISHED:
+    if post_publish_fsm.state == PUBLISH_FSM_DEFINE.STATE.PUBLISHED:
         post.published = True
     else:
         post.published = False
@@ -117,8 +118,8 @@ def post_edit(uuid):
         flash('post edit error')
         pass
 
-    post_publish_fsm = PublishFSM(post.publish_state)
-    return render_template("rp/site_admin/post_edit.html", form=form, post=post, publish_actions=post_publish_fsm.possible_triggers)
+    post_publish_fsm = PublishFSM(init_state=post.publish_state)
+    return render_template("rp/site_admin/post_edit.html", form=form, post=post, publish_triggers=post_publish_fsm.possible_triggers)
 
 
 @site_admin.route('/term/list/<string:type>', methods=['GET', ])

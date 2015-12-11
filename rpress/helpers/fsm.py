@@ -2,39 +2,57 @@
 #coding=utf-8
 
 
+"""
+https://gist.github.com/rexzhang/fc799f97ba3087eac17f
+"""
+
+
 from __future__ import print_function, unicode_literals, absolute_import
 
 from transitions import Machine
 
 
 ########################################################################
-class BaseFSM(object):
+class FSM(object):
     """FSM base class
-    please add:
-
-    STATE_XXXX = 'xxxx'
-    STATE_YYYY = 'yyyy'
-
-    STATE_DEFAULT = STATE_XXXX
-
-    TRIGGER_XXXX = 'xXxX'
-
-    states = [STATE_XXXX,]
-    transitions = [
-        {'trigger': TRIGGER_XXXX, 'source': STATE_XXXX, 'dest': STATE_YYYY,},
-    ]
+    self.state # current FSM status
+    self.is_STATE_NAME # bool
+    self.to_STATE_NAME # true to STATE
     """
+    DEFAULT_STATE = None
 
+    states = []
     transitions = []
+
     _triggers = []
+    _define_class = None
 
     #----------------------------------------------------------------------
-    def __init__(self, init_state=None):
+    def __init__(self, init_state=None, define_class=None):
         """Constructor"""
+        if define_class is not None:
+            self._define_class = define_class
+
+        self.__parse_fsm_define_data__()
+
         if init_state is None:
-            init_state = self.STATE_DEFAULT
+            init_state = self.DEFAULT_STATE
 
         self.m = Machine(model=self, states=self.states, transitions=self.transitions, initial=init_state)
+        return
+
+    #----------------------------------------------------------------------
+    def __parse_fsm_define_data__(self):
+        """"""
+        self.DEFAULT_STATE = self._define_class.DEFAULT_STATE
+
+        for attr_name in  (dir(self._define_class.STATE)):
+            if '__' in attr_name:
+                continue
+
+            self.states.append(getattr(self._define_class.STATE, attr_name))
+
+        self.transitions = self._define_class.transitions
         return
 
     @property
@@ -65,29 +83,3 @@ class BaseFSM(object):
     def do_trigger(self, trigger_name):
         """"""
         return self.__dict__[trigger_name](self)
-
-
-# publish FSM
-########################################################################
-class PublishFSM(BaseFSM):
-    """publish Finite State Machine
-    state string's length must less than 20, more info check file:models.py
-    """
-    STATE_DRAFT = 'draft'
-    STATE_PUBLISHED = 'published'
-    STATE_UNPUBLISHED = 'unpublished'
-    STATE_TRASH = 'trash'
-    STATE_HISTORY = 'history'
-
-    STATE_DEFAULT = STATE_DRAFT
-
-    TRIGGER_PUBLISH = 'publish'
-    TRIGGER_UNPUBLISH = 'unpublish'
-    TRIGGER_DELETE = 'delete'
-
-    states = [STATE_DRAFT, STATE_PUBLISHED, STATE_UNPUBLISHED, STATE_TRASH, STATE_HISTORY]
-    transitions = [
-        {'trigger': TRIGGER_PUBLISH, 'source': [STATE_DRAFT, STATE_UNPUBLISHED, STATE_TRASH], 'dest': STATE_PUBLISHED,},
-        {'trigger': TRIGGER_UNPUBLISH, 'source': STATE_PUBLISHED, 'dest': STATE_UNPUBLISHED,},
-        {'trigger': TRIGGER_DELETE, 'source': STATE_PUBLISHED, 'dest': STATE_TRASH,},
-    ]

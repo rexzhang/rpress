@@ -8,9 +8,10 @@ from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, Foreign
 from sqlalchemy.orm import relationship  #, backref
 from flask.ext.sqlalchemy import BaseQuery
 
+from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress.database import db
 from rpress.helpers.uuid1plus import uuid1, uuid1fromdatetime
-from rpress.helpers.fsm import PublishFSM
+from rpress.helpers.fsm_publish import PublishFSM
 
 
 ########################################################################
@@ -100,7 +101,7 @@ class Post(db.Model):
     author = relationship('User', foreign_keys=[author_id])
 
     published = Column(Boolean, default=False)
-    publish_state = Column(String(20), default=PublishFSM.STATE_DEFAULT)  #published 为 True 时才有意义 #修改过程版本存放在另外一个表中
+    publish_state = Column(String(20), default=PUBLISH_FSM_DEFINE.DEFAULT_STATE)  #published 为 True 时才有意义 #修改过程版本存放在另外一个表中
     publish_date = Column(DateTime)
 
     updater_id = Column(Integer, ForeignKey('users.id'))
@@ -119,7 +120,7 @@ class Post(db.Model):
     content = Column(Text)
 
     #----------------------------------------------------------------------
-    def __init__(self, author, site, uuid=None, published=False, publish_state=PublishFSM.STATE_DRAFT, publish_date=None, type='blog', name=None, title=None, content=None):
+    def __init__(self, author, site, uuid=None, published=False, publish_state=PUBLISH_FSM_DEFINE.DEFAULT_STATE, publish_date=None, type='blog', name=None, title=None, content=None):
         """Constructor"""
         self.author = author
 

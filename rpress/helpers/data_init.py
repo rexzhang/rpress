@@ -11,8 +11,9 @@ from datetime import datetime
 import feedparser
 from flask.ext.script import prompt_bool, prompt
 
+from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress.models import User, Site, SiteSetting, Post, Term, Comment
-from rpress.helpers.fsm import PublishFSM
+from rpress.helpers.fsm_publish import PublishFSM
 
 
 #----------------------------------------------------------------------
@@ -26,9 +27,9 @@ def add_site_sample_data(db_session, site_domain, admin_user):
     site_desc = SiteSetting(site=site, key='desc', value='a new rPress site')
     db_session.add(site_desc)
 
-    blog = Post(author=admin_user, site=site, published=True, publish_state=PublishFSM.STATE_PUBLISHED, type='blog', title=u'this is first blog', content=u'i am blog content')
+    blog = Post(author=admin_user, site=site, published=True, publish_state=PUBLISH_FSM_DEFINE.STATE.PUBLISHED, type='blog', title=u'this is first blog', content=u'i am blog content')
     db_session.add(blog)
-    page = Post(author=admin_user, site=site, published=True, publish_state=PublishFSM.STATE_PUBLISHED, type='page', name='sample', title=u'this is first page', content=u'i am page')
+    page = Post(author=admin_user, site=site, published=True, publish_state=PUBLISH_FSM_DEFINE.STATE.PUBLISHED, type='page', name='sample', title=u'this is first page', content=u'i am page')
     db_session.add(page)
     return
 
@@ -151,10 +152,10 @@ def import_data_from_wordpress_xml(db_session, site, disable_convert_code_tag, f
         #publish status
         if entry.wp_status == 'publish':
             published = True
-            publish_state = PublishFSM.STATE_PUBLISHED
+            publish_state = PUBLISH_FSM_DEFINE.STATE.PUBLISHED
         elif entry.wp_status == 'draft':
             published = False
-            publish_state = PublishFSM.STATE_DRAFT
+            publish_state = PUBLISH_FSM_DEFINE.STATE.DRAFT
         else:
             continue
 
