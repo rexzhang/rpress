@@ -1,6 +1,18 @@
 Changelog
 =========
 
+Version 0.4
+-----------
+- add mulit-site support
+- import wordpress's xml at admin web UI
+- add default theme
+- disqus support mulit-site
+
+Version 0.3
+-----------
+- add site settings model
+- add database migrate tools
+
 Version 0.2
 -----------
 - code hightlight(by pygments)

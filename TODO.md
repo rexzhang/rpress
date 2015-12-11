@@ -1,18 +1,16 @@
 TODO
 ====
 
-* 0.4
-	* 基于域名的多站点模式支持
-	* google访问统计支持
-	* 评论系统的多站点支持
-	* 基于网页的wordpress数据导入
+* 0.5
+
 
 * 0.X
-	* can not import tag from alan' blog?
+	* google访问统计支持
 	* 当 get_current_request_site 获取失败时，应该有错误处理和提示？？
+		* 做一个 mulit_site_view 装饰符
 
 * 0.Y
-	* 一个最基本的默认模版
+
 
 * 0.Z
 	* css 文件部署问题
