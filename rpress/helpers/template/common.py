@@ -23,9 +23,10 @@ def _site_settings():
     site_disqus = SiteSetting.query.filter_by(site=site, key='disqus').first()
 
     site_info = {
+        'domain': site.domain,
         'title': site_title.value,
         'desc': site_desc.value,
-        'disqus': site_disqus,
+        'disqus': site_disqus.value,
     }
     if site_theme is None:
         site_info['theme'] = 'default'
