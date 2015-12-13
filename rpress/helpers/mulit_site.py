@@ -10,12 +10,23 @@ from rpress.models import Site
 
 
 #----------------------------------------------------------------------
+def get_current_request_site_domain():
+    """"""
+    return request.environ['HTTP_HOST'].split(':')[0]
+
+
+#----------------------------------------------------------------------
 def get_current_request_site():
     """return site object for current request"""
-##    from pprint import pprint
-##    pprint(request.environ['HTTP_HOST'])
+    domain = get_current_request_site_domain()
 
-    site = Site.query.filter_by(domain=request.environ['HTTP_HOST'].split(':')[0]).first()
+    site = Site.query.filter_by(domain=domain).first()
+    if site is None:
+        if domain == 'localhost' or domain == '127.0.0.1':
+            site = Site.query.filter_by(id=1).first()
+        else:
+            return None
+
     return site
 
 

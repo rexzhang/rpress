@@ -31,10 +31,10 @@ Site Settings
     </tr>
   </thead>
   <tbody>
-    {% for key in content.site_settings %}
+    {% for key in content.site.settings %}
     <tr>
       <td>{{ key }}</td>
-      <td><a href="{{ url_for('site_admin.setting_edit', key=key) }}">{{ content.site_settings[key] }}</a></td>
+      <td><a href="{{ url_for('site_admin.setting_edit', key=key) }}">{{ content.site.settings[key] }}</a></td>
     </tr>
 
     {% endfor %}

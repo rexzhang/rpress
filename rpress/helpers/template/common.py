@@ -8,31 +8,7 @@ from flask.ext.login import current_user
 
 from rpress.constants import SITE_SETTINGS_KEY_LIST
 from rpress.models import Site, SiteSetting
-from rpress.helpers.mulit_site import get_current_request_site
-
-
-#----------------------------------------------------------------------
-def _site_settings():
-    """"""
-    site = get_current_request_site()
-    if site is None:
-        site = Site.query.filter_by(id=1).first()
-
-    site_info = {
-        'domain': site.domain,
-    }
-
-    for key in SITE_SETTINGS_KEY_LIST:
-        setting = SiteSetting.query.filter_by(site=site, key=key).first()
-        if setting is None or len(setting.value) == 0:
-            site_info[key] = None
-        else:
-            site_info[key] = setting.value
-
-    if site_info['theme'] is None:
-        site_info['theme'] = 'default'
-
-    return site_info
+from rpress.helpers.site import get_current_request_site_info
 
 
 #----------------------------------------------------------------------
@@ -51,7 +27,7 @@ def _user_info():
 #----------------------------------------------------------------------
 def render_template(template, **context):
     """"""
-    context['site'] = _site_settings()
+    context['site'] = get_current_request_site_info()
     context['user'] = _user_info()
 
-    return render_theme_template(context['site']['theme'], template, **context)
+    return render_theme_template(context['site']['settings']['theme'], template, **context)

@@ -13,11 +13,12 @@ from flask.ext.login import login_required, current_user
 
 from rpress.constants import PUBLISH_FSM_DEFINE, SITE_SETTINGS_KEY_LIST
 from rpress import db
+from rpress.models import User, Site, Post, Term, SiteSetting
 from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm_publish import PublishFSM
 from rpress.helpers.mulit_site import get_current_request_site
-from rpress.models import User, Site, Post, Term, SiteSetting
+from rpress.helpers.site import get_current_request_site_info
 from rpress.forms import PostEditForm, TermEditFrom, SettingsForm
 
 
@@ -161,34 +162,13 @@ def term_edit(name):
     return render_template("rp/site_admin/term_edit.html", form=form, term=term)
 
 
-#----------------------------------------------------------------------
-def _make_site_settings_info(site):
-    """"""
-    site_settings = {}
-
-    for key in SITE_SETTINGS_KEY_LIST:
-        site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
-
-        if site_setting is not None:
-            site_settings[key] = site_setting.value
-        else:
-            site_settings[key] = None
-
-    return site_settings
-
-
 @site_admin.route('/settings', methods=['GET',])
 @login_required
 #----------------------------------------------------------------------
 def settings():
     """"""
-    site = get_current_request_site()
-    if site is None:
-        return
-
     content = {
-        'site': site,
-        'site_settings': _make_site_settings_info(site),
+        'site': get_current_request_site_info(),
     }
 
     return render_template('rp/site_admin/settings.html', content=content)
