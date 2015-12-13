@@ -6,6 +6,7 @@ from flask import request
 from flask.ext.themes2 import render_theme_template  #, get_themes_list
 from flask.ext.login import current_user
 
+from rpress.constants import SITE_SETTINGS_KEY_LIST
 from rpress.models import Site, SiteSetting
 from rpress.helpers.mulit_site import get_current_request_site
 
@@ -17,21 +18,19 @@ def _site_settings():
     if site is None:
         site = Site.query.filter_by(id=1).first()
 
-    site_title = SiteSetting.query.filter_by(site=site, key='title').first()
-    site_desc = SiteSetting.query.filter_by(site=site, key='desc').first()
-    site_theme = SiteSetting.query.filter_by(site=site, key='theme').first()
-    site_disqus = SiteSetting.query.filter_by(site=site, key='disqus').first()
-
     site_info = {
         'domain': site.domain,
-        'title': site_title.value,
-        'desc': site_desc.value,
-        'disqus': site_disqus.value,
     }
-    if site_theme is None:
+
+    for key in SITE_SETTINGS_KEY_LIST:
+        setting = SiteSetting.query.filter_by(site=site, key=key).first()
+        if setting is None:
+            site_info[key] = None
+        else:
+            site_info[key] = setting.value
+
+    if site_info['theme'] is None:
         site_info['theme'] = 'default'
-    else:
-        site_info['theme'] = site_theme.value
 
     return site_info
 
