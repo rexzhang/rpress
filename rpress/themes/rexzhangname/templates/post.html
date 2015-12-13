@@ -30,3 +30,7 @@
   {% if content.post.allow_comment %}{% include theme('/front/_disqus_thread.html') %}{% endif %}
 </div>
 {% endblock %}
+
+{% block js %}{{ super() }}
+{% if content.post.allow_comment %}{% include theme('/front/_disqus_js.html') %}{% endif %}
+{% endblock %}

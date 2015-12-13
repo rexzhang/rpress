@@ -19,3 +19,7 @@
 
 {% block footer %}{% include theme('_footer.html') %}{% endblock %}
 {% endblock %}
+
+{% block js %}{{ super() }}
+{% include theme('/front/_google_analytics.html') %}
+{% endblock %}
