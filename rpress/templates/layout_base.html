@@ -10,8 +10,7 @@
   {% block head %}
   <link rel="shortcut icon" href="/static/rpress-icon.png">
   <!-- Bootstrap CSS -->
-  {#<link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">#}
-  <link rel="stylesheet" href="/static/bootstrap.css">
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
   {% endblock %}
 
   <title>{% block title %}{% endblock %}</title>
@@ -23,7 +22,7 @@
   {% block js %}
   <!-- jQuery first, then Bootstrap JS. -->
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-  <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script>
+  <script src="/static/bootstrap.min.js"></script>
   {% endblock %}
 </body>
 
