@@ -24,7 +24,7 @@ def _site_settings():
 
     for key in SITE_SETTINGS_KEY_LIST:
         setting = SiteSetting.query.filter_by(site=site, key=key).first()
-        if setting is None:
+        if setting is None or len(setting.value) == 0:
             site_info[key] = None
         else:
             site_info[key] = setting.value

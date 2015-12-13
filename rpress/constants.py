@@ -30,7 +30,9 @@ class PUBLISH_FSM_DEFINE(object):
 
 
 SITE_SETTINGS_KEY_LIST = [
-    'title', 'desc',
+    'title',
+    'desc',
     'theme',
+    'google_analytics',
     'disqus',
 ]
