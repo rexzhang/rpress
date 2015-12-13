@@ -40,7 +40,7 @@ def login():
 ##            return flaskabort(400)
         return redirect(next or url_for('site_admin.index'))
 
-    return render_template('login.html', form=form)
+    return render_template('/common/login.html', form=form)
 
 
 @permission.route("/logout")

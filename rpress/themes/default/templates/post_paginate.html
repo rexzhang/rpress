@@ -16,7 +16,7 @@
             <div class="post-title">
               <h3><a rel="bookmark" title="{{ post.title }}" href="{{ post.link }}">{{ post.title }}</a></h3>
             </div>
-            {% include theme('_post_metabar.html') %}
+            {% include theme('/front/_post_metabar.html') %}
             <div class="post-excerpt">{{ post.excerpt|post_content|safe }}</div>
           </div>
           <a class="continue_reading_link" title="查看 <<{{ post.title }}>> 全文" href="{{ post.link }}"> Continue Reading →</a>
@@ -49,6 +49,6 @@
     </div>
   </div>
 
-  <div id="sidebar" class="col-sm-3"> {% include theme('_sidebar.html') %}</div>
+  <div id="sidebar" class="col-sm-3"> {% include theme('/front/_sidebar.html') %}</div>
 </div>
 {% endblock %}

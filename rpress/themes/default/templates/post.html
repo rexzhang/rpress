@@ -14,7 +14,7 @@
           <h2>{{ content.post.title }}</h2>
         </div>
         {% set post=content.post %}
-        {% include theme('_post_metabar.html') %}
+        {% include theme('/front/_post_metabar.html') %}
         {% endif %}
         <div class="post-content">{{ content.post.content|post_content|safe }}</div>
       </div>
@@ -27,6 +27,6 @@
     <div>{{ comment.content|safe }}</div>
     {% endfor %}
   </div>
-  {% if content.post.allow_comment %}{% include theme('_disqus_thread.html') %}{% endif %}
+  {% if content.post.allow_comment %}{% include theme('/front/_disqus_thread.html') %}{% endif %}
 </div>
 {% endblock %}

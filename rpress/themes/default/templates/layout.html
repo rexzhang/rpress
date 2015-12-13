@@ -1,4 +1,4 @@
-{% extends theme('layout_base.html') %}
+{% extends theme('/front/layout.html') %}
 
 {% block head %}{{ super() }}
 {% endblock %}
@@ -7,7 +7,7 @@
 
 {% block body %}
 <div class="fill-fullpage-wrapper">
-  <div id="header" class="container padding0">{% block header %}{% include theme('_header.html') %}{% endblock %}</div>
+  <div id="header" class="container padding0">{% block header %}{% include theme('/front/_header.html') %}{% endblock %}</div>
   <div id="content" class="container padding0">{% block content %}{% endblock %}</div>
 </div>
 
