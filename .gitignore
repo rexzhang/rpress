@@ -60,3 +60,5 @@ rpress.wpu
 *.sqlite3
 *.css.map
 deploy.ini
+.idea
+venv-rpress

@@ -1,19 +1,16 @@
 TODO
 ====
 
-* 0.5
-
-
 * 0.X
-	* google访问统计支持
+	* ReStartServer.sh
+	* web 后台 add new site 不能正常工作？
 	* 当 get_current_request_site 获取失败时，应该有错误处理和提示？？
 		* 做一个 mulit_site_view 装饰符
 
 * 0.Y
-
+	* 清除 post 内多余的格式信息，工具，编辑界面
 
 * 0.Z
-	* css 文件部署问题
 	* 通过未绑定的域名访问系统时，错误提示？跳转？
 	* 用户登陆时判断绑定域名是否正确
 	* 可以通过命令行控制 manage 使用那个配置文件

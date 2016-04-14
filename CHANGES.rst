@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 0.5
+-----------
+- add Google Analytics support
+- redesign template dir layout
+- add nginx HTTPS config
+
 Version 0.4
 -----------
 - add mulit-site support
