@@ -91,7 +91,7 @@ def post_new(type):
 
     site = get_current_request_site()
 
-    post = Post(author=user, site=site)
+    post = Post(author=user, site=site, type=type)
     db.session.add(post)
     db.session.commit()
 
