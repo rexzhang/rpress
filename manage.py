@@ -5,14 +5,11 @@
 from __future__ import print_function, unicode_literals, absolute_import
 
 
-#from flask import Flask
-#from flask import current_app
 from flask.ext.script import Manager, prompt_bool, prompt
 from flask.ext.migrate import MigrateCommand
 
 from rpress import create_app
 from rpress import db
-from rpress.helpers.uuid1plus import uuid1fromdatetime
 from rpress.helpers.data_init import add_site_sample_data, import_data_from_wordpress_xml
 from rpress.helpers.prompt import ask_user_name, create_new_user_with_default_password
 
@@ -72,7 +69,7 @@ def importer(disable_convert_code_tag, filename):
     site_domain = prompt('site domain')
     site = Site.query.filter_by(domain=site_domain).first()
     if site is None:
-        return "[ERROR] invalue site domain!"
+        return "[ERROR] invalid site domain!"
 
     import_data_from_wordpress_xml(db_session=db.session, site=site, disable_convert_code_tag=disable_convert_code_tag, filename=filename)
 

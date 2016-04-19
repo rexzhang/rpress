@@ -4,15 +4,13 @@
 
 from __future__ import print_function, unicode_literals, absolute_import
 
-import os
-import logging
-
 from flask import Flask
 from flask.ext.themes2 import Themes
 from flask.ext.migrate import Migrate
 
 from rpress import db
 from rpress import login_manager
+from rpress.helpers.template.common import render_template
 from rpress.helpers.template.filter import configure_filter
 from rpress.helpers.error_handler import configure_error_handler
 from rpress.configs import get_config_obj
@@ -38,10 +36,10 @@ REGISTER_BLUE_PRINTS = (
     (profiles_admin.profiles_admin, '/rp/profiles'),
     (mulit_site_admin.mulit_site_admin, '/rp/mulitsite'),
 
-    # add your blue print here
+    # add more blue print here
 )
 
-from rpress.helpers.template.common import render_template
+
 def create_app(config_name=None,app_name=None):
     if app_name is None:
         app_name = DEFAULT_APP_NAME

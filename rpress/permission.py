@@ -13,9 +13,10 @@ login_manager = flask.ext.login.LoginManager()
 
 
 ########################################################################
-class LoginUser(flask.ext.login.UserMixin):
+class LoggedUser(flask.ext.login.UserMixin):
     """user object for login. make User.id to user_id"""
     id = None
+
     #----------------------------------------------------------------------
     def get_id(self):
         """"""
@@ -26,22 +27,21 @@ class LoginUser(flask.ext.login.UserMixin):
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def user_loader(user_id):
     """TODO:会导致一次数据查询，需要迁移到内存类容器中处理"""
-    #print 'user_id:', user_id
     user = User.query.filter_by(id=user_id).first()
 
     if user is None:
         return None
 
-    loginUser = LoginUser()
-    loginUser.id = user.id
+    logged_user = LoggedUser()
+    logged_user.id = user.id
 
-    return loginUser
+    return logged_user
 
 
 #----------------------------------------------------------------------
-def login_user(username, password):
+def user_login(username, password):
     """
     check a pair of username and password , and more...
 
@@ -54,16 +54,16 @@ def login_user(username, password):
     if user.password != hashlib.sha256(password).hexdigest():
         return False
 
-    loginUser = LoginUser()
-    loginUser.id = user.id
+    logged_user = LoggedUser()
+    logged_user.id = user.id
 
-    flask.ext.login.login_user(loginUser)
+    flask.ext.login.login_user(logged_user)
 
     return True
 
 
 #----------------------------------------------------------------------
-def logout_user():
+def user_logout():
     """"""
     flask.ext.login.logout_user()
     return

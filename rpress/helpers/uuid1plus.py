@@ -5,7 +5,7 @@
 from __future__ import print_function, unicode_literals, absolute_import
 
 
-__all__ = ['uuid1', 'uuid1fromdatetime']
+__all__ = ['uuid1', 'uuid1_from_datetime']
 
 import time
 import ctypes
@@ -68,7 +68,7 @@ def uuid1(node=None, clock_seq=None):
 
 
 #----------------------------------------------------------------------
-def uuid1fromdatetime(datetime_obj, node=None, clock_seq=None):
+def uuid1_from_datetime(datetime_obj, node=None, clock_seq=None):
     """Generate a UUID from a host ID, sequence number, and the current time.
     If 'node' is not given, getnode() is used to obtain the hardware
     address.  If 'clock_seq' is given, it is used as the sequence number;
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     uuid_list = []
     uuid_list.append(uuid.uuid1())
     uuid_list.append(uuid1())
-    uuid_list.append(uuid1fromdatetime(datetime.now()))
+    uuid_list.append(uuid1_from_datetime(datetime.now()))
 
     print('-----------')
     for u in uuid_list:

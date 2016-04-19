@@ -10,8 +10,7 @@ from flask.ext.sqlalchemy import BaseQuery
 
 from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress.database import db
-from rpress.helpers.uuid1plus import uuid1, uuid1fromdatetime
-from rpress.helpers.fsm_publish import PublishFSM
+from rpress.helpers.uuid1plus import uuid1, uuid1_from_datetime
 
 
 ########################################################################
@@ -30,7 +29,7 @@ class User(db.Model):
         self.password = password
 
     def __repr__(self):
-        return '<User %r>' % (self.name)
+        return '<User {}>'.format(self.name)
 
     #----------------------------------------------------------------------
     def _password_get(self):
@@ -59,8 +58,8 @@ class User(db.Model):
 
 ########################################################################
 post_term_relations = db.Table('post_term_relations',
-    db.Column('term_id', db.Integer, db.ForeignKey('terms.id')),
-    db.Column('post_id', db.Integer, db.ForeignKey('posts.id'))
+                               db.Column('term_id', db.Integer, db.ForeignKey('terms.id')),
+                               db.Column('post_id', db.Integer, db.ForeignKey('posts.id'))
 )
 
 
@@ -112,9 +111,11 @@ class Post(db.Model):
 
     type = Column(String(4), default='blog')  #blog/page
     name = Column(String(128))
-    terms = relationship("Term",
-                        secondary=post_term_relations,
-                        backref="posts")
+    terms = relationship(
+        "Term",
+        secondary=post_term_relations,
+        backref="posts"
+    )
 
     title = Column(String(128))
     content = Column(Text)
@@ -134,7 +135,7 @@ class Post(db.Model):
             publish_date = uuid.datetime
 
         elif uuid is None and publish_date is not None:
-            uuid = uuid1fromdatetime(publish_date)
+            uuid = uuid1_from_datetime(publish_date)
 
         self.uuid = str(uuid)
 
@@ -155,7 +156,7 @@ class Post(db.Model):
     #----------------------------------------------------------------------
     def __repr__(self):
         """"""
-        return '<Post %r>' % (self.title)  #!!!
+        return '<Post {}>'.format(self.title)  #!!!
 
 
 ########################################################################
@@ -223,7 +224,7 @@ class Comment(db.Model):
     #----------------------------------------------------------------------
     def __repr__(self):
         """"""
-        return '<Comment %r>' % (self.author_name)  #!!!
+        return '<Comment {}>'.format(self.author_name)  #!!!
 
 
 ########################################################################
@@ -244,7 +245,7 @@ class Site(db.Model):
     #----------------------------------------------------------------------
     def __repr__(self):
         """"""
-        return '<Site %r>' % (self.domain)
+        return '<Site {}>'.format(self.domain)
 
 
 ########################################################################
@@ -271,5 +272,4 @@ class SiteSetting(db.Model):
     #----------------------------------------------------------------------
     def __repr__(self):
         """"""
-        return '<SiteSetting %r>' % (self.name)
-
+        return '<SiteSetting {}>'.format(self.name)

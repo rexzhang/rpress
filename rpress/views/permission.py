@@ -9,7 +9,7 @@ from flask import request, redirect, url_for, flash, abort
 from flask.ext.login import login_required
 
 from rpress.helpers.template.common import render_template
-from rpress.permission import login_user, logout_user
+from rpress.permission import user_login, user_logout
 from rpress.forms import LoginForm
 
 
@@ -26,7 +26,7 @@ def login():
     if form.validate_on_submit():
         # Login and validate the user.
         # user should be an instance of your `User` class
-        if not login_user(form.username.data, form.password.data):
+        if not user_login(form.username.data, form.password.data):
             flash('login fail.')
             abort(401)
             #return redirect(url_for('.index'))
@@ -47,6 +47,6 @@ def login():
 @login_required
 #----------------------------------------------------------------------
 def logout():
-    logout_user()
+    user_logout()
 
     return redirect(url_for('post.post_paginate'))  #!!!!

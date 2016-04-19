@@ -15,7 +15,6 @@ from rpress import db
 from rpress.helpers.template.common import render_template
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import Post, User, Term, Comment
-from rpress.permission import login_user, logout_user
 
 
 ##class TestView(MethodView):

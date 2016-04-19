@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 0.5
+Version 0.x
 -----------
 - add Google Analytics support
 - redesign template dir layout
