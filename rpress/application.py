@@ -13,7 +13,7 @@ from rpress import login_manager
 from rpress.helpers.template.common import render_template
 from rpress.helpers.template.filter import configure_filter
 from rpress.helpers.error_handler import configure_error_handler
-from rpress.configs import get_config_obj
+from rpress.config import Config
 
 from rpress.views import permission
 from rpress.views import site_admin
@@ -68,7 +68,7 @@ def create_app_for_cli(script_info):
 
 
 def configure_app(app, config_name):
-    app.config.from_object(get_config_obj(config_name))
+    app.config.from_object(Config())
 
     #app.config.from_envvar('APP_CONFIG',silent=True)
     return
