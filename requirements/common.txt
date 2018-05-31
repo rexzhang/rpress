@@ -1,0 +1,23 @@
+# flask
+Flask<1.0.0
+Flask-Script
+Flask-SQLAlchemy
+Flask-Themes2
+Flask-WTF
+Flask-Login
+Flask-Migrate
+
+# database
+PyMySQL
+psycopg2-binary
+
+# markdown
+feedparser
+Pygments
+
+# other
+transitions
+
+
+# deploy
+gunicorn

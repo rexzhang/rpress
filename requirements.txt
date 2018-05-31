@@ -1,13 +1,1 @@
-gunicorn
-PyMySQL
-psycopg2-binary
-Flask<1.0.0
-Flask-Script
-Flask-SQLAlchemy
-Flask-Themes2
-Flask-WTF
-Flask-Login
-Flask-Migrate
-feedparser
-Pygments
-transitions
+-r requirements/common.txt
