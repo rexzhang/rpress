@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 
 import hashlib
@@ -31,24 +31,22 @@ class User(db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.name)
 
-    #----------------------------------------------------------------------
     def _password_get(self):
         """"""
         return self._password
 
-    #----------------------------------------------------------------------
     def _password_set(self, password):
         """"""
         if password is None:
             self._password = ''
         else:
-            self._password = hashlib.sha256(password).hexdigest()
+            self._password = hashlib.sha256(bytes(password, 'utf8')).hexdigest()
         return
 
     #----------------------------------------------------------------------
     def password_validate(self, password=None):
         """check user's password"""
-        if password is not None and hashlib.sha256(password).hexdigest() == self._password:
+        if password is not None and hashlib.sha256(str(password, 'utf8')).hexdigest() == self._password:
             return True
 
         return False

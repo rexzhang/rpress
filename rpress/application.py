@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 
 from __future__ import print_function, unicode_literals, absolute_import
@@ -23,7 +23,7 @@ from rpress.views import mulit_site_admin
 from rpress.views import post as post_view
 
 
-__all__ = ['create_app']
+__all__ = ['create_app', 'create_app_for_cli']
 
 
 DEFAULT_APP_NAME = 'rpress'
@@ -61,6 +61,10 @@ def create_app(config_name=None,app_name=None):
     def page_not_found(e):
         return render_template('/common/404.html'), 404
     return app
+
+
+def create_app_for_cli(script_info):
+    return create_app()
 
 
 def configure_app(app, config_name):

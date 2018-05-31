@@ -51,7 +51,7 @@ def user_login(username, password):
     if user is None:
         return False
 
-    if user.password != hashlib.sha256(password).hexdigest():
+    if user.password != hashlib.sha256(bytes(password, 'utf-8')).hexdigest():
         return False
 
     logged_user = LoggedUser()

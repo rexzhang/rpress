@@ -9,7 +9,7 @@ from html import parser
 from datetime import datetime
 
 import feedparser
-from flask_script import prompt_bool, prompt
+# from flask_script import prompt_bool, prompt
 
 from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress.models import User, Site, SiteSetting, Post, Term, Comment

@@ -1,11 +1,11 @@
 # flask
 Flask
-Flask-Script
 Flask-SQLAlchemy
 Flask-Themes2
 Flask-WTF
 Flask-Login
 Flask-Migrate
+click
 
 # database
 PyMySQL

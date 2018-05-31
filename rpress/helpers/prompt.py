@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 
 """
@@ -8,7 +8,7 @@ for Flask-Script prompt
 
 from __future__ import print_function, unicode_literals, absolute_import
 
-from flask_script import Manager, prompt_bool, prompt
+# from flask_script import Manager, prompt_bool, prompt
 
 from rpress import db
 from rpress.models import User
