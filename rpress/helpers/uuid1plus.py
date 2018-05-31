@@ -20,7 +20,7 @@ class UUID1Plus(UUID):
     #----------------------------------------------------------------------
     def datetime(self):
         """convert uuid object to datetime object"""
-        return datetime.fromtimestamp((self.time - 0x01b21dd213814000L) * 100 // 1e9)
+        return datetime.fromtimestamp((self.time - 0x01b21dd213814000) * 100 // 1e9)
 
 
 #----------------------------------------------------------------------
@@ -31,18 +31,18 @@ def _unix_timestamp_to_uuid1(unix_timestamp, node, clock_seq):
     nanoseconds = int(unix_timestamp * 1e9)
     # 0x01b21dd213814000 is the number of 100-ns intervals between the
     # UUID epoch 1582-10-15 00:00:00 and the Unix epoch 1970-01-01 00:00:00.
-    timestamp = int(nanoseconds//100) + 0x01b21dd213814000L
+    timestamp = int(nanoseconds//100) + 0x01b21dd213814000
     if _last_timestamp is not None and timestamp <= _last_timestamp:
         timestamp = _last_timestamp + 1
     _last_timestamp = timestamp
     if clock_seq is None:
         import random
-        clock_seq = random.randrange(1<<14L) # instead of stable storage
-    time_low = timestamp & 0xffffffffL
-    time_mid = (timestamp >> 32L) & 0xffffL
-    time_hi_version = (timestamp >> 48L) & 0x0fffL
-    clock_seq_low = clock_seq & 0xffL
-    clock_seq_hi_variant = (clock_seq >> 8L) & 0x3fL
+        clock_seq = random.randrange(1<<14) # instead of stable storage
+    time_low = timestamp & 0xffffffff
+    time_mid = (timestamp >> 32) & 0xffff
+    time_hi_version = (timestamp >> 48) & 0x0fff
+    clock_seq_low = clock_seq & 0xff
+    clock_seq_hi_variant = (clock_seq >> 8) & 0x3f
     if node is None:
         node = getnode()
     return UUID1Plus(fields=(time_low, time_mid, time_hi_version,

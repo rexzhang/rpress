@@ -5,7 +5,7 @@
 from __future__ import print_function, unicode_literals, absolute_import
 
 import os
-import ConfigParser
+import configparser
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -63,7 +63,7 @@ class ConfigRelease(ConfigDefault):
     # ----------------------------------------------------------------------
     def __init__(self):
         """Constructor"""
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config_filename = os.path.join(basedir, 'deploy.ini')
 
         if len(config.read(config_filename)) == 0:

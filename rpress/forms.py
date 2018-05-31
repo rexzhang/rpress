@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 
 from wtforms import BooleanField, StringField, TextField, TextAreaField, PasswordField
 from wtforms import validators, SubmitField
-from flask_wtf import Form
+from flask_wtf import FlaskForm as Form
 
 
 class LoginForm(Form):

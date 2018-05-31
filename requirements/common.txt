@@ -1,5 +1,5 @@
 # flask
-Flask<1.0.0
+Flask
 Flask-Script
 Flask-SQLAlchemy
 Flask-Themes2

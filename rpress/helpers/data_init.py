@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 
 from __future__ import print_function, unicode_literals, absolute_import
 
 import re
-import HTMLParser
+from html import parser
 from datetime import datetime
 
 import feedparser
@@ -59,7 +59,7 @@ def import_data_from_wordpress_xml(db_session, site, disable_convert_code_tag, f
         return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
 
     def convert_content(content):
-        html_parser = HTMLParser.HTMLParser()
+        html_parser = parser.HTMLParser()
         content = html_parser.unescape(content)
 
         if not disable_convert_code_tag:
