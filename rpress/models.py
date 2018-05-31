@@ -13,7 +13,6 @@ from rpress.database import db
 from rpress.helpers.uuid1plus import uuid1, uuid1_from_datetime
 
 
-########################################################################
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -43,7 +42,6 @@ class User(db.Model):
             self._password = hashlib.sha256(bytes(password, 'utf8')).hexdigest()
         return
 
-    #----------------------------------------------------------------------
     def password_validate(self, password=None):
         """check user's password"""
         if password is not None and hashlib.sha256(str(password, 'utf8')).hexdigest() == self._password:
@@ -54,17 +52,14 @@ class User(db.Model):
     password = db.synonym("_password", descriptor=property(fget=_password_get, fset=_password_set))
 
 
-########################################################################
 post_term_relations = db.Table('post_term_relations',
                                db.Column('term_id', db.Integer, db.ForeignKey('terms.id')),
                                db.Column('post_id', db.Integer, db.ForeignKey('posts.id'))
 )
 
 
-########################################################################
 class PostQuery(BaseQuery):
     """"""
-    #----------------------------------------------------------------------
     def search(self, site, keywords):
         """"""
         criteria = []
@@ -154,7 +149,6 @@ class Post(db.Model):
         return '<Post {}>'.format(self.title)  #!!!
 
 
-########################################################################
 class Term(db.Model):
     """"""
     __tablename__ = 'terms'
@@ -168,7 +162,6 @@ class Term(db.Model):
     type = Column(String(50))  #tag/category
     desc = Column(Text)
 
-    #----------------------------------------------------------------------
     def __init__(self, site, name, type='tag', desc=None):
         """Constructor"""
         self.site = site
@@ -178,13 +171,11 @@ class Term(db.Model):
         self.desc = desc
         return
 
-    #----------------------------------------------------------------------
     def __repr__(self):
         """"""
         return '<Term %r>' % (self.name)
 
 
-########################################################################
 class Comment(db.Model):
     """"""
     __tablename__ = 'comments'
@@ -202,7 +193,6 @@ class Comment(db.Model):
     publish_date = Column(DateTime)
     content = Column(Text)
 
-    #----------------------------------------------------------------------
     def __init__(self, post, author_name, publish_date, content, author_email=None, author_ip=None, author_url=None):
         """Constructor"""
         self.post = post
@@ -216,13 +206,11 @@ class Comment(db.Model):
         self.content = content
         return
 
-    #----------------------------------------------------------------------
     def __repr__(self):
         """"""
         return '<Comment {}>'.format(self.author_name)  #!!!
 
 
-########################################################################
 class Site(db.Model):
     """"""
     __tablename__ = 'sites'
@@ -231,19 +219,16 @@ class Site(db.Model):
 
     domain = Column(String(50), unique=True)
 
-    #----------------------------------------------------------------------
     def __init__(self, domain):
         """Constructor"""
         self.domain = domain
         return
 
-    #----------------------------------------------------------------------
     def __repr__(self):
         """"""
         return '<Site {}>'.format(self.domain)
 
 
-########################################################################
 class SiteSetting(db.Model):
     """"""
     __tablename__ = 'site_settings'
@@ -255,7 +240,6 @@ class SiteSetting(db.Model):
     key = Column(String(128))
     value = Column(Text())
 
-    #----------------------------------------------------------------------
     def __init__(self, site, key, value):
         """Constructor"""
         self.site = site
@@ -264,7 +248,6 @@ class SiteSetting(db.Model):
         self.value = value
         return
 
-    #----------------------------------------------------------------------
     def __repr__(self):
         """"""
         return '<SiteSetting {}>'.format(self.name)

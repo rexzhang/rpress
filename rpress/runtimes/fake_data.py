@@ -19,14 +19,14 @@ def add_sample_user_and_site(user_name, user_password, site_domain_name):
     site = Site(domain=site_domain_name)
     db.session.add(site)
 
-    site_titel = SiteSetting(site=site, key='title', value='rPress Site')
-    db.session.add(site_titel)
+    site_title = SiteSetting(site=site, key='title', value='rPress Site')
+    db.session.add(site_title)
     site_desc = SiteSetting(site=site, key='desc', value='a new rPress site')
     db.session.add(site_desc)
 
     blog = Post(
         site=site, author=user_name,
-        published=True, publish_state=PUBLISH_FSM_DEFINE.STATE.PUBLISHED, type='blog',
+        published=True, publish_state=PUBLISH_FSM_DEFINE.STATE.PUBLISHED,
         title=u'this is first blog', content=u'i am blog content'
     )
     db.session.add(blog)
