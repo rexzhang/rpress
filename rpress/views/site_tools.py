@@ -8,7 +8,7 @@ import os
 
 from werkzeug import secure_filename
 from flask import Blueprint, request, redirect, url_for
-from flask.ext.login import login_required
+from flask_login import login_required
 
 from rpress import db
 from rpress.helpers.template.common import render_template

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 
 from __future__ import print_function, unicode_literals, absolute_import
@@ -7,11 +7,10 @@ from __future__ import print_function, unicode_literals, absolute_import
 import os
 import ConfigParser
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 def get_config_obj(name):
     """get config with name"""
     config = None
@@ -38,14 +37,16 @@ class ConfigDefault(object):
 
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_DATABASE_URI = ''
-    #SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
+    # SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 
 
 class ConfigDev(ConfigDefault):
     DEBUG = True
 
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'rpress.sqlite3')
-    #SQLALCHEMY_ECHO = True
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'rpress.sqlite3')
+    # SQLALCHEMY_ECHO = True
+
+    SQLALCHEMY_DATABASE_URI = 'postgresql://rex@localhost/rpress_develop?client_encoding=utf8'
 
 
 ########################################################################
@@ -59,7 +60,7 @@ class ConfigRelease(ConfigDefault):
     """"""
     DEBUG = False
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __init__(self):
         """Constructor"""
         config = ConfigParser.ConfigParser()

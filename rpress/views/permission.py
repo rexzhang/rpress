@@ -6,7 +6,7 @@ from __future__ import print_function, unicode_literals, absolute_import
 
 import flask
 from flask import request, redirect, url_for, flash, abort
-from flask.ext.login import login_required
+from flask_login import login_required
 
 from rpress.helpers.template.common import render_template
 from rpress.permission import user_login, user_logout

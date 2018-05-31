@@ -3,8 +3,8 @@
 
 
 from flask import request
-from flask.ext.themes2 import render_theme_template  #, get_themes_list
-from flask.ext.login import current_user
+from flask_themes2 import render_theme_template  #, get_themes_list
+from flask_login import current_user
 
 from rpress.constants import SITE_SETTINGS_KEY_LIST
 from rpress.models import Site, SiteSetting

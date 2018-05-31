@@ -4,16 +4,16 @@
 
 import hashlib
 
-import flask.ext.login
+import flask_login
 
 from rpress.models import User
 
 
-login_manager = flask.ext.login.LoginManager()
+login_manager = flask_login.LoginManager()
 
 
 ########################################################################
-class LoggedUser(flask.ext.login.UserMixin):
+class LoggedUser(flask_login.UserMixin):
     """user object for login. make User.id to user_id"""
     id = None
 
@@ -57,7 +57,7 @@ def user_login(username, password):
     logged_user = LoggedUser()
     logged_user.id = user.id
 
-    flask.ext.login.login_user(logged_user)
+    flask_login.login_user(logged_user)
 
     return True
 
@@ -65,5 +65,5 @@ def user_login(username, password):
 #----------------------------------------------------------------------
 def user_logout():
     """"""
-    flask.ext.login.logout_user()
+    flask_login.logout_user()
     return

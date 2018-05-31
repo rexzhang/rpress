@@ -9,7 +9,7 @@ import re
 from sqlalchemy import desc
 import flask
 from flask import g, request, redirect, url_for, flash
-from flask.ext.login import login_required, current_user
+from flask_login import login_required, current_user
 
 from rpress.constants import PUBLISH_FSM_DEFINE, SITE_SETTINGS_KEY_LIST
 from rpress import db

@@ -5,8 +5,8 @@
 from __future__ import print_function, unicode_literals, absolute_import
 
 
-from flask.ext.script import Manager, prompt_bool, prompt
-from flask.ext.migrate import MigrateCommand
+from flask_script import Manager, prompt_bool, prompt
+from flask_migrate import MigrateCommand
 
 from rpress import create_app
 from rpress import db

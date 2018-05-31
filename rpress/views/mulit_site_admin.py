@@ -5,7 +5,7 @@
 from __future__ import print_function, unicode_literals, absolute_import
 
 from flask import Blueprint, redirect, url_for
-from flask.ext.login import login_required
+from flask_login import login_required
 
 from rpress import db
 from rpress.helpers.template.common import render_template

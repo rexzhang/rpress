@@ -5,8 +5,8 @@
 from __future__ import print_function, unicode_literals, absolute_import
 
 from flask import Flask
-from flask.ext.themes2 import Themes
-from flask.ext.migrate import Migrate
+from flask_themes2 import Themes
+from flask_migrate import Migrate
 
 from rpress import db
 from rpress import login_manager

@@ -6,7 +6,7 @@ import hashlib
 
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship  #, backref
-from flask.ext.sqlalchemy import BaseQuery
+from flask_sqlalchemy import BaseQuery
 
 from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress.database import db

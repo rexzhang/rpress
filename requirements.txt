@@ -1,6 +1,7 @@
 gunicorn
 PyMySQL
-Flask==0.10.1
+psycopg2-binary
+Flask<1.0.0
 Flask-Script
 Flask-SQLAlchemy
 Flask-Themes2
