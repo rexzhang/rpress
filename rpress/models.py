@@ -81,7 +81,6 @@ class PostQuery(BaseQuery):
         return self.filter_by(site=site).filter(query)
 
 
-########################################################################
 class Post(db.Model):
     """"""
     query_class = PostQuery
@@ -118,8 +117,7 @@ class Post(db.Model):
     title = Column(String(128))
     content = Column(Text)
 
-    #----------------------------------------------------------------------
-    def __init__(self, author, site, uuid=None, published=False, publish_state=PUBLISH_FSM_DEFINE.DEFAULT_STATE, publish_date=None, type='blog', name=None, title=None, content=None):
+    def __init__(self, site, author, uuid=None, published=False, publish_state=PUBLISH_FSM_DEFINE.DEFAULT_STATE, publish_date=None, type='blog', name=None, title=None, content=None):
         """Constructor"""
         self.author = author
 
@@ -151,7 +149,6 @@ class Post(db.Model):
         self.content = content
         return
 
-    #----------------------------------------------------------------------
     def __repr__(self):
         """"""
         return '<Post {}>'.format(self.title)  #!!!
