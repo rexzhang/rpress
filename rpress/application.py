@@ -10,7 +10,6 @@ from flask_migrate import Migrate
 
 from rpress import db
 from rpress import login_manager
-from rpress.helpers.template.common import render_template
 from rpress.helpers.template.filter import configure_filter
 from rpress.helpers.error_handler import configure_error_handler
 from rpress.config import Config
@@ -28,7 +27,7 @@ __all__ = ['create_app', 'create_app_for_cli']
 
 DEFAULT_APP_NAME = 'rpress'
 
-REGISTER_BLUE_PRINTS = (
+BLUE_PRINTS = (
     (post_view.post, ''),
     (permission.permission, ''),
     (site_admin.site_admin, '/rp/admin'),
@@ -40,13 +39,10 @@ REGISTER_BLUE_PRINTS = (
 )
 
 
-def create_app(config_name=None,app_name=None):
-    if app_name is None:
-        app_name = DEFAULT_APP_NAME
-
+def create_app(app_name=DEFAULT_APP_NAME):
     app = Flask(app_name)
+    app.config.from_object(Config())
 
-    configure_app(app, config_name)
     configure_db(app)
     configure_theme(app)
     configure_permission(app)
@@ -55,11 +51,8 @@ def create_app(config_name=None,app_name=None):
     configure_error_handler(app)
 
     configure_blueprints(app)
-    #configure_cache(app)
+    # configure_cache(app)
 
-    @app.errorhandler(404)
-    def page_not_found(e):
-        return render_template('/common/404.html'), 404
     return app
 
 
@@ -67,28 +60,19 @@ def create_app_for_cli(script_info):
     return create_app()
 
 
-def configure_app(app, config_name):
-    app.config.from_object(Config())
-
-    #app.config.from_envvar('APP_CONFIG',silent=True)
-    return
-
-
 def configure_db(app):
     """"""
     db.init_app(app)
-    migrate = Migrate(app, db)
+    Migrate(app, db)
     return
 
 
-#----------------------------------------------------------------------
 def configure_theme(app):
     """"""
     Themes(app, app_identifier='rpress')
     return
 
 
-#----------------------------------------------------------------------
 def configure_permission(app):
     """"""
     login_manager.setup_app(app)
@@ -96,7 +80,6 @@ def configure_permission(app):
 
 
 def configure_blueprints(app):
-    for blue, url_prefix in REGISTER_BLUE_PRINTS:
-        #app.register_blueprint(blue)
+    for blue, url_prefix in BLUE_PRINTS:
         app.register_blueprint(blue, url_prefix=url_prefix)
     return
