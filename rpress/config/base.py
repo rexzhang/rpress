@@ -4,6 +4,8 @@
 
 from datetime import timedelta
 
+from flask_vises.deploy import DeployLevel
+
 
 class ConfigBase(object):
     # 项目根路径
@@ -11,7 +13,9 @@ class ConfigBase(object):
 
     # Deploy
     DEBUG = False
-    # DEPLOY_LEVEL = DeployLevel.develop
+    TEMPLATES_AUTO_RELOAD = False
+
+    DEPLOY_LEVEL = DeployLevel.develop
 
     # Continuous Integration
     TESTING = False

@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
-
-from __future__ import print_function, unicode_literals, absolute_import
 
 from flask import Blueprint, redirect, url_for
 from flask_login import login_required
@@ -16,9 +14,8 @@ from rpress.forms import SiteForm
 mulit_site_admin = Blueprint('mulit_site_admin', __name__)
 
 
-@mulit_site_admin.route('', methods=['GET',])
+@mulit_site_admin.route('', methods=['GET'])
 @login_required
-#----------------------------------------------------------------------
 def index():
     """mulit-site home page"""
     sites = Site.query.all()
@@ -26,9 +23,8 @@ def index():
     return render_template('rp/mulit_site_admin/index.html', sites=sites)
 
 
-@mulit_site_admin.route('/new', methods=['GET',])
+@mulit_site_admin.route('/new', methods=['GET'])
 @login_required
-#----------------------------------------------------------------------
 def new():
     """"""
     site = Site(domain='new.sample.com')
@@ -40,7 +36,6 @@ def new():
 
 @mulit_site_admin.route('/<int:site_id>/edit', methods=['GET', 'POST'])
 @login_required
-#----------------------------------------------------------------------
 def edit(site_id):
     """"""
     site = Site.query.filter_by(id=site_id).first()
@@ -54,16 +49,15 @@ def edit(site_id):
         db.session.add(site)
         db.session.commit()
     else:
-        pass  #!!!
+        pass  # !!!
 
     return render_template('rp/mulit_site_admin/edit.html', site_id=site_id, form=form)
 
 
-@mulit_site_admin.route('/<int:site_id>/delete', methods=['GET',])
+@mulit_site_admin.route('/<int:site_id>/delete', methods=['GET'])
 @login_required
-#----------------------------------------------------------------------
 def delete(site_id):
     """"""
-    print(site_id)  #!!!!!
+    print(site_id)  # !!!!!
 
     return redirect(url_for('.index'))

@@ -5,6 +5,7 @@ Flask-Themes2
 Flask-WTF
 Flask-Login
 Flask-Migrate
+Flask-Vises
 click
 
 # database

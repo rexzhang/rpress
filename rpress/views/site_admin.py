@@ -1,19 +1,17 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
-
-from __future__ import print_function, unicode_literals, absolute_import
 
 import re
 
 from sqlalchemy import desc
 import flask
-from flask import g, request, redirect, url_for, flash
+from flask import redirect, url_for, flash
 from flask_login import login_required, current_user
 
-from rpress.constants import PUBLISH_FSM_DEFINE, SITE_SETTINGS_KEY_LIST
+from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress import db
-from rpress.models import User, Site, Post, Term, SiteSetting
+from rpress.models import User, Post, Term, SiteSetting
 from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm_publish import PublishFSM
@@ -21,13 +19,11 @@ from rpress.helpers.mulit_site import get_current_request_site
 from rpress.helpers.site import get_current_request_site_info
 from rpress.forms import PostEditForm, TermEditFrom, SettingsForm
 
-
 site_admin = flask.Blueprint('site_admin', __name__)
 
 
 @site_admin.route('', methods=['GET'])
 @login_required
-#----------------------------------------------------------------------
 def index():
     """"""
     return render_template("rp/site_admin/index.html")
@@ -35,11 +31,10 @@ def index():
 
 @site_admin.route('/post/list/<string:type>', methods=['GET'])
 @login_required
-#----------------------------------------------------------------------
 def post_list(type):
     """"""
     if not is_valid_post_type(type):
-        return  #!!!
+        return  # !!!
 
     site = get_current_request_site()
 
@@ -50,19 +45,18 @@ def post_list(type):
 
 @site_admin.route('/post/<uuid:uuid>/publish/<string:trigger>', methods=['GET'])
 @login_required
-#----------------------------------------------------------------------
 def post_publish_state(uuid, trigger):
     """"""
-    post = Post.query.filter_by(uuid=str(uuid)).first_or_404()  #!!!
+    post = Post.query.filter_by(uuid=str(uuid)).first_or_404()
     if post.publish_state not in PublishFSM.states:
-        return  #!!!
+        return
 
     post_publish_fsm = PublishFSM(init_state=post.publish_state)
     if trigger not in post_publish_fsm.triggers:
-        return  #!!!
+        return
 
     if not post_publish_fsm.do_trigger(trigger_name=trigger):
-        return  #!!!
+        return
 
     print('Done......')
     post.publish_state = post_publish_fsm.state
@@ -77,17 +71,16 @@ def post_publish_state(uuid, trigger):
     return redirect(url_for('site_admin.post_edit', uuid=uuid))
 
 
-@site_admin.route('/post/<string:type>/new', methods=['GET',])
+@site_admin.route('/post/<string:type>/new', methods=['GET', ])
 @login_required
-#----------------------------------------------------------------------
 def post_new(type):
     """"""
     if not is_valid_post_type(type):
-        return  #!!!
+        return
 
     user = User.query.filter_by(id=current_user.id).first()
     if user is None:
-        return  #!!!
+        return
 
     site = get_current_request_site()
 
@@ -100,10 +93,9 @@ def post_new(type):
 
 @site_admin.route('/post/<uuid:uuid>/edit', methods=['GET', 'POST'])
 @login_required
-#----------------------------------------------------------------------
 def post_edit(uuid):
     """"""
-    post = Post.query.filter_by(uuid=str(uuid)).first_or_404()  #!!!
+    post = Post.query.filter_by(uuid=str(uuid)).first_or_404()  # !!!
     form = PostEditForm(obj=post)
 
     if form.validate_on_submit():
@@ -114,22 +106,22 @@ def post_edit(uuid):
         db.session.commit()
 
         flash("post updated", "success")
-        #return redirect(url_for('.blog'))
+        # return redirect(url_for('.blog'))
     else:
         flash('post edit error')
         pass
 
     post_publish_fsm = PublishFSM(init_state=post.publish_state)
-    return render_template("rp/site_admin/post_edit.html", form=form, post=post, publish_triggers=post_publish_fsm.possible_triggers)
+    return render_template("rp/site_admin/post_edit.html", form=form, post=post,
+                           publish_triggers=post_publish_fsm.possible_triggers)
 
 
 @site_admin.route('/term/list/<string:type>', methods=['GET', ])
 @login_required
-#----------------------------------------------------------------------
 def term_list(type):
     """"""
     if type not in ['category', 'tag']:
-        return  #!!!
+        return  # !!!
 
     site = get_current_request_site()
 
@@ -139,12 +131,11 @@ def term_list(type):
 
 @site_admin.route('/term/<string:name>/edit', methods=['GET', 'POST'])
 @login_required
-#----------------------------------------------------------------------
 def term_edit(name):
     """"""
     site = get_current_request_site()
 
-    term = Term.query.filter_by(site=site, name=name).first_or_404()  #!!!
+    term = Term.query.filter_by(site=site, name=name).first_or_404()  # !!!
     form = TermEditFrom(obj=term)
 
     if form.validate_on_submit():
@@ -154,7 +145,7 @@ def term_edit(name):
         db.session.commit()
 
         flash("term updated", "success")
-        #return redirect(url_for('.blog'))
+        # return redirect(url_for('.blog'))
     else:
         flash('term edit error')
         pass
@@ -162,9 +153,8 @@ def term_edit(name):
     return render_template("rp/site_admin/term_edit.html", form=form, term=term)
 
 
-@site_admin.route('/settings', methods=['GET',])
+@site_admin.route('/settings', methods=['GET', ])
 @login_required
-#----------------------------------------------------------------------
 def settings():
     """"""
     content = {
@@ -176,7 +166,6 @@ def settings():
 
 @site_admin.route('/setting/<string:key>/edit', methods=['GET', 'POST'])
 @login_required
-#----------------------------------------------------------------------
 def setting_edit(key):
     """"""
     site = get_current_request_site()

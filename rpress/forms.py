@@ -2,7 +2,7 @@
 # coding=utf-8
 
 
-from wtforms import BooleanField, StringField, TextField, TextAreaField, PasswordField
+from wtforms import StringField, TextAreaField, PasswordField
 from wtforms import validators, SubmitField
 from flask_wtf import FlaskForm as Form
 
@@ -20,7 +20,6 @@ class PostEditForm(Form):
     submit = SubmitField("submit")
 
 
-########################################################################
 class ProfilesForm(Form):
     """"""
     email = StringField(u'电子邮箱', [validators.Email()])
@@ -28,7 +27,6 @@ class ProfilesForm(Form):
     submit = SubmitField("submit")
 
 
-########################################################################
 class PasswordForm(Form):
     """"""
     password_old = StringField(u'当前密码')
@@ -36,14 +34,12 @@ class PasswordForm(Form):
     submit = SubmitField("submit")
 
 
-########################################################################
 class SiteForm(Form):
     """"""
     domain = StringField(u'网站域名')
     submit = SubmitField("submit")
 
 
-########################################################################
 class SettingsForm(Form):
     """"""
     value = StringField(u'value')
@@ -51,7 +47,6 @@ class SettingsForm(Form):
     submit = SubmitField("submit")
 
 
-########################################################################
 class TermEditFrom(Form):
     """"""
     name = StringField(u'名字')

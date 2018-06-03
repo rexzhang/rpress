@@ -1,21 +1,19 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 
-from __future__ import print_function, unicode_literals, absolute_import
+from pprint import pprint
 
 from flask import g, request
 
 from rpress.models import Site
 
 
-#----------------------------------------------------------------------
 def get_current_request_site_domain():
     """"""
     return request.environ['HTTP_HOST'].split(':')[0]
 
 
-#----------------------------------------------------------------------
 def get_current_request_site():
     """return site object for current request"""
     domain = get_current_request_site_domain()
@@ -30,8 +28,6 @@ def get_current_request_site():
     return site
 
 
-from pprint import pprint
-#----------------------------------------------------------------------
 def current_request_site(func):
     """"""
     def _set_current_request_site(*args, **kwargs):

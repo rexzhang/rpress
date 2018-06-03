@@ -1,17 +1,13 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 
-from flask import request
-from flask_themes2 import render_theme_template  #, get_themes_list
+from flask_themes2 import render_theme_template
 from flask_login import current_user
 
-from rpress.constants import SITE_SETTINGS_KEY_LIST
-from rpress.models import Site, SiteSetting
 from rpress.helpers.site import get_current_request_site_info
 
 
-#----------------------------------------------------------------------
 def _user_info():
     """"""
     if not current_user.is_active:
@@ -24,7 +20,6 @@ def _user_info():
     return user_info
 
 
-#----------------------------------------------------------------------
 def render_template(template, **context):
     """"""
     context['site'] = get_current_request_site_info()

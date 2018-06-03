@@ -1,27 +1,17 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
-
-from __future__ import print_function, unicode_literals, absolute_import
 
 from datetime import datetime
-from sqlalchemy import desc, asc, func, extract
+from sqlalchemy import desc
 
 import flask
-from flask import g, request, redirect, url_for, flash, abort
-from flask.views import MethodView
+from flask import request, redirect, url_for
 
-from rpress import db
 from rpress.helpers.template.common import render_template
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import Post, User, Term, Comment
 
-
-##class TestView(MethodView):
-##    def get(self):
-##        return 'hello world'
-##
-##post.add_url_rule('/test',view_func=TestView.as_view('test'),methods=['GET',])
 
 """
 content = {
@@ -83,10 +73,9 @@ content = {
 post = flask.Blueprint('post', __name__)
 
 
-#----------------------------------------------------------------------
 def _sidebar():
     """"""
-    site = get_current_request_site()  #!!!应该传进来
+    site = get_current_request_site()  # TODO!!!应该传进来
 
     categories = []
     terms = Term.query.filter_by(site=site, type='category').order_by('name').all()
@@ -115,7 +104,6 @@ def _sidebar():
     return widgets
 
 
-#----------------------------------------------------------------------
 def _widget_date_year():
     """"""
     date_years = {}
@@ -136,7 +124,6 @@ def _widget_date_year():
     return date_years
 
 
-#----------------------------------------------------------------------
 def _make_post_info(post):
     """"""
     categorys = []
@@ -167,7 +154,7 @@ def _make_post_info(post):
         'link': link,
     }
 
-#----------------------------------------------------------------------
+
 def _render_post_paginate(query, paginate):
     """"""
     post_paginate = query.paginate(paginate['curr_num'], per_page=10)
@@ -194,14 +181,13 @@ def _render_post_paginate(query, paginate):
 
 @post.route('/', methods=['GET'])
 @post.route('/paginate/<int:page_num>', methods=['GET'])
-#----------------------------------------------------------------------
 def post_paginate(page_num=1):
     """"""
     site = get_current_request_site()
 
     query = Post.query.filter_by(site=site, type='blog', published=True).order_by(desc('publish_date'))
     paginate = {
-        'title': 'Home',  #!!!需要改为站点相关信息
+        'title': 'Home',  # TODO需要改为站点相关信息
         'curr_num': page_num,
         'view_name': 'post.post_paginate',
     }
@@ -211,7 +197,6 @@ def post_paginate(page_num=1):
 
 @post.route('/date/<int:year>', methods=['GET'])
 @post.route('/date/<int:year>/paginate/<int:page_num>', methods=['GET'])
-#----------------------------------------------------------------------
 def post_date(year, page_num=1):
     """"""
     site = get_current_request_site()
@@ -230,7 +215,6 @@ def post_date(year, page_num=1):
     return _render_post_paginate(query, paginate)
 
 
-#----------------------------------------------------------------------
 def _post_term(term, paginate):
     """"""
     site = get_current_request_site()
@@ -238,13 +222,12 @@ def _post_term(term, paginate):
     query = Post.query.filter_by(site=site, type='blog', published=True).filter(Post.terms.any(Term.name==term)).order_by(desc('publish_date'))
 
     paginate['key'] = term
-    paginate['title'] = term  #!!!diaplay name?
+    paginate['title'] = term  # TODO!!!diaplay name?
     return _render_post_paginate(query, paginate)
 
 
 @post.route('/category/<string:term>', methods=['GET'])
 @post.route('/category/<string:term>/paginate/<int:page_num>', methods=['GET'])
-#----------------------------------------------------------------------
 def post_term_category(term, page_num=1):
     """"""
     paginate = {
@@ -258,7 +241,6 @@ def post_term_category(term, page_num=1):
 
 @post.route('/tag/<string:term>', methods=['GET'])
 @post.route('/tag/<string:term>/paginate/<int:page_num>', methods=['GET'])
-#----------------------------------------------------------------------
 def post_term_tag(term, page_num=1):
     """"""
     paginate = {
@@ -272,14 +254,13 @@ def post_term_tag(term, page_num=1):
 
 @post.route('/author/<string:author>', methods=['GET'])
 @post.route('/author/<string:author>/paginate/<int:page_num>', methods=['GET'])
-#----------------------------------------------------------------------
 def post_author(author, page_num=1):
     """"""
     site = get_current_request_site()
 
     query = Post.query.filter_by(site=site, type='blog', published=True).filter(Post.author.has(User.name==author)).order_by(desc('publish_date'))
     paginate = {
-        'title': author,  #!!!display name
+        'title': author,  # TODO!!!display name
         'curr_num': page_num,
         'view_name': 'post.post_author',
     }
@@ -289,7 +270,6 @@ def post_author(author, page_num=1):
 
 @post.route("/search/")
 @post.route("/search/paginate/<int:page_num>/")
-#----------------------------------------------------------------------
 def search(page_num=1):
     """"""
     site = get_current_request_site()
@@ -298,7 +278,7 @@ def search(page_num=1):
     if not keywords:
         return redirect(url_for("post.index"))
 
-    post_query = Post.query.search(site=site, keywords=keywords)  #!!!!当前搜索多个关键字有bug
+    post_query = Post.query.search(site=site, keywords=keywords)  # TODO!!!!当前搜索多个关键字有bug
 
     if post_query.count() == 1:
         #only one result
@@ -319,7 +299,6 @@ def search(page_num=1):
     return _render_post_paginate(post_query, paginate)
 
 
-#----------------------------------------------------------------------
 def _render_post(post):
     """render one post"""
     content = {
@@ -334,7 +313,6 @@ def _render_post(post):
             'publish_date': comment.publish_date,
             'content': comment.content,
         })
-        #print(comment_list)
     content['comments'] = comment_list
 
     return render_template('post.html', content=content)
@@ -342,7 +320,6 @@ def _render_post(post):
 
 # /post/uuid0001
 @post.route('/post/<uuid:uuid>', methods=['GET', ])
-#----------------------------------------------------------------------
 def post_uuid(uuid):
     """"""
     site = get_current_request_site()
@@ -353,7 +330,6 @@ def post_uuid(uuid):
 
 # /about
 @post.route('/<string:name>', methods=['GET', ])
-#----------------------------------------------------------------------
 def page_name(name):
     """"""
     site = get_current_request_site()

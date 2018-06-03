@@ -1,11 +1,7 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 
-from __future__ import print_function, unicode_literals, absolute_import
-
-
-########################################################################
 class PUBLISH_FSM_DEFINE(object):
     """publish FSM define"""
 

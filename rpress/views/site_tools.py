@@ -1,13 +1,11 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
-
-from __future__ import print_function, unicode_literals, absolute_import
 
 import os
 
 from werkzeug import secure_filename
-from flask import Blueprint, request, redirect, url_for
+from flask import Blueprint, request
 from flask_login import login_required
 
 from rpress import db
@@ -24,7 +22,6 @@ site_tools = Blueprint('site_tools', __name__)
 
 @site_tools.route('', methods=['GET'])
 @login_required
-#----------------------------------------------------------------------
 def index():
     """"""
     return render_template("rp/site_tools/index.html")
@@ -37,7 +34,6 @@ def allowed_file(filename):
 
 @site_tools.route('/import_wp_xml', methods=['GET', 'POST'])
 @login_required
-#----------------------------------------------------------------------
 def import_wordpress_xml():
     """导入 wordpress xml 文件"""
     site = get_current_request_site()
@@ -65,6 +61,3 @@ def import_wordpress_xml():
     db.session.commit()
 
     return response_msg
-
-
-

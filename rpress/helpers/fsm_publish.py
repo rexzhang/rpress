@@ -1,14 +1,11 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
-
-from __future__ import print_function, unicode_literals, absolute_import
 
 from .fsm import FSM
 from rpress.constants import PUBLISH_FSM_DEFINE
 
 
-########################################################################
 class PublishFSM(FSM):
     """
     publish Finite State Machine
