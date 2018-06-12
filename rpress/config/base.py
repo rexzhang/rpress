@@ -34,3 +34,9 @@ class ConfigBase(object):
 
     # Theme
     THEME_DEFAULT = 'rexzhangname'
+
+    # Sentry
+    SENTRY_CONFIG = {
+        'DSN': None,
+        'ENVIRONMENT': 'rPress-develop',
+    }
