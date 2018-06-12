@@ -27,15 +27,13 @@ def add_sample_user_and_site(user_name, user_password, site_domain_name):
     session.add(site_desc)
 
     blog = Post(
-        site=site, author=user,
-        published=True, publish_state=PUBLISH_FSM_DEFINE.STATE.PUBLISHED, type='post',
-        title=u'this is first blog', content=u'i am blog content'
+        site=site, author=user, type='blog', published=True, publish_state=PUBLISH_FSM_DEFINE.STATE.PUBLISHED,
+        title='this is first blog', content='i am blog content'
     )
     session.add(blog)
     page = Post(
-        site=site, author=user,
-        published=True, publish_state=PUBLISH_FSM_DEFINE.STATE.PUBLISHED, type='page',
-        name='sample', title=u'this is first page', content=u'i am page'
+        site=site, author=user, type='page', published=True, publish_state=PUBLISH_FSM_DEFINE.STATE.PUBLISHED,
+        name='sample', title='this is first page', content='i am page'
     )
     session.add(page)
     return
