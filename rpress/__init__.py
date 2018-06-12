@@ -2,7 +2,6 @@
 # coding=utf-8
 
 
-from rpress.database import db
-from rpress.permission import login_manager
+from .application import create_app
 
-from rpress.application import create_app
+app = create_app()
