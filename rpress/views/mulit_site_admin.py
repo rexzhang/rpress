@@ -5,7 +5,7 @@
 from flask import Blueprint, redirect, url_for
 from flask_login import login_required
 
-from rpress import db
+from rpress.database import db
 from rpress.helpers.template.common import render_template
 from rpress.models import Site
 from rpress.forms import SiteForm

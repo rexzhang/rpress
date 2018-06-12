@@ -5,7 +5,7 @@
 from flask import Blueprint, redirect, url_for, flash
 from flask_login import login_required, current_user
 
-from rpress import db
+from rpress.database import db
 from rpress.helpers.template.common import render_template
 from rpress.models import User
 from rpress.forms import ProfilesForm, PasswordForm

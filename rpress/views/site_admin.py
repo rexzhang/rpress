@@ -10,8 +10,8 @@ from flask import redirect, url_for, flash
 from flask_login import login_required, current_user
 
 from rpress.constants import PUBLISH_FSM_DEFINE
-from rpress import db
 from rpress.models import User, Post, Term, SiteSetting
+from rpress.database import db
 from rpress.helpers.template.common import render_template
 from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm_publish import PublishFSM

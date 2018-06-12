@@ -7,8 +7,8 @@ from flask_themes2 import Themes
 from flask_migrate import Migrate
 from raven.contrib.flask import Sentry
 
-from rpress import db
-from rpress import login_manager
+from rpress.database import db
+from rpress.permission import login_manager
 from rpress.helpers.template.filter import configure_filter
 from rpress.helpers.error_handler import configure_error_handler
 from rpress.config import Config

@@ -10,7 +10,7 @@
 import click
 from flask.cli import with_appcontext
 
-from rpress import db
+from rpress.database import db
 from rpress.helpers.data_init import import_data_from_wordpress_xml
 from rpress.runtimes.fake_data import add_sample_user_and_site
 

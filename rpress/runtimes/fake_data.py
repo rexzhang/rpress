@@ -2,9 +2,9 @@
 # coding=utf-8
 
 
-from rpress import db
 from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress.models import User, Site, SiteSetting, Post
+from rpress.database import db
 
 
 def add_sample_user_and_site(user_name, user_password, site_domain_name):
