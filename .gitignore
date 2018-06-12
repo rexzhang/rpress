@@ -62,3 +62,4 @@ rpress.wpu
 deploy.ini
 .idea
 venv-rpress
+rpress/config/deploy.py

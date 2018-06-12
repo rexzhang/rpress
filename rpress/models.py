@@ -5,7 +5,7 @@
 import hashlib
 
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
-from sqlalchemy.orm import relationship  #, backref
+from sqlalchemy.orm import relationship
 from flask_sqlalchemy import BaseQuery
 
 from rpress.constants import PUBLISH_FSM_DEFINE
@@ -17,25 +17,19 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True)
+    name = Column(String(50), unique=True, nullable=False)
 
     _password = Column('password', String(256))
     email = Column(String(32), unique=True)
     display = Column(String(50), unique=True)
 
-    def __init__(self, name=None, password=None):
-        self.name = name
-        self.password = password
-
     def __repr__(self):
-        return '<User {}>'.format(self.name)
+        return '<User:{}|{}>'.format(self.id, self.name)
 
     def _password_get(self):
-        """"""
         return self._password
 
     def _password_set(self, password):
-        """"""
         if password is None:
             self._password = ''
         else:
@@ -55,11 +49,12 @@ class User(db.Model):
 post_term_relations = db.Table('post_term_relations',
                                db.Column('term_id', db.Integer, db.ForeignKey('terms.id')),
                                db.Column('post_id', db.Integer, db.ForeignKey('posts.id'))
-)
+                               )
 
 
 class PostQuery(BaseQuery):
     """"""
+
     def search(self, site, keywords):
         """"""
         criteria = []
@@ -69,7 +64,7 @@ class PostQuery(BaseQuery):
             criteria.append(db.or_(Post.title.ilike(keyword),
                                    Post.name.ilike(keyword),
                                    Post.content.ilike(keyword),
-                                   #Post.terms.ilike(keyword)
+                                   # Post.terms.ilike(keyword)
                                    ))
 
         query = reduce(db.and_, criteria)
@@ -85,14 +80,15 @@ class Post(db.Model):
     id = Column(Integer, primary_key=True)
     uuid = Column(String(36), unique=True)
 
-    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  #暂时定义 site_id 为异常归属
+    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  # 暂时定义 site_id 为异常归属
     site = relationship('Site', foreign_keys=[site_id])
 
-    author_id = Column(Integer, ForeignKey('users.id'), default=0)  #暂时定义 user_id＝＝0 为异常归属
+    author_id = Column(Integer, ForeignKey('users.id'), default=0)  # 暂时定义 user_id＝＝0 为异常归属
     author = relationship('User', foreign_keys=[author_id])
 
     published = Column(Boolean, default=False)
-    publish_state = Column(String(20), default=PUBLISH_FSM_DEFINE.DEFAULT_STATE)  #published 为 True 时才有意义 #修改过程版本存放在另外一个表中
+    publish_state = Column(String(20),
+                           default=PUBLISH_FSM_DEFINE.DEFAULT_STATE)  # published 为 True 时才有意义 #修改过程版本存放在另外一个表中
     publish_date = Column(DateTime)
 
     updater_id = Column(Integer, ForeignKey('users.id'))
@@ -101,7 +97,7 @@ class Post(db.Model):
 
     allow_comment = Column(Boolean, default=True)
 
-    type = Column(String(4), default='blog')  #blog/page
+    type = Column(String(4), default='blog')  # blog/page
     name = Column(String(128))
     terms = relationship(
         "Term",
@@ -112,41 +108,29 @@ class Post(db.Model):
     title = Column(String(128))
     content = Column(Text)
 
-    def __init__(self, site, author, uuid=None, published=False, publish_state=PUBLISH_FSM_DEFINE.DEFAULT_STATE, publish_date=None, type='blog', name=None, title=None, content=None):
-        """Constructor"""
-        self.author = author
+    def __init__(self, **kwargs):
+        if 'publish_state' not in kwargs:
+            kwargs['publish_state'] = PUBLISH_FSM_DEFINE.DEFAULT_STATE
 
-        self.site = site
+        if 'type' not in kwargs:
+            kwargs['type'] = 'blog'
 
-        if uuid is None and publish_date is None:
-            uuid = uuid1()
-            publish_date = uuid.datetime
+        if 'uuid' not in kwargs and 'publish_date' not in kwargs:
+            kwargs['uuid'] = uuid1()
+            kwargs['publish_date'] = kwargs['uuid'].datetime
+        elif 'uuid' in kwargs and 'publish_date' not in kwargs:
+            kwargs['publish_date'] = kwargs['uuid'].datetime
+        elif 'uuid' not in kwargs and 'publish_date' in kwargs:
+            kwargs['uuid'] = uuid1_from_datetime(kwargs['publish_date'])
+        kwargs['uuid'] = str(kwargs['uuid'])
 
-        elif uuid is not None and publish_date is None:
-            publish_date = uuid.datetime
-
-        elif uuid is None and publish_date is not None:
-            uuid = uuid1_from_datetime(publish_date)
-
-        self.uuid = str(uuid)
-
-        self.published = published
-        self.publish_state = publish_state
-        self.publish_date = publish_date
-
-        self.updater = author
-        self.update_date = publish_date
-
-        self.type = type
-        self.name = name  #!!!convert title to %xx if name==None
-
-        self.title = title
-        self.content = content
+        # TODO: !!!convert title to %xx if name==None
+        super().__init__(**kwargs)
         return
 
     def __repr__(self):
         """"""
-        return '<Post {}>'.format(self.title)  #!!!
+        return '<Post:{}|{}>'.format(self.id, self.title)
 
 
 class Term(db.Model):
@@ -155,11 +139,11 @@ class Term(db.Model):
 
     id = Column(Integer, primary_key=True)
 
-    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  #暂时定义 site_id 为异常归属
+    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  # 暂时定义 site_id 为异常归属
     site = relationship('Site', foreign_keys=[site_id])
 
     name = Column(String(50))
-    type = Column(String(50))  #tag/category
+    type = Column(String(50))  # tag/category
     desc = Column(Text)
 
     def __init__(self, site, name, type='tag', desc=None):
@@ -173,7 +157,7 @@ class Term(db.Model):
 
     def __repr__(self):
         """"""
-        return '<Term %r>' % (self.name)
+        return '<Term:{}|{}>'.format(self.id, self.name)
 
 
 class Comment(db.Model):
@@ -208,7 +192,7 @@ class Comment(db.Model):
 
     def __repr__(self):
         """"""
-        return '<Comment {}>'.format(self.author_name)  #!!!
+        return '<Comment:{}|{}>'.format(self.id, self.author_name)
 
 
 class Site(db.Model):
@@ -217,16 +201,11 @@ class Site(db.Model):
 
     id = Column(Integer, primary_key=True)
 
-    domain = Column(String(50), unique=True)
-
-    def __init__(self, domain):
-        """Constructor"""
-        self.domain = domain
-        return
+    domain = Column(String(50), unique=True, nullable=False)
 
     def __repr__(self):
         """"""
-        return '<Site {}>'.format(self.domain)
+        return '<Site:{}|{}>'.format(self.id, self.domain)
 
 
 class SiteSetting(db.Model):
@@ -234,7 +213,7 @@ class SiteSetting(db.Model):
     __tablename__ = 'site_settings'
 
     id = Column(Integer, primary_key=True)
-    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  #暂时定义 user_id＝＝0 为异常归属
+    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  # 暂时定义 user_id＝＝0 为异常归属
     site = relationship('Site', foreign_keys=[site_id])
 
     key = Column(String(128))
@@ -250,4 +229,4 @@ class SiteSetting(db.Model):
 
     def __repr__(self):
         """"""
-        return '<SiteSetting {}>'.format(self.name)
+        return '<SiteSetting:{}|{}>'.format(self.id, self.name)
