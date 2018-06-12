@@ -40,6 +40,8 @@ def create_app(app_name=DEFAULT_APP_NAME):
     app = Flask(app_name)
     app.config.from_object(Config())
 
+    configure_sentry(app)
+
     configure_db(app)
     configure_theme(app)
     configure_permission(app)
