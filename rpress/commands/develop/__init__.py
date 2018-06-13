@@ -9,7 +9,7 @@ from . import init
 
 @click.group()
 def click_group():
-    """开发环境工具"""
+    """development tools"""
     pass
 
 

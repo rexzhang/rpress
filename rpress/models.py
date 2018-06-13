@@ -229,4 +229,4 @@ class SiteSetting(db.Model):
 
     def __repr__(self):
         """"""
-        return '<SiteSetting:{}|{}>'.format(self.id, self.name)
+        return '<SiteSetting:{}|{}>'.format(self.id, self.key)
