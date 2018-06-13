@@ -3,6 +3,7 @@
 
 
 import datetime
+import codecs
 import json
 
 from rpress.models import User, Site, SiteSetting, Post, Term, Comment
@@ -149,6 +150,8 @@ def export_site_data_to_json(site_id):
 
         data['posts'].append(post_data)
 
-    fp = open('{}.rpress.{}.json'.format(site.domain, datetime.datetime.now().isoformat()), 'w+')
-    json.dump(data, fp, indent=4)
+    filename = '{}.{}.rpress.json'.format(site.domain, datetime.datetime.now().isoformat())
+    with codecs.open(filename, 'w+', encoding='utf-8') as fp:
+        json.dump(data, fp, indent=4, ensure_ascii=False)
+
     return

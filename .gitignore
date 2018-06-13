@@ -9,3 +9,4 @@ running/
 *.css.map
 
 rpress/config/deploy.py
+*.rpress.json
