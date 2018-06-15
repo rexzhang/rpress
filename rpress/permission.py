@@ -2,12 +2,12 @@
 # coding=utf-8
 
 
-import hashlib
 import logging
 
 import flask_login
 
 from rpress.models import User
+from rpress.runtimes.password import check_password_hash
 
 login_manager = flask_login.LoginManager()
 logger = logging.Logger(__name__)
@@ -62,7 +62,7 @@ def user_login(username, password):
         logger.warning('can not match user name')
         return False
 
-    if user.password != hashlib.sha256(bytes(password, 'utf-8')).hexdigest():
+    if not check_password_hash(password, user.password):
         logger.warning('can not match password')
         return False
 

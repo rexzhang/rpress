@@ -12,7 +12,6 @@ from rpress.helpers.template.common import render_template
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import Post, User, Term, Comment
 
-
 """
 content = {
     'navigation': {
@@ -69,7 +68,6 @@ content = {
 }
 """
 
-
 post = flask.Blueprint('post', __name__)
 
 
@@ -108,14 +106,13 @@ def _widget_date_year():
     """"""
     date_years = {}
 
-    posts = Post.query.filter_by(type='blog', published=True).all()
-    for post in posts:
-        year = post.publish_date.year
+    for post in Post.query.filter_by(type='blog', published=True):
+        year = post.published_time.year
 
         if year not in date_years:
             date_years[year] = {
                 'display': str(year),
-                'link':  url_for('post.post_date', year=year),
+                'link': url_for('post.post_date', year=year),
                 'count': 1,
             }
 
@@ -137,15 +134,15 @@ def _make_post_info(post):
     if post.type == 'page':
         link = url_for('post.page_name', name=post.name)
     else:
-        link = url_for('post.post_uuid', uuid=post.uuid)
+        link = url_for('post.post_uuid', uuid=post.id)
 
     return {
         'title': post.title,
-        'uuid': post.uuid,
+        'uuid': post.id,
         'type': post.type,
         'author': post.author.name,
         'author_id': post.author.id,
-        'publish_date': post.publish_date,
+        'published_time': post.published_time,
         'excerpt': post.content[:50],
         'content': post.content,
         'categorys': categorys,
@@ -185,7 +182,7 @@ def post_paginate(page_num=1):
     """"""
     site = get_current_request_site()
 
-    query = Post.query.filter_by(site=site, type='blog', published=True).order_by(desc('publish_date'))
+    query = Post.query.filter_by(site=site, type='blog', published=True).order_by(desc('published_time'))
     paginate = {
         'title': 'Home',  # TODO需要改为站点相关信息
         'curr_num': page_num,
@@ -202,8 +199,8 @@ def post_date(year, page_num=1):
     site = get_current_request_site()
 
     query = Post.query.filter_by(site=site, type='blog', published=True) \
-        .filter(Post.publish_date>=datetime(year, 1, 1), Post.publish_date<datetime(year+1, 1, 1)) \
-        .order_by(desc('publish_date'))
+        .filter(Post.published_time >= datetime(year, 1, 1), Post.published_time < datetime(year + 1, 1, 1)) \
+        .order_by(desc('published_time'))
     paginate = {
         'title': year,
         'key': year,
@@ -219,7 +216,8 @@ def _post_term(term, paginate):
     """"""
     site = get_current_request_site()
 
-    query = Post.query.filter_by(site=site, type='blog', published=True).filter(Post.terms.any(Term.name==term)).order_by(desc('publish_date'))
+    query = Post.query.filter_by(site=site, type='blog', published=True).filter(
+        Post.terms.any(Term.name == term)).order_by(desc('published_time'))
 
     paginate['key'] = term
     paginate['title'] = term  # TODO!!!diaplay name?
@@ -258,7 +256,8 @@ def post_author(author, page_num=1):
     """"""
     site = get_current_request_site()
 
-    query = Post.query.filter_by(site=site, type='blog', published=True).filter(Post.author.has(User.name==author)).order_by(desc('publish_date'))
+    query = Post.query.filter_by(site=site, type='blog', published=True).filter(
+        Post.author.has(User.name == author)).order_by(desc('published_time'))
     paginate = {
         'title': author,  # TODO!!!display name
         'curr_num': page_num,
@@ -281,10 +280,10 @@ def search(page_num=1):
     post_query = Post.query.search(site=site, keywords=keywords)  # TODO!!!!当前搜索多个关键字有bug
 
     if post_query.count() == 1:
-        #only one result
+        # only one result
         posts = post_query.all()
         post = posts[0]
-        return redirect(url_for('post.post_uuid', uuid=post.uuid))
+        return redirect(url_for('post.post_uuid', uuid=post.id))
 
     paginate = {
         'title': keywords,
@@ -306,11 +305,11 @@ def _render_post(post):
     }
 
     comment_list = []
-    comments = Comment.query.filter_by(post=post).order_by(desc('publish_date')).all()
+    comments = Comment.query.filter_by(post=post).order_by(desc('created_time')).all()
     for comment in comments:
         comment_list.append({
             'author_name': comment.author_name,
-            'publish_date': comment.publish_date,
+            'created_time': comment.created_time,
             'content': comment.content,
         })
     content['comments'] = comment_list
@@ -324,7 +323,7 @@ def post_uuid(uuid):
     """"""
     site = get_current_request_site()
 
-    post = Post.query.filter_by(site=site, uuid=str(uuid), published=True).first_or_404()
+    post = Post.query.filter_by(site=site, id=str(uuid), published=True).first_or_404()
     return _render_post(post)
 
 

@@ -105,13 +105,13 @@ def export_site_data_to_json(site_id):
             'type': post.type,
 
             'author': user_map_id_to_name[post.author_id],
-            'reviser': None if post.updater_id is None else user_map_id_to_name[post.updater_id],
+            'reviser': None if post.reviser_id is None else user_map_id_to_name[post.reviser_id],
 
             'published': post.published,
-            'publish_status': post.publish_state,
+            'publish_status': post.publish_status,
 
-            'created_time': post.publish_date.isoformat(),
-            'published_time': post.publish_date.isoformat(),
+            'created_time': post.created_time.isoformat(),
+            'published_time': post.published_time.isoformat(),
             'updated_time': None if post.update_date is None else post.update_date.isoformat(),
 
             'name': post.name,

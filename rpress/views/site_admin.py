@@ -38,7 +38,7 @@ def post_list(type):
 
     site = get_current_request_site()
 
-    posts = Post.query.filter_by(site=site, type=type).order_by(desc('publish_date')).all()
+    posts = Post.query.filter_by(site=site, type=type).order_by(desc('published_time')).all()
 
     return render_template("rp/site_admin/post_list.html", posts=posts, post_type=type)
 
@@ -51,7 +51,7 @@ def post_publish_state(uuid, trigger):
     if post.publish_state not in PublishFSM.states:
         return
 
-    post_publish_fsm = PublishFSM(init_state=post.publish_state)
+    post_publish_fsm = PublishFSM(init_state=post.publish_status)
     if trigger not in post_publish_fsm.triggers:
         return
 
@@ -59,7 +59,7 @@ def post_publish_state(uuid, trigger):
         return
 
     print('Done......')
-    post.publish_state = post_publish_fsm.state
+    post.publish_status = post_publish_fsm.state
     if post_publish_fsm.state == PUBLISH_FSM_DEFINE.STATE.PUBLISHED:
         post.published = True
     else:
@@ -88,7 +88,7 @@ def post_new(type):
     db.session.add(post)
     db.session.commit()
 
-    return redirect(url_for('.post_edit', uuid=post.uuid))
+    return redirect(url_for('.post_edit', uuid=post.id))
 
 
 @site_admin.route('/post/<uuid:uuid>/edit', methods=['GET', 'POST'])
@@ -111,7 +111,7 @@ def post_edit(uuid):
         flash('post edit error')
         pass
 
-    post_publish_fsm = PublishFSM(init_state=post.publish_state)
+    post_publish_fsm = PublishFSM(init_state=post.publish_status)
     return render_template("rp/site_admin/post_edit.html", form=form, post=post,
                            publish_triggers=post_publish_fsm.possible_triggers)
 

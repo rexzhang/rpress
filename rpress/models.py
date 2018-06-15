@@ -2,54 +2,83 @@
 # coding=utf-8
 
 
-import hashlib
+import uuid
 
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
 from flask_sqlalchemy import BaseQuery
+from sqlalchemy import Column, String, Text, Boolean, DateTime, ForeignKey, func
+from sqlalchemy.orm import relationship
+from sqlalchemy.dialects import postgresql
 
-from rpress.constants import PUBLISH_FSM_DEFINE
+from rpress.constants import POST, TERM, PUBLISH_FSM_DEFINE
 from rpress.database import db
-from rpress.helpers.uuid1plus import uuid1, uuid1_from_datetime
 
 
-class User(db.Model):
+class BaseModel(db.Model):
+    __abstract__ = True
+    _uuid_foreign_key_list_ = []
+
+    id = Column(
+        postgresql.UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+
+    created_time = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+    )
+
+    def __init__(self, **kwargs):
+        for key in self._uuid_foreign_key_list_:
+            # fix: sqlalchemy.exc.StatementError: (builtins.AttributeError) 'UUID' object has no attribute 'replace'
+            if kwargs.get(key) and isinstance(kwargs[key], uuid.UUID):
+                kwargs[key] = kwargs[key].hex
+
+        super().__init__(**kwargs)
+        return
+
+    def __repr__(self):
+        """don't forget overload!"""
+        return '{}'.format(self.id)
+
+
+class BaseModelObject(BaseModel):
+    """base model - Object"""
+    __abstract__ = True
+
+    # last update time
+    updated_time = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        onupdate=func.now(),
+    )
+
+
+class BaseModelRecord(BaseModel):
+    """base model - record/log"""
+    __abstract__ = True
+
+
+class User(BaseModelObject):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
 
-    _password = Column('password', String(256))
+    password = Column(String(255))
     email = Column(String(32), unique=True)
     display = Column(String(50), unique=True)
 
     def __repr__(self):
         return '<User:{}|{}>'.format(self.id, self.name)
 
-    def _password_get(self):
-        return self._password
 
-    def _password_set(self, password):
-        if password is None:
-            self._password = ''
-        else:
-            self._password = hashlib.sha256(bytes(password, 'utf8')).hexdigest()
-        return
-
-    def password_validate(self, password=None):
-        """check user's password"""
-        if password is not None and hashlib.sha256(str(password, 'utf8')).hexdigest() == self._password:
-            return True
-
-        return False
-
-    password = db.synonym("_password", descriptor=property(fget=_password_get, fset=_password_set))
-
-
-post_term_relations = db.Table('post_term_relations',
-                               db.Column('term_id', db.Integer, db.ForeignKey('terms.id')),
-                               db.Column('post_id', db.Integer, db.ForeignKey('posts.id'))
-                               )
+post_term_relations = db.Table(
+    'post_term_relations',
+    db.Column('term_id', postgresql.UUID, db.ForeignKey('terms.id')),
+    db.Column('post_id', postgresql.UUID, db.ForeignKey('posts.id'))
+)
 
 
 class PostQuery(BaseQuery):
@@ -71,33 +100,23 @@ class PostQuery(BaseQuery):
         return self.filter_by(site=site).filter(query)
 
 
-class Post(db.Model):
+class Post(BaseModelObject):
     """"""
     query_class = PostQuery
 
     __tablename__ = 'posts'
+    _uuid_foreign_key_list_ = ['site_id', 'author_id', 'reviser_id']
 
-    id = Column(Integer, primary_key=True)
-    uuid = Column(String(36), unique=True)
+    site_id = Column(postgresql.UUID, ForeignKey('sites.id'), nullable=False)
+    site = relationship('Site')
 
-    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  # 暂时定义 site_id 为异常归属
-    site = relationship('Site', foreign_keys=[site_id])
-
-    author_id = Column(Integer, ForeignKey('users.id'), default=0)  # 暂时定义 user_id＝＝0 为异常归属
+    author_id = Column(postgresql.UUID, ForeignKey('users.id'), nullable=False)
     author = relationship('User', foreign_keys=[author_id])
 
-    published = Column(Boolean, default=False)
-    publish_state = Column(String(20),
-                           default=PUBLISH_FSM_DEFINE.DEFAULT_STATE)  # published 为 True 时才有意义 #修改过程版本存放在另外一个表中
-    publish_date = Column(DateTime)
+    reviser_id = Column(postgresql.UUID, ForeignKey('users.id'), nullable=False)
+    reviser = relationship('User', foreign_keys=[reviser_id])
 
-    updater_id = Column(Integer, ForeignKey('users.id'))
-    updater = relationship('User', foreign_keys=[updater_id])
-    update_date = Column(DateTime)
-
-    allow_comment = Column(Boolean, default=True)
-
-    type = Column(String(4), default='blog')  # blog/page
+    type = Column(String(4), default=POST.TYPE.BLOG)  # blog/page
     name = Column(String(128))
     terms = relationship(
         "Term",
@@ -108,125 +127,84 @@ class Post(db.Model):
     title = Column(String(128))
     content = Column(Text)
 
+    published = Column(Boolean, default=False)
+    publish_status = Column(
+        # published 为 True 时才有意义 #修改过程版本存放在另外一个表中
+        String(20),
+        default=PUBLISH_FSM_DEFINE.DEFAULT_STATE
+    )
+    published_time = Column(DateTime(timezone=True))
+
+    comments = relationship('Comment', back_populates='post')
+    allow_comment = Column(Boolean, default=True)
+
     def __init__(self, **kwargs):
-        if 'publish_state' not in kwargs:
-            kwargs['publish_state'] = PUBLISH_FSM_DEFINE.DEFAULT_STATE
-
-        if 'type' not in kwargs:
-            kwargs['type'] = 'blog'
-
-        if 'uuid' not in kwargs and 'publish_date' not in kwargs:
-            kwargs['uuid'] = uuid1()
-            kwargs['publish_date'] = kwargs['uuid'].datetime
-        elif 'uuid' in kwargs and 'publish_date' not in kwargs:
-            kwargs['publish_date'] = kwargs['uuid'].datetime
-        elif 'uuid' not in kwargs and 'publish_date' in kwargs:
-            kwargs['uuid'] = uuid1_from_datetime(kwargs['publish_date'])
-        kwargs['uuid'] = str(kwargs['uuid'])
+        if kwargs.get('reviser_id') is None:
+            kwargs['reviser_id'] = kwargs['author_id']
 
         # TODO: !!!convert title to %xx if name==None
         super().__init__(**kwargs)
         return
 
     def __repr__(self):
-        """"""
         return '<Post:{}|{}>'.format(self.id, self.title)
 
 
-class Term(db.Model):
-    """"""
+class Term(BaseModelObject):
     __tablename__ = 'terms'
+    _uuid_foreign_key_list_ = ['site_id']
 
-    id = Column(Integer, primary_key=True)
-
-    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  # 暂时定义 site_id 为异常归属
-    site = relationship('Site', foreign_keys=[site_id])
+    site_id = Column(postgresql.UUID, ForeignKey('sites.id'), nullable=False)
+    site = relationship('Site', back_populates='terms')
 
     name = Column(String(50))
-    type = Column(String(50))  # tag/category
-    desc = Column(Text)
-
-    def __init__(self, site, name, type='tag', desc=None):
-        """Constructor"""
-        self.site = site
-
-        self.name = name
-        self.type = type
-        self.desc = desc
-        return
+    type = Column(String(50), default=TERM.TYPE.CATEGORY)  # tag/category
+    desc = Column(Text, nullable=True)
 
     def __repr__(self):
-        """"""
         return '<Term:{}|{}>'.format(self.id, self.name)
 
 
-class Comment(db.Model):
-    """"""
+class Comment(BaseModelRecord):
     __tablename__ = 'comments'
+    _uuid_foreign_key_list_ = ['post_id']
 
-    id = Column(Integer, primary_key=True)
-
-    post_id = Column(Integer, ForeignKey('posts.id'))
-    post = relationship('Post', foreign_keys=[post_id])
+    post_id = Column(postgresql.UUID, ForeignKey('posts.id'), nullable=False)
+    post = relationship('Post', back_populates='comments')
 
     author_name = Column(String(50))
-    author_email = Column(String(32))
-    author_ip = Column(String(19))
-    author_url = Column(Text)
+    author_email = Column(String(32), nullable=True)
+    author_ip = Column(String(19), nullable=True)
+    author_url = Column(Text, nullable=True)
 
-    publish_date = Column(DateTime)
     content = Column(Text)
 
-    def __init__(self, post, author_name, publish_date, content, author_email=None, author_ip=None, author_url=None):
-        """Constructor"""
-        self.post = post
-
-        self.author_name = author_name
-        self.author_email = author_email
-        self.author_ip = author_ip
-        self.author_url = author_url
-
-        self.publish_date = publish_date
-        self.content = content
-        return
-
     def __repr__(self):
-        """"""
-        return '<Comment:{}|{}>'.format(self.id, self.author_name)
+        return '<Comment:{}|{}|{}>'.format(self.id, self.post_id, self.author_name)
 
 
-class Site(db.Model):
-    """"""
+class Site(BaseModelObject):
     __tablename__ = 'sites'
-
-    id = Column(Integer, primary_key=True)
 
     domain = Column(String(50), unique=True, nullable=False)
 
+    settings = relationship('SiteSetting', back_populates='site')
+    terms = relationship('Term', back_populates='site')
+
     def __repr__(self):
-        """"""
         return '<Site:{}|{}>'.format(self.id, self.domain)
 
 
-class SiteSetting(db.Model):
+class SiteSetting(BaseModelObject):
     """"""
     __tablename__ = 'site_settings'
+    _uuid_foreign_key_list_ = ['site_id']
 
-    id = Column(Integer, primary_key=True)
-    site_id = Column(Integer, ForeignKey('sites.id'), default=0)  # 暂时定义 user_id＝＝0 为异常归属
-    site = relationship('Site', foreign_keys=[site_id])
+    site_id = Column(postgresql.UUID, ForeignKey('sites.id'), nullable=False)
+    site = relationship('Site', foreign_keys=[site_id], back_populates='settings')
 
     key = Column(String(128))
     value = Column(Text())
 
-    def __init__(self, site, key, value):
-        """Constructor"""
-        self.site = site
-
-        self.key = key
-        self.value = value
-        return
-
     def __repr__(self):
-        """"""
         return '<SiteSetting:{}|{}>'.format(self.id, self.key)

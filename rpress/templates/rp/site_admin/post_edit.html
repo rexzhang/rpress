@@ -2,16 +2,16 @@
 
 {% block contentnav %}
 <ul class="nav nav-pills">
-  <li class="nav-item"><a class="nav-link" href="{{ url_for('post.post_uuid', uuid=post.uuid ) }}">查看文章</a></li>
-  <li class="nav-item"><a class="nav-link disabled">publish state:{{ post.publish_state }}</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('post.id', uuid=post.id ) }}">查看文章</a></li>
+  <li class="nav-item"><a class="nav-link disabled">publish state:{{ post.publish_status }}</a></li>
   {% for triggers in publish_triggers %}
-  <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.post_publish_state', uuid=post.uuid, trigger=triggers) }}">{{ triggers }}</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('site_admin.post_publish_state', uuid=post.id, trigger=triggers) }}">{{ triggers }}</a></li>
   {% endfor %}
 </ul>
 {% endblock %}
 
 {% block contentmain %}
-<form method="POST" action="{{ url_for('site_admin.post_edit', uuid=post.uuid) }}">
+<form method="POST" action="{{ url_for('site_admin.post_edit', uuid=post.id) }}">
   {{ form.csrf_token }}
   <div>
     {{ form.title.label }}: {{ form.title }}

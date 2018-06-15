@@ -2,6 +2,18 @@
 # coding=utf-8
 
 
+class POST(object):
+    class TYPE(object):
+        BLOG = 'blog'
+        PAGE = 'page'
+
+
+class TERM(object):
+    class TYPE(object):
+        CATEGORY = 'category'
+        TAG = 'tag'
+
+
 class PUBLISH_FSM_DEFINE(object):
     """publish FSM define"""
 
@@ -19,9 +31,10 @@ class PUBLISH_FSM_DEFINE(object):
 
     DEFAULT_STATE = STATE.DRAFT
     transitions = [
-        {'trigger': TRIGGER.PUBLISH, 'source': [STATE.DRAFT, STATE.UNPUBLISHED, STATE.TRASH], 'dest': STATE.PUBLISHED,},
-        {'trigger': TRIGGER.UNPUBLISH, 'source': STATE.PUBLISHED, 'dest': STATE.UNPUBLISHED,},
-        {'trigger': TRIGGER.DELETE, 'source': STATE.PUBLISHED, 'dest': STATE.TRASH,},
+        {'trigger': TRIGGER.PUBLISH, 'source': [STATE.DRAFT, STATE.UNPUBLISHED, STATE.TRASH],
+         'dest': STATE.PUBLISHED, },
+        {'trigger': TRIGGER.UNPUBLISH, 'source': STATE.PUBLISHED, 'dest': STATE.UNPUBLISHED, },
+        {'trigger': TRIGGER.DELETE, 'source': STATE.PUBLISHED, 'dest': STATE.TRASH, },
     ]
 
 
