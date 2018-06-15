@@ -160,6 +160,7 @@ def export_site_data_to_json(site_id):
 
 def import_site_data_from_json(filename):
     session = db.session()
+    post = None
 
     # User
     user_map_name_to_id = {}
@@ -189,7 +190,7 @@ def import_site_data_from_json(filename):
 
     for key in data['site']['settings']:
         site_setting = SiteSetting(
-            site_id=site.id,
+            site=site,
 
             key=key,
             value=data['site']['settings'][key],
@@ -197,39 +198,45 @@ def import_site_data_from_json(filename):
         session.add(site_setting)
 
     # Term
-    term_map_name_to_id = {
-        'category': {},
-        'tag': {},
+    already_exists_term = {
+        'category': {
+            # key:name, value:obj
+        },
+        'tag': {
+            # key:name, value:obj
+        },
     }
-    for term in Term.query.filter_by(site_id=str(site.id), type='category'):
-        term_map_name_to_id['category'][term.name] = term.id
-    for term in Term.query.filter_by(site_id=str(site.id), type='tag'):
-        term_map_name_to_id['tag'][term.name] = term.id
+    for term in Term.query.filter_by(site=site, type='category'):
+        already_exists_term['category'][term.name] = term
+    for term in Term.query.filter_by(site=site, type='tag'):
+        already_exists_term['tag'][term.name] = term
 
     new_term_type = ''
     new_term_name = None
 
-    def get_term_id():
-        if term_map_name_to_id[new_term_type].get(new_term_name) is None:
-            new_term = Term(
-                site_id=site.id,
+    def add_term_relationship():
+        if new_term_name not in already_exists_term[new_term_type]:
+            term_obj = Term(
+                site=site,
 
                 type=new_term_type,
                 name=new_term_name,
             )
-            session.add(new_term)
+            session.add(term_obj)
 
             session.flush()
-            term_map_name_to_id[new_term_type][new_term_name] = new_term.id
+            already_exists_term[new_term_type][new_term_name] = term_obj
 
-        return term_map_name_to_id[new_term_type][new_term_name]
+        term_obj = already_exists_term[new_term_type][new_term_name]
+        post.terms.append(term_obj)
+        return
 
     # Comment
     new_comment_data = None
 
-    def get_comment_id(post_id):
+    def add_comment():
         comment = Comment.query.filter_by(
-            post_id=post_id,
+            post=post,
             created_time=new_comment_data['time'],
 
             commenter_name=new_comment_data['commenter']['name'],
@@ -238,7 +245,7 @@ def import_site_data_from_json(filename):
         ).first()
         if comment is None:
             comment = Comment(
-                post_id=post_id,
+                post=post,
                 created_time=new_comment_data['time'],
 
                 commenter_name=new_comment_data['commenter']['name'],
@@ -254,7 +261,7 @@ def import_site_data_from_json(filename):
 
     for post_data in data['posts']:
         post = Post(
-            site_id=site.id,
+            site=site,
 
             id=post_data['id'],
             type=post_data['type'],
@@ -279,10 +286,10 @@ def import_site_data_from_json(filename):
 
         for new_term_type in ['category', 'tag']:
             for new_term_name in post_data['terms'][new_term_type]:
-                get_term_id()
+                add_term_relationship()
 
         for new_comment_data in post_data['comments']:
-            get_comment_id(post_id=post.id)
+            add_comment()
 
     session.commit()
     return

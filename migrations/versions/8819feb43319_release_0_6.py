@@ -1,8 +1,8 @@
 """release_0_6
 
-Revision ID: 02f243df4cdd
+Revision ID: 8819feb43319
 Revises: 
-Create Date: 2018-06-15 15:26:57.342160
+Create Date: 2018-06-15 16:39:17.275397
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '02f243df4cdd'
+revision = '8819feb43319'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -43,9 +43,9 @@ def upgrade():
     sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('created_time', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_time', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('site_id', postgresql.UUID(), nullable=False),
-    sa.Column('author_id', postgresql.UUID(), nullable=False),
-    sa.Column('reviser_id', postgresql.UUID(), nullable=False),
+    sa.Column('site_id', postgresql.UUID(as_uuid=True), nullable=False),
+    sa.Column('author_id', postgresql.UUID(as_uuid=True), nullable=False),
+    sa.Column('reviser_id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('type', sa.String(length=4), nullable=True),
     sa.Column('name', sa.String(length=128), nullable=True),
     sa.Column('title', sa.String(length=128), nullable=True),
@@ -63,7 +63,7 @@ def upgrade():
     sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('created_time', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_time', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('site_id', postgresql.UUID(), nullable=False),
+    sa.Column('site_id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('key', sa.String(length=128), nullable=True),
     sa.Column('value', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['site_id'], ['sites.id'], ),
@@ -73,7 +73,7 @@ def upgrade():
     sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('created_time', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_time', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('site_id', postgresql.UUID(), nullable=False),
+    sa.Column('site_id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('type', sa.String(length=50), nullable=True),
     sa.Column('name', sa.String(length=50), nullable=True),
     sa.Column('desc', sa.Text(), nullable=True),
@@ -83,7 +83,7 @@ def upgrade():
     op.create_table('comments',
     sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('created_time', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('post_id', postgresql.UUID(), nullable=False),
+    sa.Column('post_id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('commenter_name', sa.String(length=50), nullable=True),
     sa.Column('commenter_email', sa.String(length=32), nullable=True),
     sa.Column('commenter_ip', sa.String(length=19), nullable=True),
@@ -93,8 +93,8 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('post_term_relations',
-    sa.Column('term_id', postgresql.UUID(), nullable=True),
-    sa.Column('post_id', postgresql.UUID(), nullable=True),
+    sa.Column('term_id', postgresql.UUID(as_uuid=True), nullable=True),
+    sa.Column('post_id', postgresql.UUID(as_uuid=True), nullable=True),
     sa.ForeignKeyConstraint(['post_id'], ['posts.id'], ),
     sa.ForeignKeyConstraint(['term_id'], ['terms.id'], )
     )

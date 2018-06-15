@@ -76,8 +76,8 @@ class User(BaseModelObject):
 
 post_term_relations = db.Table(
     'post_term_relations',
-    db.Column('term_id', postgresql.UUID, db.ForeignKey('terms.id')),
-    db.Column('post_id', postgresql.UUID, db.ForeignKey('posts.id'))
+    db.Column('term_id', postgresql.UUID(as_uuid=True), db.ForeignKey('terms.id')),
+    db.Column('post_id', postgresql.UUID(as_uuid=True), db.ForeignKey('posts.id'))
 )
 
 
@@ -107,13 +107,13 @@ class Post(BaseModelObject):
     __tablename__ = 'posts'
     _uuid_foreign_key_list_ = ['site_id', 'author_id', 'reviser_id']
 
-    site_id = Column(postgresql.UUID, ForeignKey('sites.id'), nullable=False)
+    site_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('sites.id'), nullable=False)
     site = relationship('Site')
 
-    author_id = Column(postgresql.UUID, ForeignKey('users.id'), nullable=False)
+    author_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
     author = relationship('User', foreign_keys=[author_id])
 
-    reviser_id = Column(postgresql.UUID, ForeignKey('users.id'), nullable=False)
+    reviser_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
     reviser = relationship('User', foreign_keys=[reviser_id])
 
     type = Column(String(4), default=POST.TYPE.BLOG)  # blog/page
@@ -139,7 +139,10 @@ class Post(BaseModelObject):
     allow_comment = Column(Boolean, default=True)
 
     def __init__(self, **kwargs):
-        if kwargs.get('reviser_id') is None:
+        if kwargs.get('reviser') is None and kwargs.get('author') is not None:
+            kwargs['reviser'] = kwargs['author']
+
+        if kwargs.get('reviser_id') is None and kwargs.get('author_id') is not None:
             kwargs['reviser_id'] = kwargs['author_id']
 
         # TODO: !!!convert title to %xx if name==None
@@ -154,7 +157,7 @@ class Term(BaseModelObject):
     __tablename__ = 'terms'
     _uuid_foreign_key_list_ = ['site_id']
 
-    site_id = Column(postgresql.UUID, ForeignKey('sites.id'), nullable=False)
+    site_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('sites.id'), nullable=False)
     site = relationship('Site', foreign_keys=[site_id], back_populates='terms')
 
     type = Column(String(50), default=TERM.TYPE.CATEGORY)  # tag/category
@@ -170,7 +173,7 @@ class Comment(BaseModelRecord):
     __tablename__ = 'comments'
     _uuid_foreign_key_list_ = ['post_id']
 
-    post_id = Column(postgresql.UUID, ForeignKey('posts.id'), nullable=False)
+    post_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('posts.id'), nullable=False)
     post = relationship('Post', back_populates='comments')
 
     commenter_name = Column(String(50))
@@ -201,7 +204,7 @@ class SiteSetting(BaseModelObject):
     __tablename__ = 'site_settings'
     _uuid_foreign_key_list_ = ['site_id']
 
-    site_id = Column(postgresql.UUID, ForeignKey('sites.id'), nullable=False)
+    site_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('sites.id'), nullable=False)
     site = relationship('Site', foreign_keys=[site_id], back_populates='settings')
 
     key = Column(String(128))

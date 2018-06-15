@@ -8,6 +8,7 @@ from sqlalchemy import desc
 import flask
 from flask import request, redirect, url_for
 
+from rpress.constants import POST
 from rpress.helpers.template.common import render_template
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import Post, User, Term, Comment
@@ -216,8 +217,9 @@ def _post_term(term, paginate):
     """"""
     site = get_current_request_site()
 
-    query = Post.query.filter_by(site=site, type='blog', published=True).filter(
-        Post.terms.any(Term.name == term)).order_by(desc('published_time'))
+    query = Post.query.filter_by(
+        site=site, type=POST.TYPE.BLOG, published=True
+    ).filter(Post.terms.any(name=term)).order_by(desc('published_time'))
 
     paginate['key'] = term
     paginate['title'] = term  # TODO!!!diaplay name?
