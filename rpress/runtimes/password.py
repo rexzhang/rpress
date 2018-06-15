@@ -6,7 +6,7 @@ import hashlib
 
 
 def generate_password_hash(password):
-    return hashlib.sha256(bytes(password, 'utf8')).hexdigest()
+    return hashlib.sha256(bytes(password, 'utf8')).hexdigest()  # TODO salt
 
 
 def check_password_hash(password, hashed_password):

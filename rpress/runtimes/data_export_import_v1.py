@@ -163,22 +163,22 @@ def import_site_data_from_json(filename):
     post = None
 
     # User
-    user_map_name_to_id = {}
+    already_exists_users = {}
     for user in User.query:
-        user_map_name_to_id[user.name] = user.id
+        already_exists_users[user.name] = user
 
-    def get_user_id(user_name):
-        if user_map_name_to_id.get(user_name) is None:
+    def get_user_obj(user_name):
+        if user_name not in already_exists_users:
             new_user = User(
                 name=user_name,
-                password=generate_password_hash('password'),
+                password=generate_password_hash('password'),  # TODO random password
             )
             session.add(new_user)
 
             session.flush()
-            user_map_name_to_id[user_name] = new_user.id
+            already_exists_users[user_name] = new_user
 
-        return user_map_name_to_id[user_name]
+        return already_exists_users[user_name]
 
     with codecs.open(filename, encoding='utf-8') as fp:
         data = json.load(fp)
@@ -198,7 +198,7 @@ def import_site_data_from_json(filename):
         session.add(site_setting)
 
     # Term
-    already_exists_term = {
+    already_exists_terms = {
         'category': {
             # key:name, value:obj
         },
@@ -207,28 +207,27 @@ def import_site_data_from_json(filename):
         },
     }
     for term in Term.query.filter_by(site=site, type='category'):
-        already_exists_term['category'][term.name] = term
+        already_exists_terms['category'][term.name] = term
     for term in Term.query.filter_by(site=site, type='tag'):
-        already_exists_term['tag'][term.name] = term
+        already_exists_terms['tag'][term.name] = term
 
     new_term_type = ''
     new_term_name = None
 
     def add_term_relationship():
-        if new_term_name not in already_exists_term[new_term_type]:
-            term_obj = Term(
+        if new_term_name not in already_exists_terms[new_term_type]:
+            new_term = Term(
                 site=site,
 
                 type=new_term_type,
                 name=new_term_name,
             )
-            session.add(term_obj)
+            session.add(new_term)
 
             session.flush()
-            already_exists_term[new_term_type][new_term_name] = term_obj
+            already_exists_terms[new_term_type][new_term_name] = new_term
 
-        term_obj = already_exists_term[new_term_type][new_term_name]
-        post.terms.append(term_obj)
+        post.terms.append(already_exists_terms[new_term_type][new_term_name])
         return
 
     # Comment
@@ -266,8 +265,8 @@ def import_site_data_from_json(filename):
             id=post_data['id'],
             type=post_data['type'],
 
-            author_id=get_user_id(post_data['author']),
-            reviser_id=None if post_data['reviser'] is None else get_user_id(post_data['reviser']),
+            author=get_user_obj(post_data['author']),
+            reviser=None if post_data['reviser'] is None else get_user_obj(post_data['reviser']),
 
             created_time=post_data['created_time'],
             updated_time=post_data['updated_time'],
