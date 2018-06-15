@@ -15,7 +15,6 @@ from rpress.database import db
 
 class BaseModel(db.Model):
     __abstract__ = True
-    _uuid_foreign_key_list_ = []
 
     id = Column(
         postgresql.UUID(as_uuid=True),
@@ -28,15 +27,6 @@ class BaseModel(db.Model):
         nullable=False,
         default=func.now(),
     )
-
-    def __init__(self, **kwargs):
-        for key in self._uuid_foreign_key_list_:
-            # fix: sqlalchemy.exc.StatementError: (builtins.AttributeError) 'UUID' object has no attribute 'replace'
-            if kwargs.get(key) and isinstance(kwargs[key], uuid.UUID):
-                kwargs[key] = kwargs[key].hex
-
-        super().__init__(**kwargs)
-        return
 
     def __repr__(self):
         """don't forget overload!"""
@@ -155,7 +145,6 @@ class Post(BaseModelObject):
 
 class Term(BaseModelObject):
     __tablename__ = 'terms'
-    _uuid_foreign_key_list_ = ['site_id']
 
     site_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('sites.id'), nullable=False)
     site = relationship('Site', foreign_keys=[site_id], back_populates='terms')
@@ -171,7 +160,6 @@ class Term(BaseModelObject):
 
 class Comment(BaseModelRecord):
     __tablename__ = 'comments'
-    _uuid_foreign_key_list_ = ['post_id']
 
     post_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('posts.id'), nullable=False)
     post = relationship('Post', back_populates='comments')
@@ -202,7 +190,6 @@ class Site(BaseModelObject):
 class SiteSetting(BaseModelObject):
     """"""
     __tablename__ = 'site_settings'
-    _uuid_foreign_key_list_ = ['site_id']
 
     site_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('sites.id'), nullable=False)
     site = relationship('Site', foreign_keys=[site_id], back_populates='settings')
