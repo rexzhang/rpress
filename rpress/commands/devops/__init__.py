@@ -14,3 +14,4 @@ def click_group():
 
 
 click_group.add_command(data_export_import.command_export, name='export')
+click_group.add_command(data_export_import.command_import, name='import')

@@ -20,10 +20,9 @@ def get_current_request_site():
 
     site = Site.query.filter_by(domain=domain).first()
     if site is None:
-        if domain == 'localhost' or domain == '127.0.0.1':
-            site = Site.query.filter_by(id=1).first()
-        else:
-            return None
+        site = Site.query.first()
+    else:
+        return None
 
     return site
 

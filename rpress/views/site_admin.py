@@ -43,11 +43,11 @@ def post_list(type):
     return render_template("rp/site_admin/post_list.html", posts=posts, post_type=type)
 
 
-@site_admin.route('/post/<uuid:uuid>/publish/<string:trigger>', methods=['GET'])
+@site_admin.route('/post/<uuid:post_id>/publish/<string:trigger>', methods=['GET'])
 @login_required
-def post_publish_state(uuid, trigger):
+def post_publish_state(post_id, trigger):
     """"""
-    post = Post.query.filter_by(uuid=str(uuid)).first_or_404()
+    post = Post.query.filter_by(uuid=str(post_id)).first_or_404()
     if post.publish_state not in PublishFSM.states:
         return
 
@@ -68,7 +68,7 @@ def post_publish_state(uuid, trigger):
     db.session.add(post)
     db.session.commit()
 
-    return redirect(url_for('site_admin.post_edit', uuid=uuid))
+    return redirect(url_for('site_admin.post_edit', post_id=post_id))
 
 
 @site_admin.route('/post/<string:type>/new', methods=['GET', ])
@@ -88,14 +88,14 @@ def post_new(type):
     db.session.add(post)
     db.session.commit()
 
-    return redirect(url_for('.post_edit', uuid=post.id))
+    return redirect(url_for('.post_edit', post_id=post.id))
 
 
-@site_admin.route('/post/<uuid:uuid>/edit', methods=['GET', 'POST'])
+@site_admin.route('/post/<uuid:post_id>/edit', methods=['GET', 'POST'])
 @login_required
-def post_edit(uuid):
+def post_edit(post_id):
     """"""
-    post = Post.query.filter_by(uuid=str(uuid)).first_or_404()  # !!!
+    post = Post.query.filter_by(id=post_id).first_or_404()
     form = PostEditForm(obj=post)
 
     if form.validate_on_submit():
@@ -171,7 +171,11 @@ def setting_edit(key):
     site = get_current_request_site()
     site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
     if site_setting is None:
-        site_setting = SiteSetting(site, key, None)
+        site_setting = SiteSetting(
+            site_id=site.id,
+            key=key,
+            value=None,
+        )
 
     form = SettingsForm(obj=site_setting)
 

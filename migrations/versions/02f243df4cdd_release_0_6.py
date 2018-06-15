@@ -1,8 +1,8 @@
 """release_0_6
 
-Revision ID: 5916f9118e11
+Revision ID: 02f243df4cdd
 Revises: 
-Create Date: 2018-06-15 12:25:06.526590
+Create Date: 2018-06-15 15:26:57.342160
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '5916f9118e11'
+revision = '02f243df4cdd'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -74,8 +74,8 @@ def upgrade():
     sa.Column('created_time', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_time', sa.DateTime(timezone=True), nullable=False),
     sa.Column('site_id', postgresql.UUID(), nullable=False),
-    sa.Column('name', sa.String(length=50), nullable=True),
     sa.Column('type', sa.String(length=50), nullable=True),
+    sa.Column('name', sa.String(length=50), nullable=True),
     sa.Column('desc', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['site_id'], ['sites.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -84,10 +84,10 @@ def upgrade():
     sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('created_time', sa.DateTime(timezone=True), nullable=False),
     sa.Column('post_id', postgresql.UUID(), nullable=False),
-    sa.Column('author_name', sa.String(length=50), nullable=True),
-    sa.Column('author_email', sa.String(length=32), nullable=True),
-    sa.Column('author_ip', sa.String(length=19), nullable=True),
-    sa.Column('author_url', sa.Text(), nullable=True),
+    sa.Column('commenter_name', sa.String(length=50), nullable=True),
+    sa.Column('commenter_email', sa.String(length=32), nullable=True),
+    sa.Column('commenter_ip', sa.String(length=19), nullable=True),
+    sa.Column('commenter_url', sa.Text(), nullable=True),
     sa.Column('content', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['post_id'], ['posts.id'], ),
     sa.PrimaryKeyConstraint('id')

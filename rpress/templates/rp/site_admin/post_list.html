@@ -23,7 +23,7 @@
     <tr>
       <td>{{ post.publish_status }}</td>
       <td>{{ post.published_time }}</td>
-      <td><a href="{{ url_for('site_admin.post_edit', uuid=post.id) }}">{{ post.title }}</a></td>
+      <td><a href="{{ url_for('site_admin.post_edit', post_id=post.id) }}">{{ post.title }}</a></td>
     </tr>
 
     {% endfor %}

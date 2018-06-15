@@ -155,10 +155,11 @@ class Term(BaseModelObject):
     _uuid_foreign_key_list_ = ['site_id']
 
     site_id = Column(postgresql.UUID, ForeignKey('sites.id'), nullable=False)
-    site = relationship('Site', back_populates='terms')
+    site = relationship('Site', foreign_keys=[site_id], back_populates='terms')
+
+    type = Column(String(50), default=TERM.TYPE.CATEGORY)  # tag/category
 
     name = Column(String(50))
-    type = Column(String(50), default=TERM.TYPE.CATEGORY)  # tag/category
     desc = Column(Text, nullable=True)
 
     def __repr__(self):
@@ -172,10 +173,10 @@ class Comment(BaseModelRecord):
     post_id = Column(postgresql.UUID, ForeignKey('posts.id'), nullable=False)
     post = relationship('Post', back_populates='comments')
 
-    author_name = Column(String(50))
-    author_email = Column(String(32), nullable=True)
-    author_ip = Column(String(19), nullable=True)
-    author_url = Column(Text, nullable=True)
+    commenter_name = Column(String(50))
+    commenter_email = Column(String(32), nullable=True)
+    commenter_ip = Column(String(19), nullable=True)
+    commenter_url = Column(Text, nullable=True)
 
     content = Column(Text)
 

@@ -132,9 +132,9 @@ def _make_post_info(post):
             tags.append(term.name)
 
     if post.type == 'page':
-        link = url_for('post.page_name', name=post.name)
+        link = url_for('post.show_with_name', post_name=post.name)
     else:
-        link = url_for('post.post_uuid', uuid=post.id)
+        link = url_for('post.show_with_id', post_id=post.id)
 
     return {
         'title': post.title,
@@ -283,7 +283,7 @@ def search(page_num=1):
         # only one result
         posts = post_query.all()
         post = posts[0]
-        return redirect(url_for('post.post_uuid', uuid=post.id))
+        return redirect(url_for('post.show_with_id', post_id=post.id))
 
     paginate = {
         'title': keywords,
@@ -308,7 +308,7 @@ def _render_post(post):
     comments = Comment.query.filter_by(post=post).order_by(desc('created_time')).all()
     for comment in comments:
         comment_list.append({
-            'author_name': comment.author_name,
+            'commenter_name': comment.commenter_name,
             'created_time': comment.created_time,
             'content': comment.content,
         })
@@ -317,21 +317,21 @@ def _render_post(post):
     return render_template('post.html', content=content)
 
 
-# /post/uuid0001
-@post.route('/post/<uuid:uuid>', methods=['GET', ])
-def post_uuid(uuid):
+# /post/post_id
+@post.route('/post/<uuid:post_id>', methods=['GET', ])
+def show_with_id(post_id):
     """"""
     site = get_current_request_site()
 
-    post = Post.query.filter_by(site=site, id=str(uuid), published=True).first_or_404()
+    post = Post.query.filter_by(site=site, id=post_id, published=True).first_or_404()
     return _render_post(post)
 
 
 # /about
-@post.route('/<string:name>', methods=['GET', ])
-def page_name(name):
+@post.route('/<string:post_name>', methods=['GET', ])
+def show_with_name(post_name):
     """"""
     site = get_current_request_site()
 
-    post = Post.query.filter_by(site=site, name=name, published=True, type='page').first_or_404()
+    post = Post.query.filter_by(site=site, name=post_name, published=True, type='page').first_or_404()
     return _render_post(post)

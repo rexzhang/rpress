@@ -23,7 +23,7 @@
 
   <div>
     {% for comment in content.comments %}
-    <div>{{ comment.author_name }}</div>
+    <div>{{ comment.commenter_name }}</div>
     <div>{{ comment.content|safe }}</div>
     {% endfor %}
   </div>
