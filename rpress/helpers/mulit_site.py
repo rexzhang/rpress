@@ -21,8 +21,6 @@ def get_current_request_site():
     site = Site.query.filter_by(domain=domain).first()
     if site is None:
         site = Site.query.order_by('created_time').first()
-    else:
-        return None
 
     return site
 
