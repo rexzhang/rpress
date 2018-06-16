@@ -25,6 +25,8 @@ def command_export():
 def command_import():
     p = Path('.')
     for filename in p.glob('*.rpress.json'):
-        import_site_data_from_json(filename)
+        # compatible 3.5
+        # TypeError: invalid file: PosixPath
+        import_site_data_from_json(str(filename))
 
     return
