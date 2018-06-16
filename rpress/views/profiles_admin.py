@@ -45,7 +45,7 @@ def change_password():
     form = PasswordForm()
 
     if form.validate_on_submit():
-        if check_password_hash(form.data['password_old'], user.password):
+        if check_password_hash(user.password, form.data['password_old']):
             user.password = form.data['password_new']
 
             db.session.add(user)
