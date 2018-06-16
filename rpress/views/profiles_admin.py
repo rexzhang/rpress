@@ -8,6 +8,7 @@ from flask_login import login_required, current_user
 from rpress.database import db
 from rpress.helpers.template.common import render_template
 from rpress.models import User
+from rpress.runtimes.password import check_password_hash
 from rpress.forms import ProfilesForm, PasswordForm
 
 
@@ -39,12 +40,12 @@ def change_password():
     """"""
     user = User.query.filter_by(id=current_user.id).first()
     if user is None:
-        return  #!!!
+        return  # TODO
 
     form = PasswordForm()
 
     if form.validate_on_submit():
-        if user.password_validate(form.data['password_old']):
+        if check_password_hash(form.data['password_old'], user.password):
             user.password = form.data['password_new']
 
             db.session.add(user)
