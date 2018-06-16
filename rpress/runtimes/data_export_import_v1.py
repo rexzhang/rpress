@@ -170,7 +170,7 @@ def import_site_data_from_json(filename):
 
     def get_user_obj(user_name):
         if user_name not in already_exists_users:
-            password = uuid4()
+            password = uuid4().hex
             print('new user:{} password:{}'.format(user_name, password))
 
             new_user = User(
