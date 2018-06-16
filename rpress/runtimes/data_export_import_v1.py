@@ -5,6 +5,7 @@
 import datetime
 import codecs
 import json
+from uuid import uuid4
 
 from rpress.database import db
 from rpress.models import User, Site, SiteSetting, Post, Term, Comment
@@ -169,9 +170,12 @@ def import_site_data_from_json(filename):
 
     def get_user_obj(user_name):
         if user_name not in already_exists_users:
+            password = uuid4()
+            print('new user:{} password:{}'.format(user_name, password))
+
             new_user = User(
                 name=user_name,
-                password=generate_password_hash('password'),  # TODO random password
+                password=generate_password_hash(password),  # TODO random password
             )
             session.add(new_user)
 

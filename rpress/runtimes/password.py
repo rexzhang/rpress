@@ -2,15 +2,15 @@
 # coding=utf-8
 
 
-import hashlib
+from werkzeug.security import (
+    generate_password_hash as werkzeug_generate_password_hash,
+    check_password_hash as werkzeug_check_password_hash,
+)
 
 
 def generate_password_hash(password):
-    return hashlib.sha256(bytes(password, 'utf8')).hexdigest()  # TODO salt
+    return werkzeug_generate_password_hash(password=password, method='pbkdf2:sha256:50000')
 
 
-def check_password_hash(password, hashed_password):
-    if password is not None and hashlib.sha256(bytes(password, 'utf8')).hexdigest() == hashed_password:
-        return True
-
-    return False
+def check_password_hash(hashed_password, password):
+    return werkzeug_check_password_hash(pwhash=hashed_password, password=password)
