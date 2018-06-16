@@ -9,7 +9,6 @@ from uuid import uuid4
 
 from rpress.database import db
 from rpress.models import User, Site, SiteSetting, Post, Term, Comment
-from rpress.runtimes.password import generate_password_hash
 
 """
 data_format = {
@@ -175,7 +174,7 @@ def import_site_data_from_json(filename):
 
             new_user = User(
                 name=user_name,
-                password=generate_password_hash(password),  # TODO random password
+                password=password,
             )
             session.add(new_user)
 

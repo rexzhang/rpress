@@ -7,7 +7,6 @@ import logging
 import flask_login
 
 from rpress.models import User
-from rpress.runtimes.password import check_password_hash
 
 login_manager = flask_login.LoginManager()
 logger = logging.Logger(__name__)
@@ -71,7 +70,7 @@ def user_login(username, password):
         logger.warning('can not match user name')
         return False
 
-    if not check_password_hash(user.password, password):
+    if not user.check_password(password):
         logger.warning('can not match password')
         return False
 

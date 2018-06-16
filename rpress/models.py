@@ -11,6 +11,7 @@ from sqlalchemy.dialects import postgresql
 
 from rpress.constants import POST, TERM, PUBLISH_FSM_DEFINE
 from rpress.database import db
+from rpress.runtimes.password import generate_password_hash, check_password_hash
 
 
 class BaseModel(db.Model):
@@ -59,6 +60,21 @@ class User(BaseModelObject):
     password = Column(String(255))
     email = Column(String(32), unique=True)
     display = Column(String(50), unique=True)
+
+    def check_password(self, password):
+        return check_password_hash(hashed_password=self.password, password=password)
+
+    def change_password(self, password):
+        self.password = generate_password_hash(password=password)
+        return
+
+    def __init__(self, **kwargs):
+        password = kwargs.get('password')
+        if password:
+            kwargs['password'] = generate_password_hash(password=password)
+
+        super().__init__(**kwargs)
+        return
 
     def __repr__(self):
         return '<User:{}|{}>'.format(self.id, self.name)

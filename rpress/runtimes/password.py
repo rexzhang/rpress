@@ -7,6 +7,8 @@ from werkzeug.security import (
     check_password_hash as werkzeug_check_password_hash,
 )
 
+__all__ = ['generate_password_hash', 'check_password_hash']
+
 
 def generate_password_hash(password):
     return werkzeug_generate_password_hash(password=bytes(password.encode('utf-8')), method='pbkdf2:sha256:50000')

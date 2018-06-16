@@ -7,7 +7,6 @@ from datetime import datetime
 from rpress.constants import POST, TERM, PUBLISH_FSM_DEFINE
 from rpress.models import User, Site, SiteSetting, Post, Term, Comment
 from rpress.database import db
-from rpress.runtimes.password import generate_password_hash
 
 
 def add_sample_user_and_site(user_name, user_password, site_domain_name):
@@ -18,7 +17,7 @@ def add_sample_user_and_site(user_name, user_password, site_domain_name):
         print('duplicate user name!')
         return None
 
-    user = User(name=user_name, password=generate_password_hash(user_password))
+    user = User(name=user_name, password=user_password)
     session.add(user)
 
     site = Site(domain=site_domain_name)
