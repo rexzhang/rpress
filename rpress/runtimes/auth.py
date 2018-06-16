@@ -71,7 +71,7 @@ def user_login(username, password):
         logger.warning('can not match user name')
         return False
 
-    if not check_password_hash(password, user.password):
+    if not check_password_hash(user.password, password):
         logger.warning('can not match password')
         return False
 
