@@ -5,7 +5,7 @@
   <div class="box">
     <h2><em>r</em>Press</h2>
 
-    <form method="POST" action="{{ url_for('permission.login') }}">
+    <form method="POST" action="{{ url_for('auth.login') }}">
       {{ form.csrf_token }}
       <fieldset class="form-group">
         {{ form.username.label }}<br>{{ form.username }}

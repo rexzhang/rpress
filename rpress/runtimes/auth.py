@@ -25,6 +25,15 @@ class LoggedUser(flask_login.UserMixin):
         return self.id
 
 
+class AnonymousUser(flask_login.AnonymousUserMixin):
+    """anonymous user"""
+    id = None
+    name = None
+
+    def get_id(self):
+        return None
+
+
 def _init_logged_user(user_id):
     user = User.query.filter_by(id=user_id).first()
     if user is None:

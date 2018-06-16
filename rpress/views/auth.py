@@ -7,13 +7,13 @@ from flask import request, redirect, url_for, flash, abort
 from flask_login import login_required
 
 from rpress.helpers.template.common import render_template
-from rpress.permission import user_login, user_logout
+from rpress.runtimes.auth import user_login, user_logout
 from rpress.forms import LoginForm
 
-permission = flask.Blueprint('permission', __name__)
+auth = flask.Blueprint('auth', __name__)
 
 
-@permission.route('/login', methods=['GET', 'POST'])
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
     # Here we use a class of some kind to represent and validate our
     # client-side form data. For example, WTForms is a library that will
@@ -39,7 +39,7 @@ def login():
     return render_template('/common/login.html', form=form)
 
 
-@permission.route("/logout")
+@auth.route("/logout")
 @login_required
 def logout():
     user_logout()

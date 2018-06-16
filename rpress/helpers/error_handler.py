@@ -2,7 +2,13 @@
 # coding=utf-8
 
 
+from flask import redirect, url_for
+
 from rpress.helpers.template.common import render_template
+
+
+def auth_failed(e):
+    return redirect(url_for('auth.login'))
 
 
 def permission_not_match(e):
@@ -18,6 +24,7 @@ def internal_server_error(e):
 
 
 def configure_error_handler(app):
+    app.register_error_handler(401, auth_failed)
     app.register_error_handler(403, permission_not_match)
     app.register_error_handler(404, page_not_found)
     app.register_error_handler(500, internal_server_error)

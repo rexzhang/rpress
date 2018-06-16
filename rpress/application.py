@@ -8,29 +8,23 @@ from flask_migrate import Migrate
 from raven.contrib.flask import Sentry
 
 from rpress.database import db
-from rpress.permission import login_manager
+from rpress.runtimes.auth import login_manager
 from rpress.helpers.template.filter import configure_filter
 from rpress.helpers.error_handler import configure_error_handler
 from rpress.config import Config
-
-from rpress.views import permission
-from rpress.views import site_admin
-from rpress.views import site_tools
-from rpress.views import profiles_admin
-from rpress.views import mulit_site_admin
-from rpress.views import post as post_view
+from rpress import views
 
 __all__ = ['create_app', 'create_app_for_cli']
 
 DEFAULT_APP_NAME = 'rpress'
 
 BLUE_PRINTS = (
-    (post_view.post, ''),
-    (permission.permission, ''),
-    (site_admin.site_admin, '/rp/admin'),
-    (site_tools.site_tools, '/rp/tools'),
-    (profiles_admin.profiles_admin, '/rp/profiles'),
-    (mulit_site_admin.mulit_site_admin, '/rp/mulitsite'),
+    (views.post.post, ''),
+    (views.auth.auth, ''),
+    (views.site_admin.site_admin, '/rp/admin'),
+    (views.site_tools.site_tools, '/rp/tools'),
+    (views.profiles_admin.profiles_admin, '/rp/profiles'),
+    (views.mulit_site_admin.mulit_site_admin, '/rp/multi_site'),
 
     # add more blue print here
 )
