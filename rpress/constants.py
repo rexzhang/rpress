@@ -2,6 +2,11 @@
 # coding=utf-8
 
 
+APP_NAME = 'rpress'
+
+TESTING_DATABASE_NAME = 'rpress_testing'
+
+
 class POST(object):
     class TYPE(object):
         BLOG = 'blog'

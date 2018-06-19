@@ -2,11 +2,14 @@
 # coding=utf-8
 
 
+import re
+
 from flask import Flask
 from flask_themes2 import Themes
 from flask_migrate import Migrate
 from raven.contrib.flask import Sentry
 
+from rpress.constants import APP_NAME, TESTING_DATABASE_NAME
 from rpress.database import db
 from rpress.runtimes.auth import login_manager
 from rpress.helpers.template.filter import configure_filter
@@ -14,9 +17,7 @@ from rpress.helpers.error_handler import configure_error_handler
 from rpress.config import Config
 from rpress import views
 
-__all__ = ['create_app', 'create_app_for_cli']
-
-DEFAULT_APP_NAME = 'rpress'
+__all__ = ['create_app', 'create_app_for_cli', 'create_app_for_testing']
 
 BLUE_PRINTS = (
     (views.post.post, ''),
@@ -30,9 +31,12 @@ BLUE_PRINTS = (
 )
 
 
-def create_app(app_name=DEFAULT_APP_NAME):
-    app = Flask(app_name)
+def create_app(testing=False):
+    app = Flask(APP_NAME)
     app.config.from_object(Config())
+
+    if testing:
+        configure_testing(app)
 
     configure_sentry(app)
 
@@ -51,6 +55,10 @@ def create_app(app_name=DEFAULT_APP_NAME):
 
 def create_app_for_cli(script_info):
     return create_app()
+
+
+def create_app_for_testing():
+    return create_app(testing=True)
 
 
 def configure_db(app):
@@ -75,6 +83,16 @@ def configure_permission(app):
 def configure_blueprints(app):
     for blue, url_prefix in BLUE_PRINTS:
         app.register_blueprint(blue, url_prefix=url_prefix)
+    return
+
+
+def configure_testing(app):
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = re.sub(
+        r'/\w+\?', '/{}?'.format(TESTING_DATABASE_NAME), app.config['SQLALCHEMY_DATABASE_URI']
+    )
+    app.config['WTF_CSRF_ENABLED'] = False
+
     return
 
 

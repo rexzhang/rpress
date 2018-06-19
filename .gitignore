@@ -1,12 +1,19 @@
+# develop env
 .idea/
 venv/
 *.sqlite3
 
+# python
 __pycache__/
-running/
 *.pyc
+.coverage
+.pytest_cache
 
+# jave script
 *.css.map
 
+# deploy
 rpress/config/deploy.py
 *.rpress.json
+running/
+

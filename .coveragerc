@@ -1,0 +1,6 @@
+[run]
+omit=venv*,tests*,conftest.py,manage.py
+
+[html]
+directory = coverage_html_report
+
