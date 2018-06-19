@@ -45,7 +45,7 @@ data_format = {
             'category': ['category1', 'category2],
             'tag': ['tag1', 'tag2],
         },
-        
+
         'comments': [
             {
                 'commenter': {

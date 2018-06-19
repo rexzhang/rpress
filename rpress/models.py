@@ -3,6 +3,7 @@
 
 
 import uuid
+from functools import reduce
 
 from flask_sqlalchemy import BaseQuery
 from sqlalchemy import Column, String, Text, Boolean, DateTime, ForeignKey, func
@@ -96,11 +97,12 @@ class PostQuery(BaseQuery):
 
         for keyword in keywords.split():
             keyword = '%' + keyword + '%'
-            criteria.append(db.or_(Post.title.ilike(keyword),
-                                   Post.name.ilike(keyword),
-                                   Post.content.ilike(keyword),
-                                   # Post.terms.ilike(keyword)
-                                   ))
+            criteria.append(db.or_(
+                Post.title.ilike(keyword),
+                Post.name.ilike(keyword),
+                Post.content.ilike(keyword),
+                # Post.terms.ilike(keyword)
+            ))
 
         query = reduce(db.and_, criteria)
         return self.filter_by(site=site).filter(query)

@@ -2,9 +2,11 @@
 # coding=utf-8
 
 
-from . import auth
-from . import post
-from . import site_admin
-from . import site_tools
-from . import mulit_site_admin
-from . import profiles_admin
+from . import (  # noqa: F401
+    auth,
+    post,
+    site_admin,
+    site_tools,
+    mulit_site_admin,
+    profiles_admin,
+)
