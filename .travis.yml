@@ -16,8 +16,8 @@ before_script:
 
 # command to run tests
 script:
-  flake8 rpress
-  python -m pytest --cov=.
+  - flake8 rpress
+  - python -m pytest --cov=.
 
 after_success:
-coveralls
+  coveralls
