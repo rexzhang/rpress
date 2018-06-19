@@ -1,0 +1,20 @@
+language: python
+python:
+    - "3.5"
+    - "3.6"
+
+services:
+    - postgresql
+
+# command to install dependencies
+install:
+    - pip install -r requirements.txt
+    - pip install -r requirements/test.txt
+
+# command to run tests
+script:
+    flake8 rpress
+    python -m pytest --cov=.
+
+after_success:
+coveralls
