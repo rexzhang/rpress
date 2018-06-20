@@ -8,11 +8,9 @@ COPY ./rpress /deploy/app/rpress
 
 COPY ./migrations /deploy/app/migrations
 COPY ./manage.py /deploy/app/manage.py
-
-COPY script/docker-entrypoint.sh /usr/local/bin/
+COPY ./script /deploy/app/script
 
 WORKDIR /deploy/app
 EXPOSE 5000
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-CMD ["gunicorn", "-w", "4", "-b", ":5000", "rpress:app"]
+CMD script/fix-host-docker-internal-at-linux.sh && gunicorn -w 4 -b :5000 rpress:app
