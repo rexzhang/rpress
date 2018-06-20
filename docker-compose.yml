@@ -1,0 +1,5 @@
+image: ray1ex/rpress
+build: .
+ports: "127.0.0.1:10000:8000"
+volumes:
+  - ~/.cache:/root/.cache
