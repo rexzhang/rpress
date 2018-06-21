@@ -1,18 +1,32 @@
 Changelog
 =========
 
-Version 0.x
+Version 0.7
+-----------
+- new password hash method
+- support pytest
+- support travis CI
+- support docker deploy
+
+Version 0.6
+-----------
+- site data export/import tool
+- new models design
+
+Version 0.5
 -----------
 - add Google Analytics support
 - redesign template dir layout
 - add nginx HTTPS config
+- update flask -> 1.0.x, python -> 3.x
+- remove Flask-Script depend
 
 Version 0.4
 -----------
-- add mulit-site support
+- add multi-site support
 - import wordpress's xml at admin web UI
 - add default theme
-- disqus support mulit-site
+- disqus support multi-site
 
 Version 0.3
 -----------

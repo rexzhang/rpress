@@ -4,4 +4,6 @@
 
 from .application import create_app
 
+__version__ = '0.7'
+
 app = create_app()

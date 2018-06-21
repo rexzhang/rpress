@@ -13,4 +13,4 @@ COPY ./script /deploy/app/script
 WORKDIR /deploy/app
 EXPOSE 5000
 
-CMD script/fix-host-docker-internal-at-linux.sh && gunicorn -w 4 -b :5000 rpress:app
+CMD script/fix-host-docker-internal-at-linux.sh && gunicorn -w 3 -b :5000 rpress:app

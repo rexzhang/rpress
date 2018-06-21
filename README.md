@@ -1,5 +1,5 @@
 # rPress
-a mulit-site and mulit-user blog system.
+A multi-site and multi-user blog system.
 
 ## requirement
 - Python3
