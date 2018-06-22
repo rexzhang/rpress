@@ -1,0 +1,13 @@
+/art
+/deploy
+/running
+.coverage
+
+.git
+__pycache__
+*.pyc
+.pytest_cache
+venv*
+*.rpress.json
+
+.DS_Store

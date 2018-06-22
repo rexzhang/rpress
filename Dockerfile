@@ -1,14 +1,9 @@
 FROM python:3
 
-COPY ./requirements /deploy/app/requirements
-COPY ./requirements.txt /deploy/app/requirements.txt
+COPY . /deploy/app
+
 RUN pip install -r /deploy/app/requirements.txt
-
-COPY ./rpress /deploy/app/rpress
-
-COPY ./migrations /deploy/app/migrations
-COPY ./manage.py /deploy/app/manage.py
-COPY ./script /deploy/app/script
+RUN rm -rf /root/.cache/pip
 
 WORKDIR /deploy/app
 EXPOSE 5000
