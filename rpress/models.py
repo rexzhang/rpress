@@ -2,58 +2,30 @@
 # coding=utf-8
 
 
-import uuid
 from functools import reduce
 
 from flask_sqlalchemy import BaseQuery
-from sqlalchemy import Column, String, Text, Boolean, DateTime, ForeignKey, func
+from sqlalchemy import Column, String, Text, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects import postgresql
+from flask_vises.database.models import ObjectModelMixin, RecordModelMixin
 
 from rpress.constants import POST, TERM, PUBLISH_FSM_DEFINE
 from rpress.database import db
 from rpress.runtimes.password import generate_password_hash, check_password_hash
 
 
-class BaseModel(db.Model):
-    __abstract__ = True
-
-    id = Column(
-        postgresql.UUID(as_uuid=True),
-        primary_key=True,
-        default=uuid.uuid4,
-    )
-
-    created_time = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        default=func.now(),
-    )
-
-    def __repr__(self):
-        """don't forget overload!"""
-        return '{}'.format(self.id)
-
-
-class BaseModelObject(BaseModel):
+class BaseObjectModel(db.Model, ObjectModelMixin):
     """base model - Object"""
     __abstract__ = True
 
-    # last update time
-    updated_time = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        default=func.now(),
-        onupdate=func.now(),
-    )
 
-
-class BaseModelRecord(BaseModel):
-    """base model - record/log"""
+class BaseRecordModel(db.Model, RecordModelMixin):
+    """base model - Record/Logging"""
     __abstract__ = True
 
 
-class User(BaseModelObject):
+class User(BaseObjectModel):
     __tablename__ = 'users'
 
     name = Column(String(50), unique=True, nullable=False)
@@ -108,7 +80,7 @@ class PostQuery(BaseQuery):
         return self.filter_by(site=site).filter(query)
 
 
-class Post(BaseModelObject):
+class Post(BaseObjectModel):
     """"""
     query_class = PostQuery
 
@@ -161,7 +133,7 @@ class Post(BaseModelObject):
         return '<Post:{}|{}>'.format(self.id, self.title)
 
 
-class Term(BaseModelObject):
+class Term(BaseObjectModel):
     __tablename__ = 'terms'
 
     site_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('sites.id'), nullable=False)
@@ -176,7 +148,7 @@ class Term(BaseModelObject):
         return '<Term:{}|{}>'.format(self.id, self.name)
 
 
-class Comment(BaseModelRecord):
+class Comment(BaseRecordModel):
     __tablename__ = 'comments'
 
     post_id = Column(postgresql.UUID(as_uuid=True), ForeignKey('posts.id'), nullable=False)
@@ -193,7 +165,7 @@ class Comment(BaseModelRecord):
         return '<Comment:{}|{}|{}>'.format(self.id, self.post_id, self.author_name)
 
 
-class Site(BaseModelObject):
+class Site(BaseObjectModel):
     __tablename__ = 'sites'
 
     domain = Column(String(50), unique=True, nullable=False)
@@ -205,7 +177,7 @@ class Site(BaseModelObject):
         return '<Site:{}|{}>'.format(self.id, self.domain)
 
 
-class SiteSetting(BaseModelObject):
+class SiteSetting(BaseObjectModel):
     """"""
     __tablename__ = 'site_settings'
 

@@ -4,13 +4,11 @@
 
 from datetime import timedelta
 
+from flask_vises.config import ConfigAbstract
 from flask_vises.deploy import DeployLevel
 
 
-class ConfigBase(object):
-    # 项目根路径
-    # ROOT_PATH = getcwd()
-
+class ConfigBase(ConfigAbstract):
     # Deploy
     DEBUG = False
     TEMPLATES_AUTO_RELOAD = False
@@ -21,7 +19,8 @@ class ConfigBase(object):
     TESTING = False
 
     # Database
-    SQLALCHEMY_DATABASE_URI = 'postgresql://rex@localhost/rpress_develop?client_encoding=utf8'
+    ConfigAbstract.SQLALCHEMY_DATABASE['NAME'] = 'rpress'
+    ConfigAbstract.SQLALCHEMY_DATABASE['USER'] = 'rex'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Session/Cookie/Flask-Login

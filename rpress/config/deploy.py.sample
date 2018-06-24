@@ -6,7 +6,12 @@ from .release import Config as ConfigBase
 
 
 class Config(ConfigBase):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://rpress:xxx@host.docker.internal/rpress_0_x?client_encoding=utf8'
+    # database
+    ConfigBase.SQLALCHEMY_DATABASE['HOST'] = 'host.docker.internal'
+    ConfigBase.SQLALCHEMY_DATABASE['NAME'] = 'rpress_0_x'
+    ConfigBase.SQLALCHEMY_DATABASE['USER'] = 'username'
+    ConfigBase.SQLALCHEMY_DATABASE['PASSWORD'] = 'password'
+
     SENTRY_CONFIG = {
         'DSN': 'https://xxx:xxx@sentry.io/123',
         'ENVIRONMENT': 'rPress-Release',
