@@ -82,7 +82,7 @@ def _sidebar():
         categories.append({
             'name': term.name,
             'desc': term.desc,
-            'link': url_for('post.post_term_category', term=term.name),
+            'link': url_for('post_page.paginate_with_term_category', term=term.name),
         })
 
     tags = []
@@ -91,7 +91,7 @@ def _sidebar():
         tags.append({
             'name': term.name,
             'desc': term.desc,
-            'link': url_for('post.post_term_tag', term=term.name),
+            'link': url_for('post_page.paginate_with_term_tag', term=term.name),
         })
 
     widgets = {
@@ -113,7 +113,7 @@ def _widget_date_year():
         if year not in date_years:
             date_years[year] = {
                 'display': str(year),
-                'link': url_for('post.post_date', year=year),
+                'link': url_for('post_page.paginate_with_year', year=year),
                 'count': 1,
             }
 
@@ -133,9 +133,9 @@ def _post_info(post):
             tags.append(term.name)
 
     if post.type == 'page':
-        link = url_for('post.show_with_name', post_name=post.name)
+        link = url_for('post_page.one_with_name', post_name=post.name)
     else:
-        link = url_for('post.show_with_id', post_id=post.id)
+        link = url_for('post_page.one_with_id', post_id=post.id)
 
     return {
         'title': post.title,
@@ -241,7 +241,7 @@ def paginate_with_year(year, page_num=1):
         'key': year,
         'desc': 'Viewing the date archives',
         'curr_num': page_num,
-        'view_name': 'post.post_date',
+        'view_name': 'post_page.paginate_with_year',
     }
 
     return _render_paginate_post_page(query, paginate)
@@ -254,7 +254,7 @@ def paginate_with_term_category(term, page_num=1):
     paginate = {
         'desc': 'Viewing the category',
         'curr_num': page_num,
-        'view_name': 'post.post_term_category',
+        'view_name': 'post_page.paginate_with_term_category',
     }
 
     return _post_term(term, paginate)
@@ -267,7 +267,7 @@ def paginate_with_term_tag(term, page_num=1):
     paginate = {
         'desc': 'Viewing the tag',
         'curr_num': page_num,
-        'view_name': 'post.post_term_tag',
+        'view_name': 'post_page.paginate_with_term_tag',
     }
 
     return _post_term(term, paginate)
@@ -284,7 +284,7 @@ def paginate_with_author(author, page_num=1):
     paginate = {
         'title': author,  # TODO!!!display name
         'curr_num': page_num,
-        'view_name': 'post.post_author',
+        'view_name': 'post_page.paginate_with_author',
     }
 
     return _render_paginate_post_page(query, paginate)
@@ -292,7 +292,7 @@ def paginate_with_author(author, page_num=1):
 
 @post_page.route("/search/")
 @post_page.route("/search/paginate/<int:page_num>/")
-def paginate_withsearch(page_num=1):
+def paginate_with_search(page_num=1):
     """"""
     site = get_current_request_site()
     keywords = request.args.get('keywords', '').strip(',')
@@ -306,7 +306,7 @@ def paginate_withsearch(page_num=1):
         # only one result
         posts = post_query.all()
         post = posts[0]
-        return redirect(url_for('post.show_with_id', post_id=post.id))
+        return redirect(url_for('post_page.one_with_id', post_id=post.id))
 
     paginate = {
         'title': keywords,
@@ -322,7 +322,7 @@ def paginate_withsearch(page_num=1):
 
 
 @post_page.route('/post/<uuid:post_id>', methods=['GET', ])
-def show_with_id(post_id):
+def one_with_id(post_id):
     """"""
     site = get_current_request_site()
 
@@ -331,7 +331,7 @@ def show_with_id(post_id):
 
 
 @post_page.route('/<string:post_name>', methods=['GET', ])
-def show_with_name(post_name):
+def one_with_name(post_name):
     """"""
     site = get_current_request_site()
 
