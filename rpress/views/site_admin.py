@@ -47,7 +47,7 @@ def post_list(post_type):
 @login_required
 def post_publish_state(post_id, trigger):
     """"""
-    post = Post.query.filter_by(uuid=str(post_id)).first_or_404()
+    post = Post.query.filter_by(id=post_id).first_or_404()
     if post.publish_state not in PublishFSM.states:
         return
 
@@ -115,16 +115,16 @@ def post_edit(post_id):
                            publish_triggers=post_publish_fsm.possible_triggers)
 
 
-@site_admin.route('/term/list/<post_type>', methods=['GET', ])
+@site_admin.route('/term/list/<term_type>', methods=['GET', ])
 @login_required
-def term_list(post_type):
+def term_list(term_type):
     """"""
-    if post_type not in ['category', 'tag']:
+    if term_type not in ['category', 'tag']:
         return  # !!!
 
     site = get_current_request_site()
 
-    terms = Term.query.filter_by(site=site, type=post_type).order_by(desc('name')).all()
+    terms = Term.query.filter_by(site=site, type=term_type).order_by(desc('name')).all()
     return render_template('rp/site_admin/term_list.html', terms=terms)
 
 

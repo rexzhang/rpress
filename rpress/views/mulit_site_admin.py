@@ -20,7 +20,7 @@ def index():
     """mulit-site home page"""
     sites = Site.query.all()
 
-    return render_template('rp/mulit_site_admin/index.html', sites=sites)
+    return render_template('rp/multi_site_admin/index.html', sites=sites)
 
 
 @multi_site_admin.route('/new', methods=['GET'])
@@ -34,7 +34,7 @@ def new():
     return redirect(url_for('.site_edit', site_id=site.id))
 
 
-@multi_site_admin.route('/<int:site_id>/edit', methods=['GET', 'POST'])
+@multi_site_admin.route('/<uuid:site_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(site_id):
     """"""
@@ -51,10 +51,10 @@ def edit(site_id):
     else:
         pass  # !!!
 
-    return render_template('rp/mulit_site_admin/edit.html', site_id=site_id, form=form)
+    return render_template('rp/multi_site_admin/edit.html', site_id=site_id, form=form)
 
 
-@multi_site_admin.route('/<int:site_id>/delete', methods=['GET'])
+@multi_site_admin.route('/<uuid:site_id>/delete', methods=['GET'])
 @login_required
 def delete(site_id):
     """"""
