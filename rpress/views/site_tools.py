@@ -15,7 +15,7 @@ from rpress.helpers.data_init import import_data_from_wordpress_xml
 
 
 UPLOAD_FOLDER = '/tmp'
-ALLOWED_EXTENSIONS = set(['xml', 'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = {'xml', 'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 site_tools = Blueprint('site_tools', __name__)
 
@@ -23,7 +23,6 @@ site_tools = Blueprint('site_tools', __name__)
 @site_tools.route('', methods=['GET'])
 @login_required
 def index():
-    """"""
     return render_template("rp/site_tools/index.html")
 
 

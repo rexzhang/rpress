@@ -9,7 +9,7 @@ Flask-Vises
 click
 
 # database
-PyMySQL
+sqlalchemy
 psycopg2-binary
 
 # markdown
@@ -17,8 +17,8 @@ feedparser
 Pygments
 
 # other
+wtforms
 transitions
-
 
 # deploy
 gunicorn

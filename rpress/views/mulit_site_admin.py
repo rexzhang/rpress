@@ -11,10 +11,10 @@ from rpress.models import Site
 from rpress.forms import SiteForm
 
 
-mulit_site_admin = Blueprint('mulit_site_admin', __name__)
+multi_site_admin = Blueprint('multi_site_admin', __name__)
 
 
-@mulit_site_admin.route('', methods=['GET'])
+@multi_site_admin.route('', methods=['GET'])
 @login_required
 def index():
     """mulit-site home page"""
@@ -23,18 +23,18 @@ def index():
     return render_template('rp/mulit_site_admin/index.html', sites=sites)
 
 
-@mulit_site_admin.route('/new', methods=['GET'])
+@multi_site_admin.route('/new', methods=['GET'])
 @login_required
 def new():
     """"""
-    site = Site(domain='new.sample.com')
+    site = Site(domain='rpress.sample.com')
     db.session.add(site)
     db.session.commit()
 
     return redirect(url_for('.site_edit', site_id=site.id))
 
 
-@mulit_site_admin.route('/<int:site_id>/edit', methods=['GET', 'POST'])
+@multi_site_admin.route('/<int:site_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(site_id):
     """"""
@@ -54,7 +54,7 @@ def edit(site_id):
     return render_template('rp/mulit_site_admin/edit.html', site_id=site_id, form=form)
 
 
-@mulit_site_admin.route('/<int:site_id>/delete', methods=['GET'])
+@multi_site_admin.route('/<int:site_id>/delete', methods=['GET'])
 @login_required
 def delete(site_id):
     """"""

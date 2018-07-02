@@ -8,47 +8,47 @@ from flask_wtf import FlaskForm as Form
 
 
 class LoginForm(Form):
-    username = StringField(u'用户', [validators.Length(min=3, max=50)])
-    password = PasswordField(u'密码', [validators.Length(min=8)])
-    submit = SubmitField(u'登陆')
+    username = StringField('用户', [validators.Length(min=3, max=50)])
+    password = PasswordField('密码', [validators.Length(min=8)])
+    submit = SubmitField('登陆')
 
 
 class PostEditForm(Form):
-    title = StringField(u'标题', [validators.Length(min=4, max=128)])
-    name = StringField(u'name', [validators.Length(min=0, max=128)])
-    content = TextAreaField(u'正文', [validators.Length(min=4)])
+    title = StringField('标题', [validators.Length(min=4, max=128)])
+    name = StringField('name', [validators.Length(min=0, max=128)])
+    content = TextAreaField('正文', [validators.Length(min=4)])
     submit = SubmitField("submit")
 
 
 class ProfilesForm(Form):
     """"""
-    email = StringField(u'电子邮箱', [validators.Email()])
-    display = StringField(u'显示名字')
+    email = StringField('电子邮箱', [validators.Email()])
+    display = StringField('显示名字')
     submit = SubmitField("submit")
 
 
 class PasswordForm(Form):
     """"""
-    password_old = StringField(u'当前密码')
-    password_new = StringField(u'新密码')
+    password_old = StringField('当前密码')
+    password_new = StringField('新密码')
     submit = SubmitField("submit")
 
 
 class SiteForm(Form):
     """"""
-    domain = StringField(u'网站域名')
+    domain = StringField('网站域名')
     submit = SubmitField("submit")
 
 
 class SettingsForm(Form):
     """"""
-    value = StringField(u'value')
+    value = StringField('value')
 
     submit = SubmitField("submit")
 
 
 class TermEditFrom(Form):
     """"""
-    name = StringField(u'名字')
-    desc = StringField(u'描述')
+    name = StringField('名字')
+    desc = StringField('描述')
     submit = SubmitField("submit")

@@ -29,18 +29,18 @@ def index():
     return render_template("rp/site_admin/index.html")
 
 
-@site_admin.route('/post/list/<string:type>', methods=['GET'])
+@site_admin.route('/post/list/<post_type>', methods=['GET'])
 @login_required
-def post_list(type):
+def post_list(post_type):
     """"""
-    if not is_valid_post_type(type):
+    if not is_valid_post_type(post_type):
         return  # !!!
 
     site = get_current_request_site()
 
-    posts = Post.query.filter_by(site=site, type=type).order_by(desc('published_time')).all()
+    posts = Post.query.filter_by(site=site, type=post_type).order_by(desc('published_time')).all()
 
-    return render_template("rp/site_admin/post_list.html", posts=posts, post_type=type)
+    return render_template("rp/site_admin/post_list.html", posts=posts, post_type=post_type)
 
 
 @site_admin.route('/post/<uuid:post_id>/publish/<string:trigger>', methods=['GET'])
@@ -58,7 +58,6 @@ def post_publish_state(post_id, trigger):
     if not post_publish_fsm.do_trigger(trigger_name=trigger):
         return
 
-    print('Done......')
     post.publish_status = post_publish_fsm.state
     if post_publish_fsm.state == PUBLISH_FSM_DEFINE.STATE.PUBLISHED:
         post.published = True
@@ -71,11 +70,11 @@ def post_publish_state(post_id, trigger):
     return redirect(url_for('site_admin.post_edit', post_id=post_id))
 
 
-@site_admin.route('/post/<string:type>/new', methods=['GET', ])
+@site_admin.route('/post/<post_type>/new', methods=['GET', ])
 @login_required
-def post_new(type):
+def post_new(post_type):
     """"""
-    if not is_valid_post_type(type):
+    if not is_valid_post_type(post_type):
         return
 
     user = User.query.filter_by(id=current_user.id).first()
@@ -84,7 +83,7 @@ def post_new(type):
 
     site = get_current_request_site()
 
-    post = Post(author=user, site=site, type=type)
+    post = Post(author=user, site=site, type=post_type)
     db.session.add(post)
     db.session.commit()
 
@@ -116,16 +115,16 @@ def post_edit(post_id):
                            publish_triggers=post_publish_fsm.possible_triggers)
 
 
-@site_admin.route('/term/list/<string:type>', methods=['GET', ])
+@site_admin.route('/term/list/<post_type>', methods=['GET', ])
 @login_required
-def term_list(type):
+def term_list(post_type):
     """"""
-    if type not in ['category', 'tag']:
+    if post_type not in ['category', 'tag']:
         return  # !!!
 
     site = get_current_request_site()
 
-    terms = Term.query.filter_by(site=site, type=type).order_by(desc('name')).all()
+    terms = Term.query.filter_by(site=site, type=post_type).order_by(desc('name')).all()
     return render_template('rp/site_admin/term_list.html', terms=terms)
 
 

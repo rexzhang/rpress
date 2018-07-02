@@ -69,7 +69,7 @@ content = {
 }
 """
 
-post = flask.Blueprint('post', __name__)
+post_page = flask.Blueprint('post_page', __name__)
 
 
 def _sidebar():
@@ -122,7 +122,7 @@ def _widget_date_year():
     return date_years
 
 
-def _make_post_info(post):
+def _post_info(post):
     """"""
     categorys = []
     tags = []
@@ -153,7 +153,20 @@ def _make_post_info(post):
     }
 
 
-def _render_post_paginate(query, paginate):
+def _post_term(term, paginate):
+    """"""
+    site = get_current_request_site()
+
+    query = Post.query.filter_by(
+        site=site, type=POST.TYPE.BLOG, published=True
+    ).filter(Post.terms.any(name=term)).order_by(desc('published_time'))
+
+    paginate['key'] = term
+    paginate['title'] = term  # TODO!!!diaplay name?
+    return _render_paginate_post_page(query, paginate)
+
+
+def _render_paginate_post_page(query, paginate):
     """"""
     post_paginate = query.paginate(paginate['curr_num'], per_page=10)
 
@@ -164,7 +177,7 @@ def _render_post_paginate(query, paginate):
 
     paginate_posts = []
     for post in post_paginate.items:
-        paginate_posts.append(_make_post_info(post))
+        paginate_posts.append(_post_info(post))
     paginate['posts'] = paginate_posts
 
     widgets = _sidebar()
@@ -177,9 +190,28 @@ def _render_post_paginate(query, paginate):
     return render_template('post_paginate.html', content=content)
 
 
-@post.route('/', methods=['GET'])
-@post.route('/paginate/<int:page_num>', methods=['GET'])
-def post_paginate(page_num=1):
+def _render_one_post(post):
+    """render one post"""
+    content = {
+        'post': _post_info(post),
+    }
+
+    comment_list = []
+    comments = Comment.query.filter_by(post=post).order_by(desc('created_time')).all()
+    for comment in comments:
+        comment_list.append({
+            'commenter_name': comment.commenter_name,
+            'created_time': comment.created_time,
+            'content': comment.content,
+        })
+    content['comments'] = comment_list
+
+    return render_template('post.html', content=content)
+
+
+@post_page.route('/', methods=['GET'])
+@post_page.route('/paginate/<int:page_num>', methods=['GET'])
+def paginate_post_page(page_num=1):
     """"""
     site = get_current_request_site()
 
@@ -190,18 +222,20 @@ def post_paginate(page_num=1):
         'view_name': 'post.post_paginate',
     }
 
-    return _render_post_paginate(query, paginate)
+    return _render_paginate_post_page(query, paginate)
 
 
-@post.route('/date/<int:year>', methods=['GET'])
-@post.route('/date/<int:year>/paginate/<int:page_num>', methods=['GET'])
-def post_date(year, page_num=1):
+@post_page.route('/date/<int:year>', methods=['GET'])
+@post_page.route('/date/<int:year>/paginate/<int:page_num>', methods=['GET'])
+def paginate_with_year(year, page_num=1):
     """"""
     site = get_current_request_site()
 
-    query = Post.query.filter_by(site=site, type='blog', published=True) \
-        .filter(Post.published_time >= datetime(year, 1, 1), Post.published_time < datetime(year + 1, 1, 1)) \
-        .order_by(desc('published_time'))
+    query = Post.query.filter_by(
+        site=site, type='blog', published=True
+    ).filter(
+        Post.published_time >= datetime(year, 1, 1), Post.published_time < datetime(year + 1, 1, 1)
+    ).order_by(desc('published_time'))
     paginate = {
         'title': year,
         'key': year,
@@ -210,25 +244,12 @@ def post_date(year, page_num=1):
         'view_name': 'post.post_date',
     }
 
-    return _render_post_paginate(query, paginate)
+    return _render_paginate_post_page(query, paginate)
 
 
-def _post_term(term, paginate):
-    """"""
-    site = get_current_request_site()
-
-    query = Post.query.filter_by(
-        site=site, type=POST.TYPE.BLOG, published=True
-    ).filter(Post.terms.any(name=term)).order_by(desc('published_time'))
-
-    paginate['key'] = term
-    paginate['title'] = term  # TODO!!!diaplay name?
-    return _render_post_paginate(query, paginate)
-
-
-@post.route('/category/<string:term>', methods=['GET'])
-@post.route('/category/<string:term>/paginate/<int:page_num>', methods=['GET'])
-def post_term_category(term, page_num=1):
+@post_page.route('/category/<string:term>', methods=['GET'])
+@post_page.route('/category/<string:term>/paginate/<int:page_num>', methods=['GET'])
+def paginate_with_term_category(term, page_num=1):
     """"""
     paginate = {
         'desc': 'Viewing the category',
@@ -239,9 +260,9 @@ def post_term_category(term, page_num=1):
     return _post_term(term, paginate)
 
 
-@post.route('/tag/<string:term>', methods=['GET'])
-@post.route('/tag/<string:term>/paginate/<int:page_num>', methods=['GET'])
-def post_term_tag(term, page_num=1):
+@post_page.route('/tag/<string:term>', methods=['GET'])
+@post_page.route('/tag/<string:term>/paginate/<int:page_num>', methods=['GET'])
+def paginate_with_term_tag(term, page_num=1):
     """"""
     paginate = {
         'desc': 'Viewing the tag',
@@ -252,9 +273,9 @@ def post_term_tag(term, page_num=1):
     return _post_term(term, paginate)
 
 
-@post.route('/author/<string:author>', methods=['GET'])
-@post.route('/author/<string:author>/paginate/<int:page_num>', methods=['GET'])
-def post_author(author, page_num=1):
+@post_page.route('/author/<string:author>', methods=['GET'])
+@post_page.route('/author/<string:author>/paginate/<int:page_num>', methods=['GET'])
+def paginate_with_author(author, page_num=1):
     """"""
     site = get_current_request_site()
 
@@ -266,12 +287,12 @@ def post_author(author, page_num=1):
         'view_name': 'post.post_author',
     }
 
-    return _render_post_paginate(query, paginate)
+    return _render_paginate_post_page(query, paginate)
 
 
-@post.route("/search/")
-@post.route("/search/paginate/<int:page_num>/")
-def search(page_num=1):
+@post_page.route("/search/")
+@post_page.route("/search/paginate/<int:page_num>/")
+def paginate_withsearch(page_num=1):
     """"""
     site = get_current_request_site()
     keywords = request.args.get('keywords', '').strip(',')
@@ -297,43 +318,22 @@ def search(page_num=1):
         'keywords': keywords,
     }
 
-    return _render_post_paginate(post_query, paginate)
+    return _render_paginate_post_page(post_query, paginate)
 
 
-def _render_post(post):
-    """render one post"""
-    content = {
-        'post': _make_post_info(post),
-    }
-
-    comment_list = []
-    comments = Comment.query.filter_by(post=post).order_by(desc('created_time')).all()
-    for comment in comments:
-        comment_list.append({
-            'commenter_name': comment.commenter_name,
-            'created_time': comment.created_time,
-            'content': comment.content,
-        })
-    content['comments'] = comment_list
-
-    return render_template('post.html', content=content)
-
-
-# /post/post_id
-@post.route('/post/<uuid:post_id>', methods=['GET', ])
+@post_page.route('/post/<uuid:post_id>', methods=['GET', ])
 def show_with_id(post_id):
     """"""
     site = get_current_request_site()
 
     post = Post.query.filter_by(site=site, id=post_id, published=True).first_or_404()
-    return _render_post(post)
+    return _render_one_post(post)
 
 
-# /about
-@post.route('/<string:post_name>', methods=['GET', ])
+@post_page.route('/<string:post_name>', methods=['GET', ])
 def show_with_name(post_name):
     """"""
     site = get_current_request_site()
 
     post = Post.query.filter_by(site=site, name=post_name, published=True, type='page').first_or_404()
-    return _render_post(post)
+    return _render_one_post(post)

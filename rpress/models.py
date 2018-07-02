@@ -9,10 +9,10 @@ from sqlalchemy import Column, String, Text, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects import postgresql
 from flask_vises.database.models import ObjectModelMixin, RecordModelMixin
+from flask_vises.password import generate_password_hash, check_password_hash
 
 from rpress.constants import POST, TERM, PUBLISH_FSM_DEFINE
 from rpress.database import db
-from rpress.runtimes.password import generate_password_hash, check_password_hash
 
 
 class BaseObjectModel(db.Model, ObjectModelMixin):
