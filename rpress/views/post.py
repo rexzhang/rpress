@@ -219,7 +219,7 @@ def paginate_with_all(page_num=1):
     paginate = {
         'title': 'Home',  # TODO需要改为站点相关信息
         'curr_num': page_num,
-        'view_name': 'post_page.post_paginate',
+        'view_name': 'post_page.paginate_with_all',
     }
 
     return _render_paginate_post_page(query, paginate)
