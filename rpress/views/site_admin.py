@@ -48,6 +48,9 @@ def post_list(post_type):
 def post_publish_status(post_id, trigger):
     """"""
     post = Post.query.filter_by(id=post_id).first_or_404()
+    if post.name is None or post.content is None:
+        return redirect(url_for('site_admin.post_edit', post_id=post_id))
+
     if post.publish_status not in PublishFSM.states:
         return
 
