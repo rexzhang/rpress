@@ -138,7 +138,7 @@ URL 规则
 * author_user_id
 
 * published       #True/False
-* publish_state   #publish / history/draft/auto-draft/trash
+* publish_status   #publish / history/draft/auto-draft/trash
 * publish_date
 
 * updater_user_id

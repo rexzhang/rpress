@@ -6,7 +6,7 @@
   <li class="nav-item"><a class="nav-link disabled">publish state:{{ post.publish_status }}</a></li>
   {% for triggers in publish_triggers %}
   <li class="nav-item"><a class="nav-link"
-                          href="{{ url_for('site_admin.post_publish_state', post_id=post.id, trigger=triggers) }}">{{
+                          href="{{ url_for('site_admin.post_publish_status', post_id=post.id, trigger=triggers) }}">{{
     triggers }}</a></li>
   {% endfor %}
 </ul>

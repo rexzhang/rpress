@@ -45,10 +45,10 @@ def post_list(post_type):
 
 @site_admin.route('/post/<uuid:post_id>/publish/<string:trigger>', methods=['GET'])
 @login_required
-def post_publish_state(post_id, trigger):
+def post_publish_status(post_id, trigger):
     """"""
     post = Post.query.filter_by(id=post_id).first_or_404()
-    if post.publish_state not in PublishFSM.states:
+    if post.publish_status not in PublishFSM.states:
         return
 
     post_publish_fsm = PublishFSM(init_state=post.publish_status)
