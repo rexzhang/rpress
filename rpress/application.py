@@ -5,7 +5,6 @@
 from flask import Flask
 from flask_themes2 import Themes
 from flask_vises.database import configure_db
-from flask_vises.testing import configure_testing
 from raven.contrib.flask import Sentry
 
 from rpress.constants import APP_NAME
@@ -35,6 +34,8 @@ def create_app(testing=False):
     app.config.from_object(Config())
 
     if testing:
+        from flask_vises.testing import configure_testing
+
         configure_testing(app)
 
     configure_sentry(app)
