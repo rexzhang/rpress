@@ -44,4 +44,4 @@ def login():
 def logout():
     user_logout()
 
-    return redirect(url_for('post.post_paginate'))
+    return redirect(url_for('post_page.paginate_with_all'))

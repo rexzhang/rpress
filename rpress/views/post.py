@@ -29,7 +29,7 @@ content = {
         'prev_num': post_paginate.prev_num
         'next_num': post_paginate.next_num
 
-        'view_name': 'post.search',
+        'view_name': 'post_page.paginate_with_all',
 
         'keywords': keywords, #search only
 
@@ -211,7 +211,7 @@ def _render_one_post(post):
 
 @post_page.route('/', methods=['GET'])
 @post_page.route('/paginate/<int:page_num>', methods=['GET'])
-def paginate_post_page(page_num=1):
+def paginate_with_all(page_num=1):
     """"""
     site = get_current_request_site()
 
@@ -219,7 +219,7 @@ def paginate_post_page(page_num=1):
     paginate = {
         'title': 'Home',  # TODO需要改为站点相关信息
         'curr_num': page_num,
-        'view_name': 'post.post_paginate',
+        'view_name': 'post_page.post_paginate',
     }
 
     return _render_paginate_post_page(query, paginate)
@@ -298,7 +298,7 @@ def paginate_with_search(page_num=1):
     keywords = request.args.get('keywords', '').strip(',')
 
     if not keywords:
-        return redirect(url_for("post.index"))
+        return redirect(url_for("post_page.index"))
 
     post_query = Post.query.search(site=site, keywords=keywords)  # TODO!!!!当前搜索多个关键字有bug
 
@@ -313,7 +313,7 @@ def paginate_with_search(page_num=1):
         'key': keywords,
         'desc': 'Search results for',
         'curr_num': page_num,
-        'view_name': 'post.search',
+        'view_name': 'post_page.paginate_with_search',
 
         'keywords': keywords,
     }
