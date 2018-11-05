@@ -1,21 +1,26 @@
 {% extends theme('/rp/layout.html') %}
 {% block body %}
 <div id="login" class="row">
-  <div class="col-sm-4 col-center">
-  <div class="box">
-    <h2><em>r</em>Press</h2>
+  <div class="form-login">
+    <h1><em>r</em>Press</h1>
 
     <form method="POST" action="{{ url_for('auth.login') }}">
-      {{ form.csrf_token }}
-      <fieldset class="form-group">
-        {{ form.username.label }}<br>{{ form.username }}
-      </fieldset>
-      <fieldset class="form-group">
-        {{ form.password.label }}<br>{{ form.password }}
-      </fieldset>
-      {{ form.submit }}
+      <div class="form-input">
+        {{ form.csrf_token }}
+        <!--<fieldset class="form-group">-->
+        <!--{{ form.username.label }}-->
+        {{ form.username }}
+        <!--</fieldset>-->
+        <!--<fieldset class="form-group">-->
+        <!--{{ form.password.label }}-->
+        {{ form.password }}
+        <!--</fieldset>-->
+      </div>
+
+      <div>{{ form.submit }}</div>
     </form>
-    </div>
+
+    <p class="footer" align="right">power by rPress.</p>
   </div>
 </div>
 {% endblock %}
