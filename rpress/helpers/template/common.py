@@ -15,6 +15,7 @@ def _user_info():
 
     user_info = {
         'id': current_user.id,
+        'name': current_user.name,
     }
 
     return user_info

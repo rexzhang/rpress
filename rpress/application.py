@@ -20,6 +20,9 @@ __all__ = ['create_app', 'create_app_for_cli', 'create_app_for_testing']
 BLUE_PRINTS = (
     (views.post.post_page, ''),
     (views.auth.auth, ''),
+
+    (views.rpadmin.dashboard.app, '/rp/admin/dashboard'),
+
     (views.site_admin.site_admin, '/rp/admin'),
     (views.site_tools.site_tools, '/rp/tools'),
     (views.profiles_admin.profiles_admin, '/rp/profiles'),

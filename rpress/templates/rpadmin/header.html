@@ -1,0 +1,56 @@
+<!--<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">-->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <!-- Logo -->
+  <a class="navbar-brand" href="#">rPress Admin</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+          aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar -->
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="http://{{ site.domain }}"><i class="nav-icon fas fa-home"></i> {{ site.domain }}</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ url_for('dashboard.dashboard') }}"><i class="nav-icon fas fa-tachometer-alt"></i>
+          Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="nav-icon fas fa-thumbtack"></i> Posts</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="nav-icon fas fa-file-alt"></i> Pages</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="nav-icon fas fa-copy"></i> Categories</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="nav-icon fas fa-tags"></i> Tags</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="nav-icon fas fa-sliders-h"></i> Settings</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="nav-icon fas fa-cogs"></i> Sites</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+          <a class="dropdown-item" href="#"><i class="nav-icon fas fa-th-list"></i> Site List</a>
+          <a class="dropdown-item" href="#"><i class="nav-icon fas fa-file-import"></i> Import Site</a>
+        </div>
+      </li>
+    </ul>
+
+    <!-- User -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="nav-icon fas fa-user-circle"></i> {{ user.name }}</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown02">
+          <a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a>
+          <a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </ul>
+  </div>
+</nav>

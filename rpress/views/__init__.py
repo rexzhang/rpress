@@ -9,4 +9,6 @@ from . import (  # noqa: F401
     site_tools,
     mulit_site_admin,
     profiles_admin,
+
+    rpadmin,
 )
