@@ -4,25 +4,39 @@
 //------------------------------------------------------
 // global variables
 .font-common {
-    font-style: normal;
-    font-variant: normal;
-    font-weight: normal;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
 }
 
 .area-common {
-    padding-top: $base-page-blank-width * 1.75;
-    padding-bottom: $base-page-blank-width * 1.75;
-    padding-left: $base-page-blank-width;
-    padding-right: $base-page-blank-width;
+  padding-top: $base-page-blank-width * 1.75;
+  padding-bottom: $base-page-blank-width * 1.75;
+  padding-left: $base-page-blank-width;
+  padding-right: $base-page-blank-width;
 }
 
 .underline-box {
-    border-bottom: 1px solid;
-    border-bottom-color: $color-silver;
+  border-bottom: 1px solid;
+  border-bottom-color: $color-silver;
 }
 
 //------------------------------------------------------
+//fill full page
+$footer-height: 10em;
 
+html, body {
+  height: 100%;
+}
+
+.fill-fullpage-wrapper {
+  min-height: 100%;
+
+  /* the bottom margin is the negative value of the footer's height */
+  margin: 0 (auto - $footer-height);
+}
+
+//------------------------------------------------------
 //h1 site title, error handler title
 //h2 post title, login etc...function page title
 //h3 post@rollcell title, site title@footer
@@ -30,291 +44,293 @@
 //h5 sub-title
 //h6 site desc
 h1, h2, h3, h4, h5, h6 {
-    @extend .font-common;
+  @extend .font-common;
 
-    letter-spacing: 0;
-    text-transform: none;
+  letter-spacing: 0;
+  text-transform: none;
 
-    a {
-        color: $color-black;
-    }
+  a {
+    color: $color-black;
+  }
 }
 
 //------------------------------------------------------
 // header
 #header {
-    @extend .area-common;
+  @extend .area-common;
 
-    padding-bottom: 0px;
+  padding-bottom: 0px;
 }
 
 .site-title {
-    color: $color-black;
+  color: $color-black;
 
-    a {
-        text-decoration: none;
-    }
+  a {
+    text-decoration: none;
+  }
 
-    h1 {
-        font-size: 2.6em;
-        line-height: 1em;
-        margin: 0.3em 0 0.15em;
-    }
+  h1 {
+    font-size: 2.6em;
+    line-height: 1em;
+    margin: 0.3em 0 0.15em;
+  }
 
-    h3 {
-        font-size: 1em;
-        line-height: 1em;
-        margin: 0.3em 0 0.15em;
-    }
+  h3 {
+    font-size: 1em;
+    line-height: 1em;
+    margin: 0.3em 0 0.15em;
+  }
 }
 
 .site-description {
-    font-family: $font-family-second;
-    font-size: 0.9em;
-    color: $color-silver;
+  font-family: $font-family-second;
+  font-size: 0.9em;
+  color: $color-silver;
 
-    h6 {
-        //margin-left: 0.2em;
+  h6 {
+    //margin-left: 0.2em;
 
-    }
+  }
 }
 
 //------------------------------------------------------
 // navigation
 #navigation {
-    padding-right: 0px;
+  padding-right: 0px;
 
-    @extend .underline-box;
+  @extend .underline-box;
 }
 
 .nav-box-common {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .nav-mainmenu {
-    font-size: 14px;
-    font-family: $font-family-second;
-    margin-bottom: 0px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 0px;
-    padding-right: 0px;
+  font-size: 14px;
+  font-family: $font-family-second;
+  margin-bottom: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  float: left;
+
+  ul {
+  }
+
+  li {
+    list-style-type: none;
+    display: block;
     float: left;
+  }
 
-    ul {}
+  a {
+    @extend .nav-box-common;
 
-    li {
-        list-style-type: none;
-        display: block;
-        float: left;
+    color: $color-gray;
+    text-transform: uppercase;
+  }
+
+  a:hover {
+    @extend .nav-box-common;
+
+    color: $color-black;
+    background: $color-silver;
+    text-decoration: none;
+  }
+
+  form {
+    @extend .nav-box-common;
+
+    input[type="text"], input[type="password"], textarea, #dsq-content textarea {
+      font-family: "Courier New", Courier, Verdana, sans-serif;
     }
-
-    a {
-        @extend .nav-box-common;
-
-        color: $color-gray;
-        text-transform: uppercase;
-    }
-
-    a:hover {
-        @extend .nav-box-common;
-
-        color: $color-black;
-        background: $color-silver;
-        text-decoration: none;
-    }
-
-    form {
-        @extend .nav-box-common;
-
-        input[type="text"], input[type="password"], textarea, #dsq-content textarea {
-            font-family: "Courier New", Courier, Verdana, sans-serif;
-        }
-    }
+  }
 }
 
 //------------------------------------------------------
 // post
 #post {
-    @extend .area-common;
+  @extend .area-common;
 
-    .post-summary-box {
-        margin-bottom: 22.4px;
-        padding-bottom: 20px;
+  .post-summary-box {
+    margin-bottom: 22.4px;
+    padding-bottom: 20px;
 
-        @extend .underline-box;
+    @extend .underline-box;
+  }
+
+  .post-summary-content {
+  }
+
+  .post-title {
+    h2, h3 {
+      margin-bottom: 2px;
     }
 
-    .post-summary-content {}
+    a {
+      color: $color-black;
+    }
+  }
 
-    .post-title {
-        h2, h3 {
-            margin-bottom: 2px;
-        }
+  .post-metabar {
+    font-family: $font-family-second;
+    font-size: 0.8em;
+    color: $color-silver;
+    letter-spacing: 0.15em;
 
-        a {
-            color: $color-black;
-        }
+    em {
+      font-style: normal;
     }
 
-    .post-metabar {
-        font-family: $font-family-second;
-        font-size: 0.8em;
-        color: $color-silver;
-        letter-spacing: 0.15em;
-
-        em {
-            font-style: normal;
-        }
-
-        .stress {
-            color: $color-gray;
-            text-transform: uppercase;
-        }
-
-        a {
-            color: $color-gray;
-        }
+    .stress {
+      color: $color-gray;
+      text-transform: uppercase;
     }
 
-    .post-excerpt, .post-content {
-        margin-top: 1em;
-        margin-bottom: 1em;
-        line-height: 1.6em;
+    a {
+      color: $color-gray;
     }
+  }
+
+  .post-excerpt, .post-content {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    line-height: 1.6em;
+  }
 }
 
 //------------------------------------------------------
 #paginate-desc {
-    margin-bottom: 1.5em;
-    padding: 0.5em;
-    background-color: $color-silver;
-    border-left: 4px solid;
-    border-left-color: $color-gray;
+  margin-bottom: 1.5em;
+  padding: 0.5em;
+  background-color: $color-silver;
+  border-left: 4px solid;
+  border-left-color: $color-gray;
 }
 
 #paginate {
-    padding-top: 1em;
-    padding-bottom: 1em;
+  padding-top: 1em;
+  padding-bottom: 1em;
 
-    .prev-entries {
-        float: left;
-    }
+  .prev-entries {
+    float: left;
+  }
 
-    .next-entries {
-        float: right;
-    }
+  .next-entries {
+    float: right;
+  }
 }
 
 //------------------------------------------------------
 // sidebar
 #sidebar {
-    @extend .area-common;
+  @extend .area-common;
 }
 
 .widget {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 
-    h4 {
-        padding-bottom: 0.5em;
+  h4 {
+    padding-bottom: 0.5em;
 
-        @extend .underline-box;
+    @extend .underline-box;
 
-        font-family: $font-family-second;
-        font-size: .9em;
-        color: $color-gray;
+    font-family: $font-family-second;
+    font-size: .9em;
+    color: $color-gray;
 
-        @extend .font-common;
+    @extend .font-common;
 
-        letter-spacing: 0.10em;
-        text-transform: uppercase;
-        text-align: left;
-    }
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    text-align: left;
+  }
 
-    ul {
-        list-style-type: none;
-        padding-top: 2.1px;
-        padding-bottom: 2.1px;
-        padding-left: 10px;
-        padding-right: 2px;
-    }
+  ul {
+    list-style-type: none;
+    padding-top: 2.1px;
+    padding-bottom: 2.1px;
+    padding-left: 10px;
+    padding-right: 2px;
+  }
 
-    li {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
+  li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
 
 //------------------------------------------------------
 // footer
 #one-word {
-    margin: 0px;
-    padding: 0.5em;
-    color: $color-gray;
-    background-color: $color-gray-light;
-    text-align: center;
-    line-height: 1.8em;
+  margin: 0px;
+  padding: 0.5em;
+  color: $color-gray;
+  background-color: $color-gray-light;
+  text-align: center;
+  line-height: 1.8em;
 }
 
 #footer {
-    padding-top: 1em;
-    font-size: 1em;
-    text-align: left;
-    color: $color-gray;
-    background-color: $color-black;
+  padding-top: 1em;
+  font-size: 1em;
+  text-align: left;
+  color: $color-gray;
+  background-color: $color-black;
 
-    //for fill full page
-    height: $fill-fullpage-footer-height;
+  //for fill full page
+  height: $footer-height;
 
-    h4 {
-        font-family: $font-family-second;
-        font-size: 0.9em;
-        text-transform: uppercase;
+  h4 {
+    font-family: $font-family-second;
+    font-size: 0.9em;
+    text-transform: uppercase;
+  }
+
+  a {
+    color: $color-white;
+    font-size: 0.9em;
+
+    :hover {
+      text-decoration: underline;
     }
+  }
 
-    a {
-        color: $color-white;
-        font-size: 0.9em;
+  ul {
+    padding: 0 5px;
 
-        :hover {
-            text-decoration: underline;
-        }
+    li {
+      list-style-type: none;
     }
+  }
 
-    ul {
-        padding: 0 5px;
-
-        li {
-            list-style-type: none;
-        }
-    }
-
-    .terms {
-        font-size: 0.6em;
-    }
+  .terms {
+    font-size: 0.6em;
+  }
 }
 
 //------------------------------------------------------
 // error handler
 #error_handler {
-    margin-bottom: 2em;
-    padding: 10em;
-    text-align: center;
-    align: center;
+  margin-bottom: 2em;
+  padding: 10em;
+  text-align: center;
+  align: center;
 
-    h1 {
-        font-family: $font-family-major;
-        font-size: 7em;
-        color: $color-black;
-    }
+  h1 {
+    font-family: $font-family-major;
+    font-size: 7em;
+    color: $color-black;
+  }
 
-    p {
-        margin: 1em;
-        color: $color-gray;
-    }
+  p {
+    margin: 1em;
+    color: $color-gray;
+  }
 }
 
 // import code highlight css define

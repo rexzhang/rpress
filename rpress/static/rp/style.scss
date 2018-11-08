@@ -34,67 +34,35 @@
 }
 
 //------------------------------------------------------
-// login page
-#login {
-  height: 100%;
-  background-color: $color-silver;
+//for fill full page
+$fill-fullpage-footer-height: 10em; //!!!!!!! :todo
 
-  h1 {
-    margin-bottom: 1em;
-    text-align: center;
-    color: $color-gray;
-  }
+//for fill full page
+.fill-fullpage-wrapper {
+  min-height: 100%;
 
-  em {
-    color: $color-gray-dark;
-  }
+  /* the bottom margin is the negative value of the footer's height */
+  margin: 0 (auto - $fill-fullpage-footer-height);
+}
 
-  .box {
-    margin-top: 8em;
-    padding: 3em;
-    background-color: $color-white;
-    box-shadow: 0 0 1em $color-gray;
-  }
+.margin0 {
+  margin: 0;
+}
 
-  .logo{
-    
-  }
+.padding0 {
+  padding: 0;
+}
 
-  .form-login {
-    width: 100%;
-    max-width: 330px;
-    padding: 15px;
-    margin: auto;
-  }
+.col-center {
+  float: none;
+  margin-right: auto;
+  margin-left: auto;
+}
 
-  .form-input {
-    padding-top: 10px;
-    padding-bottom: 40px;
-  }
+#message-flash {
+  margin: 1em;
 
-  input {
-    width: 100%;
-
-    border: none;
-    padding: 10px;
-  }
-  input[type="text"] {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom: 1px solid $color-silver;
-  }
-  input[type="password"] {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-  }
-  input[type="submit"] {
-    border-radius: 5px;
-    color: white;
-    background-color: dodgerblue;
-  }
-
-  .footer {
-    padding-top: 60px;
-    color: $color-gray;
+  li {
+    border: 1px solid $color-silver;
   }
 }

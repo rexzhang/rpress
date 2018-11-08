@@ -1,0 +1,55 @@
+body {
+  font: 1em Georgia, "Times New Roman", Times, serif;
+  margin: 0;
+  border: 0 none;
+  outline: 0 none;
+  padding: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Georgia, "Times New Roman", Times, serif; }
+
+html, body {
+  height: 100%; }
+
+#login {
+  height: 100%;
+  background-color: #E9E9E9; }
+  #login h1 {
+    margin-bottom: 1em;
+    text-align: center;
+    color: #AFAFAF; }
+  #login em {
+    color: #5F5F5F; }
+  #login .box {
+    margin-top: 8em;
+    padding: 3em;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 1em #AFAFAF; }
+  #login .form-login {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto; }
+  #login .form-input {
+    padding-top: 10px;
+    padding-bottom: 40px; }
+  #login input {
+    width: 100%;
+    border: none;
+    padding: 10px; }
+  #login input[type="text"] {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 1px solid #E9E9E9; }
+  #login input[type="password"] {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px; }
+  #login input[type="submit"] {
+    border-radius: 5px;
+    color: white;
+    background-color: dodgerblue; }
+  #login .footer {
+    padding-top: 60px;
+    color: #AFAFAF; }
+
+/*# sourceMappingURL=login.css.map */

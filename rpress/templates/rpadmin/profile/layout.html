@@ -1,0 +1,11 @@
+{% extends theme('/rpadmin/layout.html') %}
+
+{% block navbar_sub %}
+<!-- SubNavbar -->
+<div class="nav-scroller bg-white shadow-sm">
+  <nav class="nav nav-underline">
+    <a class="nav-link" href="{{ url_for('rpadmin_profile.edit') }}">Profile</a>
+    <a class="nav-link" href="{{ url_for('rpadmin_profile.change_password') }}">Change password</a>
+  </nav>
+</div>
+{% endblock %}

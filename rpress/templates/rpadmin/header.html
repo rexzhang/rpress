@@ -7,15 +7,15 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <!-- Navbar -->
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <!-- Navbar -->
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a class="nav-link" href="http://{{ site.domain }}"><i class="nav-icon fas fa-home"></i> {{ site.domain }}</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="{{ url_for('dashboard.dashboard') }}"><i class="nav-icon fas fa-tachometer-alt"></i>
-          Dashboard</a>
+        <a class="nav-link" href="{{ url_for('rpadmin_dashboard.dashboard') }}">
+          <i class="nav-icon fas fa-tachometer-alt"></i> Dashboard</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#"><i class="nav-icon fas fa-thumbtack"></i> Posts</a>
@@ -48,7 +48,7 @@
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="nav-icon fas fa-user-circle"></i> {{ user.name }}</a>
         <div class="dropdown-menu" aria-labelledby="dropdown02">
-          <a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a>
+          <a class="dropdown-item" href="{{ url_for('rpadmin_profile.edit') }}"><i class="fas fa-user"></i> Profile</a>
           <a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </ul>

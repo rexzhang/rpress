@@ -1,0 +1,68 @@
+// import rPress common css define
+@import "common";
+
+html, body {
+  height: 100%;
+}
+
+#login {
+  height: 100%;
+  background-color: $color-silver;
+
+  h1 {
+    margin-bottom: 1em;
+    text-align: center;
+    color: $color-gray;
+  }
+
+  em {
+    color: $color-gray-dark;
+  }
+
+  .box {
+    margin-top: 8em;
+    padding: 3em;
+    background-color: $color-white;
+    box-shadow: 0 0 1em $color-gray;
+  }
+
+  .form-login {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+  }
+
+  .form-input {
+    padding-top: 10px;
+    padding-bottom: 40px;
+  }
+
+  input {
+    width: 100%;
+
+    border: none;
+    padding: 10px;
+  }
+  input[type="text"] {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 1px solid $color-silver;
+  }
+  input[type="password"] {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  input[type="submit"] {
+    border-radius: 5px;
+    color: white;
+    background-color: dodgerblue;
+  }
+
+  .footer {
+    padding-top: 60px;
+    color: $color-gray;
+  }
+}
+
+

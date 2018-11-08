@@ -1,0 +1,14 @@
+{% extends theme('/rpadmin/profile/layout.html') %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('rpadmin_profile.edit') }}">
+  {{ form.csrf_token }}
+  <div>
+    {{ form.email.label }}: {{ form.email }}
+  </div>
+  <div>
+    {{ form.display.label }}: {{ form.display }}
+  </div>
+  {{ form.submit }}
+</form>
+{% endblock %}

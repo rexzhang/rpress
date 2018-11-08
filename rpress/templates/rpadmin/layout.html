@@ -15,6 +15,8 @@
   <!-- Icons-->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
         integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+  <link rel=stylesheet type=text/css href="/static/rpadmin.css">
   {% endblock %}
 
   <title>{% block title %}{% endblock %}</title>
@@ -23,9 +25,12 @@
 <body>
 {% block body %}
 {% block header %}{% include theme('/rpadmin/header.html') %}{% endblock %}
+{% block navbar_sub %}{% endblock %}
 {% include theme('/rpadmin/flash_message.html') %}
 <main role="main" class="container">
-  {% block content %}{% endblock%}
+  <div id="content" class="container-fluid">
+    {% block content %}{% endblock%}
+  </div>
 </main>
 {% endblock %}
 

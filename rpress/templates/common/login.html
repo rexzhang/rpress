@@ -1,4 +1,9 @@
-{% extends theme('/rp/layout.html') %}
+{% extends theme('/common/layout.html') %}
+
+{% block head %}{{ super() }}
+<link rel=stylesheet type=text/css href="/static/login.css">
+{% endblock %}
+
 {% block body %}
 <div id="login" class="row">
   <div class="form-login">

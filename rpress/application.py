@@ -22,10 +22,10 @@ BLUE_PRINTS = (
     (views.auth.auth, ''),
 
     (views.rpadmin.dashboard.app, '/rp/admin/dashboard'),
+    (views.rpadmin.profile.app, '/rp/admin/profile'),
 
     (views.site_admin.site_admin, '/rp/admin'),
     (views.site_tools.site_tools, '/rp/tools'),
-    (views.profiles_admin.profiles_admin, '/rp/profiles'),
     (views.mulit_site_admin.multi_site_admin, '/rp/multi_site'),
 
     # add more blue print here

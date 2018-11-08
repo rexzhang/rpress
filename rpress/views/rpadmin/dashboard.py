@@ -3,14 +3,13 @@
 
 
 import flask
-from flask import Blueprint, redirect, url_for, flash
-# from flask import render_template, request
+from flask import flash
 from flask_login import login_required
 
 from rpress.helpers.template.common import render_template
 
 
-app = flask.Blueprint('dashboard', __name__)
+app = flask.Blueprint('rpadmin_dashboard', __name__)
 
 
 @app.route('/')
@@ -19,7 +18,7 @@ def dashboard():
     content = {}
 
     print('11111111')
-    flash('password is changed!')
+    flash('alert demo.')
 
     return render_template(
         'rpadmin/dashboard.html',

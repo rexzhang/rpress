@@ -11,10 +11,10 @@ from rpress.models import User
 from rpress.forms import ProfilesForm, PasswordForm
 
 
-profiles_admin = Blueprint('profiles_admin', __name__)
+app = Blueprint('rpadmin_profile', __name__)
 
 
-@profiles_admin.route('/edit', methods=['GET', 'POST'])
+@app.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit():
     """"""
@@ -30,10 +30,10 @@ def edit():
     else:
         pass
 
-    return render_template('rp/profiles_admin/index.html', form=form)
+    return render_template('rpadmin/profile/index.html', form=form)
 
 
-@profiles_admin.route('/password', methods=['GET', 'POST'])
+@app.route('/password', methods=['GET', 'POST'])
 @login_required
 def change_password():
     """"""
@@ -51,7 +51,7 @@ def change_password():
             db.session.commit()
 
             flash('password is changed!')
-            return redirect(url_for('profiles_admin.edit'))
+            return redirect(url_for('rpadmin_profile.edit'))
 
         else:
             flash("old password is NOT correct")
@@ -59,4 +59,4 @@ def change_password():
     else:
         pass
 
-    return render_template('rp/profiles_admin/change_password.html', form=form)
+    return render_template('rpadmin/profile/change_password.html', form=form)
