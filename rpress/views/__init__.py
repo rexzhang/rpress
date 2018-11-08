@@ -5,7 +5,6 @@
 from . import (  # noqa: F401
     auth,
     post,
-    site_admin,
     site_tools,
     rpadmin,
 )

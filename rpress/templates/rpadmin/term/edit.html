@@ -1,7 +1,7 @@
-{% extends theme('/rp/layout.html') %}
+{% extends theme('/rpadmin/term/layout.html') %}
 
-{% block contentmain %}
-<form method="POST" action="{{ url_for('site_admin.term_edit', name=term.name) }}">
+{% block content %}
+<form method="POST" action="{{ url_for('rpadmin_term.edit', name=term.name) }}">
   {{ form.csrf_token }}
   <div>
     {{ form.name.label }}: {{ form.name }}

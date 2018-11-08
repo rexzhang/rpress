@@ -8,4 +8,5 @@ from . import (  # noqa: F401
     post,
     setting,
     site,
+    term,
 )

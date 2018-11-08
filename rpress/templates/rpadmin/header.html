@@ -26,10 +26,12 @@
           <i class="nav-icon fas fa-file-alt"></i> Pages</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="nav-icon fas fa-copy"></i> Categories</a>
+        <a class="nav-link" href="{{ url_for('rpadmin_term.list', term_type='category') }}">
+          <i class="nav-icon fas fa-copy"></i> Categories</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="nav-icon fas fa-tags"></i> Tags</a>
+        <a class="nav-link" href="{{ url_for('rpadmin_term.list', term_type='tag') }}">
+          <i class="nav-icon fas fa-tags"></i> Tags</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('rpadmin_setting.list') }}">

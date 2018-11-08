@@ -34,7 +34,7 @@ def login():
         # permission to access the `next` url
         # if not next_is_valid(next):
         #    return flaskabort(400)
-        return redirect(next_location or url_for('site_admin.index'))
+        return redirect(next_location or url_for('rpadmin_dashboard.dashboard'))
 
     return render_template('/common/login.html', form=form)
 

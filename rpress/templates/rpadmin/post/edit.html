@@ -1,6 +1,7 @@
-{% extends theme('/rpadmin/post/layout.html') %}
+{% extends theme('/rpadmin/layout.html') %}
 
 {% block navbar_sub %}
+<!-- SubNavbar -->
 <ul class="nav nav-pills">
   <li class="nav-item">
     <a class="nav-link {% if post.publish_status != 'published' %}disabled{% endif %}"
