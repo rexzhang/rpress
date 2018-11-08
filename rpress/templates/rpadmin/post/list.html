@@ -1,0 +1,43 @@
+{% extends theme('/rpadmin/layout.html') %}
+
+<!--{% block contentnav %}-->
+<!--<ul class="nav nav-pills">-->
+<!--<li class="nav-item"><a class="nav-link" href="{{ url_for('rpadmin_post.new', post_type=post_type) }}">New post</a>-->
+<!--</ul>-->
+<!--{% endblock %}-->
+
+{% block navbar_sub %}
+<!-- SubNavbar -->
+<div class="nav-scroller bg-white shadow-sm">
+  <nav class="nav nav-underline">
+    <a class="nav-link" href="{{ url_for('rpadmin_post.list', post_type=post_type) }}">List</a>
+    <a class="nav-link" href="{{ url_for('rpadmin_post.new', post_type=post_type) }}">New</a>
+  </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+  {#
+  <caption>table title and/or explanatory text</caption>
+  #}
+  <thead>
+  <tr>
+    <th>status</th>
+    <th>publish date</th>
+    <th>title</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for post in posts %}
+  <tr>
+    <td>{{ post.publish_status }}</td>
+    <td>{{ post.published_time }}</td>
+    <td><a href="{{ url_for('rpadmin_post.edit', post_id=post.id) }}">{{ post.title }}</a></td>
+  </tr>
+
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

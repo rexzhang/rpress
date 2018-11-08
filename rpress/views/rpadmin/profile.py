@@ -30,7 +30,7 @@ def edit():
     else:
         pass
 
-    return render_template('rpadmin/profile/index.html', form=form)
+    return render_template('rpadmin/profile/list.html', form=form)
 
 
 @app.route('/password', methods=['GET', 'POST'])

@@ -1,6 +1,6 @@
-{% extends theme('/rp/layout.html') %}
+{% extends theme('/rpadmin/layout.html') %}
 
-{% block contentmain %}
+{% block content %}
 Site Info
 <table class="table">
   <thead>
@@ -34,7 +34,7 @@ Site Settings
     {% for key in content.site.settings %}
     <tr>
       <td>{{ key }}</td>
-      <td><a href="{{ url_for('site_admin.setting_edit', key=key) }}">{{ content.site.settings[key] }}</a></td>
+      <td><a href="{{ url_for('rpadmin_setting.edit', key=key) }}">{{ content.site.settings[key] }}</a></td>
     </tr>
 
     {% endfor %}

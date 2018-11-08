@@ -11,19 +11,19 @@ from rpress.models import Site
 from rpress.forms import SiteForm
 
 
-multi_site_admin = Blueprint('multi_site_admin', __name__)
+app = Blueprint('rpadmin_site', __name__)
 
 
-@multi_site_admin.route('', methods=['GET'])
+@app.route('', methods=['GET'])
 @login_required
-def index():
+def list():
     """mulit-site home page"""
     sites = Site.query.all()
 
-    return render_template('rp/multi_site_admin/index.html', sites=sites)
+    return render_template('rpadmin/site/list.html', sites=sites)
 
 
-@multi_site_admin.route('/new', methods=['GET'])
+@app.route('/new', methods=['GET'])
 @login_required
 def new():
     """"""
@@ -31,10 +31,10 @@ def new():
     db.session.add(site)
     db.session.commit()
 
-    return redirect(url_for('.site_edit', site_id=site.id))
+    return redirect(url_for('.edit', site_id=site.id))
 
 
-@multi_site_admin.route('/<uuid:site_id>/edit', methods=['GET', 'POST'])
+@app.route('/<uuid:site_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(site_id):
     """"""
@@ -51,13 +51,13 @@ def edit(site_id):
     else:
         pass  # !!!
 
-    return render_template('rp/multi_site_admin/edit.html', site_id=site_id, form=form)
+    return render_template('rpadmin/site/edit.html', site_id=site_id, form=form)
 
 
-@multi_site_admin.route('/<uuid:site_id>/delete', methods=['GET'])
+@app.route('/<uuid:site_id>/delete', methods=['GET'])
 @login_required
 def delete(site_id):
     """"""
     print(site_id)  # !!!!!
 
-    return redirect(url_for('.index'))
+    return redirect(url_for('.list'))

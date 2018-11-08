@@ -23,7 +23,7 @@ site_tools = Blueprint('site_tools', __name__)
 @site_tools.route('', methods=['GET'])
 @login_required
 def index():
-    return render_template("rp/site_tools/index.html")
+    return render_template("rp/site_tools/list.html")
 
 
 def allowed_file(filename):

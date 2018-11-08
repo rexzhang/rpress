@@ -17,7 +17,6 @@ app = flask.Blueprint('rpadmin_dashboard', __name__)
 def dashboard():
     content = {}
 
-    print('11111111')
     flash('alert demo.')
 
     return render_template(

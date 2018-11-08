@@ -1,8 +1,8 @@
-{% extends theme('/rp/layout.html') %}
+{% extends theme('/rpadmin/layout.html') %}
 
-{% block contentmain %}
+{% block content %}
 key: {{ site_setting.key }}
-<form method="POST" action="{{ url_for('site_admin.setting_edit', key=site_setting.key) }}">
+<form method="POST" action="{{ url_for('rpadmin_setting.edit', key=site_setting.key) }}">
   {{ form.csrf_token }}
   <div>
     {{ form.value.label }}: {{ form.value }}

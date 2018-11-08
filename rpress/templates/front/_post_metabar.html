@@ -13,7 +13,7 @@
         href="{{ url_for('post_page.paginate_with_term_tag', term=tag) }}"> #{{ tag }}</a>{% endfor %}</span>
     <span class="stress">
     {% if post.author_id==user.id %}
-      <a href="{{ url_for('site_admin.post_edit', post_id=post.id) }}">[EDIT]</a>
+      <a href="{{ url_for('rpadmin_post.edit', post_id=post.id) }}">[EDIT]</a>
     {% endif %}
     </span>
   </em>

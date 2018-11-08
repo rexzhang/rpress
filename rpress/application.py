@@ -23,10 +23,12 @@ BLUE_PRINTS = (
 
     (views.rpadmin.dashboard.app, '/rp/admin/dashboard'),
     (views.rpadmin.profile.app, '/rp/admin/profile'),
+    (views.rpadmin.post.app, '/rp/admin/post'),
+    (views.rpadmin.setting.app, '/rp/admin/settings'),
+    (views.rpadmin.site.app, '/rp/admin/site'),
 
     (views.site_admin.site_admin, '/rp/admin'),
     (views.site_tools.site_tools, '/rp/tools'),
-    (views.mulit_site_admin.multi_site_admin, '/rp/multi_site'),
 
     # add more blue print here
 )

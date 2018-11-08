@@ -18,10 +18,12 @@
           <i class="nav-icon fas fa-tachometer-alt"></i> Dashboard</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="nav-icon fas fa-thumbtack"></i> Posts</a>
+        <a class="nav-link" href="{{ url_for('rpadmin_post.list', post_type='blog') }}">
+          <i class="nav-icon fas fa-thumbtack"></i> Blogs</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="nav-icon fas fa-file-alt"></i> Pages</a>
+        <a class="nav-link" href="{{ url_for('rpadmin_post.list', post_type='page') }}">
+          <i class="nav-icon fas fa-file-alt"></i> Pages</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#"><i class="nav-icon fas fa-copy"></i> Categories</a>
@@ -30,13 +32,15 @@
         <a class="nav-link" href="#"><i class="nav-icon fas fa-tags"></i> Tags</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="nav-icon fas fa-sliders-h"></i> Settings</a>
+        <a class="nav-link" href="{{ url_for('rpadmin_setting.list') }}">
+          <i class="nav-icon fas fa-sliders-h"></i> Settings</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="nav-icon fas fa-cogs"></i> Sites</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
-          <a class="dropdown-item" href="#"><i class="nav-icon fas fa-th-list"></i> Site List</a>
+          <a class="dropdown-item" href="{{ url_for('rpadmin_site.list') }}">
+            <i class="nav-icon fas fa-th-list"></i> Site List</a>
           <a class="dropdown-item" href="#"><i class="nav-icon fas fa-file-import"></i> Import Site</a>
         </div>
       </li>

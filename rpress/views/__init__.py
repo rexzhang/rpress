@@ -7,6 +7,5 @@ from . import (  # noqa: F401
     post,
     site_admin,
     site_tools,
-    mulit_site_admin,
     rpadmin,
 )
