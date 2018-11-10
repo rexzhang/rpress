@@ -9,7 +9,7 @@ import flask
 from flask import request, redirect, url_for
 
 from rpress.constants import POST
-from rpress.helpers.template.common import render_template
+from rpress.runtimes.template import render_template
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.models import Post, User, Term, Comment
 

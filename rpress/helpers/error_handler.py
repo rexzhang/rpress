@@ -4,7 +4,7 @@
 
 from flask import redirect, url_for
 
-from rpress.helpers.template.common import render_template
+from rpress.runtimes.template import render_template
 
 
 def auth_failed(e):

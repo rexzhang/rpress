@@ -4,12 +4,12 @@
 
 from sqlalchemy import desc
 import flask
-from flask import flash
+from flask import g, flash
 from flask_login import login_required
 
 from rpress.models import Term
 from rpress.database import db
-from rpress.helpers.template.common import render_template
+from rpress.runtimes.rpadmin.template import render_template, set_navbar
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.forms import TermEditFrom
 
@@ -25,6 +25,8 @@ def list(term_type):
     site = get_current_request_site()
 
     terms = Term.query.filter_by(site=site, type=term_type).order_by(desc('name')).all()
+
+    set_navbar(level1=term_type)
     return render_template(
         'rpadmin/term/list.html',
         terms=terms, term_type=term_type
@@ -43,8 +45,8 @@ def edit(name):
     site = get_current_request_site()
 
     term = Term.query.filter_by(site=site, name=name).first_or_404()  # !!!
-    form = TermEditFrom(obj=term)
 
+    form = TermEditFrom(obj=term)
     if form.validate_on_submit():
         form.populate_obj(term)
 
@@ -57,4 +59,5 @@ def edit(name):
         flash('term edit error')
         pass
 
+    set_navbar(level1=term.type)
     return render_template("rpadmin/term/edit.html", form=form, term=term)

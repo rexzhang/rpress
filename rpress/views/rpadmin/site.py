@@ -2,11 +2,11 @@
 # coding=utf-8
 
 
-from flask import Blueprint, redirect, url_for
+from flask import Blueprint, redirect, url_for, flash
 from flask_login import login_required
 
 from rpress.database import db
-from rpress.helpers.template.common import render_template
+from rpress.runtimes.rpadmin.template import render_template, navbar
 from rpress.models import Site
 from rpress.forms import SiteForm
 
@@ -16,6 +16,7 @@ app = Blueprint('rpadmin_site', __name__)
 
 @app.route('', methods=['GET'])
 @login_required
+@navbar(level1='sites')
 def list():
     """mulit-site home page"""
     sites = Site.query.all()
@@ -36,6 +37,7 @@ def new():
 
 @app.route('/<uuid:site_id>/edit', methods=['GET', 'POST'])
 @login_required
+@navbar(level1='sites')
 def edit(site_id):
     """"""
     site = Site.query.filter_by(id=site_id).first()
@@ -59,5 +61,6 @@ def edit(site_id):
 def delete(site_id):
     """"""
     print(site_id)  # !!!!!
+    flash('delete site:{}, skip...'.format(site_id))
 
     return redirect(url_for('.list'))

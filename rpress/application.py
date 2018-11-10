@@ -27,6 +27,7 @@ BLUE_PRINTS = (
     (views.rpadmin.post.app, '/rp/admin/post'),
     (views.rpadmin.term.app, '/rp/admin/term'),
     (views.rpadmin.setting.app, '/rp/admin/setting'),
+
     (views.rpadmin.site.app, '/rp/admin/site'),
 
     (views.site_tools.site_tools, '/rp/tools'),

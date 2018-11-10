@@ -8,7 +8,7 @@ from flask_login import login_required
 
 from rpress.models import SiteSetting
 from rpress.database import db
-from rpress.helpers.template.common import render_template
+from rpress.runtimes.rpadmin.template import render_template, navbar
 from rpress.helpers.mulit_site import get_current_request_site
 from rpress.helpers.site import get_current_request_site_info
 from rpress.forms import SettingsForm
@@ -18,6 +18,7 @@ app = flask.Blueprint('rpadmin_setting', __name__)
 
 @app.route('/', methods=['GET', ])
 @login_required
+@navbar(level1='settings')
 def list():
     content = {
         'site': get_current_request_site_info(),
@@ -28,6 +29,7 @@ def list():
 
 @app.route('/<string:key>/edit', methods=['GET', 'POST'])
 @login_required
+@navbar(level1='settings')
 def edit(key):
     """"""
     site = get_current_request_site()

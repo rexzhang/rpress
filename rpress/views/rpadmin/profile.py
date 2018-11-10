@@ -6,7 +6,7 @@ from flask import Blueprint, redirect, url_for, flash
 from flask_login import login_required, current_user
 
 from rpress.database import db
-from rpress.helpers.template.common import render_template
+from rpress.runtimes.template import render_template
 from rpress.models import User
 from rpress.forms import ProfilesForm, PasswordForm
 
@@ -30,7 +30,7 @@ def edit():
     else:
         pass
 
-    return render_template('rpadmin/profile/list.html', form=form)
+    return render_template('rpadmin/profile/edit.html', form=form)
 
 
 @app.route('/password', methods=['GET', 'POST'])

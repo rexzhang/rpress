@@ -12,7 +12,7 @@ from flask_login import login_required, current_user
 from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress.models import User, Post
 from rpress.database import db
-from rpress.helpers.template.common import render_template
+from rpress.runtimes.rpadmin.template import render_template, set_navbar
 from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm_publish import PublishFSM
 from rpress.helpers.mulit_site import get_current_request_site
@@ -31,6 +31,7 @@ def list(post_type):
 
     posts = Post.query.filter_by(site=site, type=post_type).order_by(desc('published_time')).all()
 
+    set_navbar(level1=post_type)
     return render_template("rpadmin/post/list.html", posts=posts, post_type=post_type)
 
 
@@ -106,6 +107,8 @@ def edit(post_id):
         pass
 
     post_publish_fsm = PublishFSM(init_state=post.publish_status)
+
+    set_navbar(level1=post.type)
     return render_template(
         "rpadmin/post/edit.html", form=form, post=post,
         publish_triggers=post_publish_fsm.possible_triggers

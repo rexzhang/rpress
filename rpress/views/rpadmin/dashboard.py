@@ -3,21 +3,21 @@
 
 
 import flask
-from flask import flash
+# from flask import flash
 from flask_login import login_required
 
-from rpress.helpers.template.common import render_template
-
+from rpress.runtimes.rpadmin.template import render_template, navbar
 
 app = flask.Blueprint('rpadmin_dashboard', __name__)
 
 
 @app.route('/')
 @login_required
+@navbar(level1='dashboard')
 def dashboard():
     content = {}
 
-    flash('alert demo.')
+    # flash('alert demo.')
 
     return render_template(
         'rpadmin/dashboard.html',
