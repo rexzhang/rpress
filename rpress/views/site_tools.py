@@ -10,7 +10,7 @@ from flask_login import login_required
 
 from rpress.database import db
 from rpress.runtimes.template import render_template
-from rpress.helpers.mulit_site import get_current_request_site
+from rpress.runtimes.current_session import get_current_request_site
 from rpress.helpers.data_init import import_data_from_wordpress_xml
 
 

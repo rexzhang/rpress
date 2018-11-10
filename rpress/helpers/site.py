@@ -4,22 +4,6 @@
 
 from rpress.constants import SITE_SETTINGS_KEY_LIST
 from rpress.models import SiteSetting
-from rpress.helpers.mulit_site import get_current_request_site
-
-
-def get_current_request_site_info():
-    """"""
-    site = get_current_request_site()
-    if site is None:
-        return None
-
-    site_info = {
-        'id': site.id,
-        'domain': site.domain,
-        'settings': get_site_settings(site),
-    }
-
-    return site_info
 
 
 def get_site_settings(site):
@@ -39,12 +23,3 @@ def get_site_settings(site):
         site_settings['theme'] = 'default'
 
     return site_settings
-
-
-def get_current_request_site_settings():
-    """"""
-    site = get_current_request_site()
-    if site is None:
-        return None
-
-    return get_site_settings(site)

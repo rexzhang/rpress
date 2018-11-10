@@ -11,27 +11,43 @@
 {% endblock %}
 
 {% block content %}
-<table class="table">
-  {#
-  <caption>table title and/or explanatory text</caption>
-  #}
-  <thead>
-  <tr>
-    <th>status</th>
-    <th>publish date</th>
-    <th>title</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for post in posts %}
-  <tr>
-    <td>{{ post.publish_status }}</td>
-    <td>{{ post.published_time }}</td>
-    <td><a href="{{ url_for('rpadmin_post.edit', post_id=post.id) }}">{{ post.title }}</a></td>
-  </tr>
+<div class="accordion" id="accordionExample">
+  {% for publish_status in content %}
+  <div class="card border-0">
+    <div class="card-header rounded" id="heading_{{ publish_status }}">
+      <h5 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_{{ publish_status }}"
+                aria-expanded="true" aria-controls="collapse_{{ publish_status }}">
+          {{ publish_status }}
+        </button>
+      </h5>
+    </div>
 
+    <div id="collapse_{{ publish_status }}" class="collapse {% if publish_status=='draft' %}show{% endif %}"
+         aria-labelledby="heading_{{ publish_status }}" data-parent="#accordionExample">
+      <div class="card-body">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>status</th>
+            <th>publish date</th>
+            <th>title</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for post in content[publish_status] %}
+          <tr>
+            <td>{{ post.publish_status }}</td>
+            <td>{{ post.published_time }}</td>
+            <td><a href="{{ url_for('rpadmin_post.edit', post_id=post.id) }}">{{ post.title }}</a></td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
   {% endfor %}
-  </tbody>
-</table>
+</div>
 
 {% endblock %}

@@ -13,26 +13,62 @@ from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress.models import User, Post
 from rpress.database import db
 from rpress.runtimes.rpadmin.template import render_template, set_navbar
+from rpress.runtimes.current_session import get_current_request_site
 from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm_publish import PublishFSM
-from rpress.helpers.mulit_site import get_current_request_site
 from rpress.forms import PostEditForm
 
 app = flask.Blueprint('rpadmin_post', __name__)
 
 
+def flatten(a):
+    for each in a:
+        if not isinstance(each, list):
+            yield each
+        else:
+            yield from flatten(each)
+
+import itertools
+
+
 @app.route('/<string:post_type>/list', methods=['GET'])
 @login_required
 def list(post_type):
+    publish_status_display_list = [
+        PUBLISH_FSM_DEFINE.STATE.DRAFT,
+        PUBLISH_FSM_DEFINE.STATE.UNPUBLISHED,
+        PUBLISH_FSM_DEFINE.STATE.PUBLISHED,
+        PUBLISH_FSM_DEFINE.STATE.TRASH
+    ]  # for pre-sort
+    content = {}
+
     if not is_valid_post_type(post_type):
-        return  # !!!
+        return redirect(url_for('.list', post_type='blog'))
 
     site = get_current_request_site()
+    queryset = Post.query.filter_by(site=site, type=post_type)
 
-    posts = Post.query.filter_by(site=site, type=post_type).order_by(desc('published_time')).all()
+    for x in itertools.chain(*queryset.group_by('publish_status').values('publish_status')):
+        print(x)
+    print('11')
+
+    publish_status_set = set(itertools.chain(*queryset.group_by('publish_status').values('publish_status')))
+    print(publish_status_set)
+    for publish_status in publish_status_display_list:
+        if publish_status not in publish_status_set:
+            continue
+
+        print('!!!')
+        content[publish_status] = queryset.filter_by(
+            publish_status=publish_status
+        ).order_by(desc('published_time')).all()
+
+        # posts = queryset.order_by(desc('published_time')).all()
 
     set_navbar(level1=post_type)
-    return render_template("rpadmin/post/list.html", posts=posts, post_type=post_type)
+    return render_template(
+        "rpadmin/post/list.html", post_type=post_type, content=content
+    )
 
 
 @app.route('/<uuid:post_id>/publish/<string:trigger>', methods=['GET'])
@@ -83,7 +119,7 @@ def new(post_type):
     db.session.add(post)
     db.session.commit()
 
-    return redirect(url_for('.post_edit', post_id=post.id))
+    return redirect(url_for('.edit', post_id=post.id))
 
 
 @app.route('/<uuid:post_id>/edit', methods=['GET', 'POST'])

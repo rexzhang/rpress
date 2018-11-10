@@ -4,12 +4,12 @@
 
 from flask_themes2 import render_theme_template
 
-from rpress.runtimes.current_session import get_user_info, get_site_info
+from rpress.runtimes.current_session import get_current_user_info, get_current_site_info
 
 
 def render_template(template, content=None, **context):
-    context['site'] = get_site_info()
-    context['user'] = get_user_info()
+    context['site'] = get_current_site_info()
+    context['user'] = get_current_user_info()
 
     context['content'] = content
 

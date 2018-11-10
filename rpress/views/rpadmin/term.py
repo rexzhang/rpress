@@ -10,7 +10,7 @@ from flask_login import login_required
 from rpress.models import Term
 from rpress.database import db
 from rpress.runtimes.rpadmin.template import render_template, set_navbar
-from rpress.helpers.mulit_site import get_current_request_site
+from rpress.runtimes.current_session import get_current_request_site
 from rpress.forms import TermEditFrom
 
 app = flask.Blueprint('rpadmin_term', __name__)
