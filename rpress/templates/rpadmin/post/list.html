@@ -18,7 +18,7 @@
       <h5 class="mb-0">
         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_{{ publish_status }}"
                 aria-expanded="true" aria-controls="collapse_{{ publish_status }}">
-          {{ publish_status }}
+          {{ publish_status }} <span class="badge badge-secondary">{{ content[publish_status]['count'] }}</span>
         </button>
       </h5>
     </div>
@@ -29,16 +29,16 @@
         <table class="table">
           <thead>
           <tr>
-            <th>status</th>
-            <th>publish date</th>
+            <th>last published date</th>
+            <th>last updated date</th>
             <th>title</th>
           </tr>
           </thead>
           <tbody>
-          {% for post in content[publish_status] %}
+          {% for post in content[publish_status]['list'] %}
           <tr>
-            <td>{{ post.publish_status }}</td>
             <td>{{ post.published_time }}</td>
+            <td>{{ post.updated_time }}</td>
             <td><a href="{{ url_for('rpadmin_post.edit', post_id=post.id) }}">{{ post.title }}</a></td>
           </tr>
           {% endfor %}

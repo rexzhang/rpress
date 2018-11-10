@@ -28,6 +28,7 @@ def flatten(a):
         else:
             yield from flatten(each)
 
+
 import itertools
 
 
@@ -48,22 +49,15 @@ def list(post_type):
     site = get_current_request_site()
     queryset = Post.query.filter_by(site=site, type=post_type)
 
-    for x in itertools.chain(*queryset.group_by('publish_status').values('publish_status')):
-        print(x)
-    print('11')
-
     publish_status_set = set(itertools.chain(*queryset.group_by('publish_status').values('publish_status')))
-    print(publish_status_set)
     for publish_status in publish_status_display_list:
         if publish_status not in publish_status_set:
             continue
 
-        print('!!!')
-        content[publish_status] = queryset.filter_by(
-            publish_status=publish_status
-        ).order_by(desc('published_time')).all()
-
-        # posts = queryset.order_by(desc('published_time')).all()
+        content[publish_status] = {
+            'count': queryset.filter_by(publish_status=publish_status).count(),
+            'list': queryset.filter_by(publish_status=publish_status).order_by(desc('published_time')).all(),
+        }
 
     set_navbar(level1=post_type)
     return render_template(
