@@ -14,3 +14,27 @@ def render_template(template, content=None, **context):
     context['content'] = content
 
     return render_theme_template(context['site']['settings']['theme'], template, **context)
+
+
+def filter_datetime_short(value):
+    if value is None:
+        return str(None)
+
+    return value.strftime(format="%Y-%m-%d")
+
+
+def filter_datetime_long(value):
+    if value is None:
+        return str(None)
+
+    return value.strftime(format="%Y-%m-%d %H:%M:%S")
+
+
+def configure_filter(app):
+    @app.template_filter()
+    def datetime_short(value):
+        return filter_datetime_short(value)
+
+    @app.template_filter()
+    def datetime_long(value):
+        return filter_datetime_long(value)

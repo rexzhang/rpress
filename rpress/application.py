@@ -10,7 +10,8 @@ from raven.contrib.flask import Sentry
 from rpress.constants import APP_NAME
 from rpress.database import db
 from rpress.runtimes.auth import login_manager
-from rpress.helpers.template.filter import configure_filter
+from rpress.runtimes.template import configure_filter
+from rpress.helpers.template.filter import configure_filter as configure_filter_old
 from rpress.helpers.error_handler import configure_error_handler
 from rpress.config import Config
 from rpress import views
@@ -52,6 +53,7 @@ def create_app(testing=False):
     configure_permission(app)
 
     configure_filter(app)
+    configure_filter_old(app)
     configure_error_handler(app)
 
     configure_blueprints(app)

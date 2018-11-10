@@ -23,7 +23,8 @@
       </h5>
     </div>
 
-    <div id="collapse_{{ publish_status }}" class="collapse {% if publish_status=='draft' %}show{% endif %}"
+    <div id="collapse_{{ publish_status }}"
+         class="collapse {% if publish_status=='draft' or publish_status=='unpublished' %}show{% endif %}"
          aria-labelledby="heading_{{ publish_status }}" data-parent="#accordionExample">
       <div class="card-body">
         <table class="table">
@@ -37,8 +38,8 @@
           <tbody>
           {% for post in content[publish_status]['list'] %}
           <tr>
-            <td>{{ post.published_time }}</td>
-            <td>{{ post.updated_time }}</td>
+            <td>{{ post.published_time|datetime_long }}</td>
+            <td>{{ post.updated_time|datetime_long }}</td>
             <td><a href="{{ url_for('rpadmin_post.edit', post_id=post.id) }}">{{ post.title }}</a></td>
           </tr>
           {% endfor %}

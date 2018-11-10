@@ -27,6 +27,9 @@ def configure_filter(app):
     """"""
     @app.template_filter('datetime2str_short')
     def datetime2str_short(value):
+        if value is None:
+            return str(None)
+
         return value.strftime(format="%Y-%m-%d")
 
     def filter_codeblock_old(string):
