@@ -49,13 +49,13 @@ def list(post_type):
     site = get_current_request_site()
     queryset = Post.query.filter_by(site=site, type=post_type)
 
-    publish_status_set = set(itertools.chain(*queryset.group_by('publish_status').values('publish_status')))
     for publish_status in publish_status_display_list:
-        if publish_status not in publish_status_set:
+        count = queryset.filter_by(publish_status=publish_status).count()
+        if count == 0:
             continue
 
         content[publish_status] = {
-            'count': queryset.filter_by(publish_status=publish_status).count(),
+            'count': count,
             'list': queryset.filter_by(publish_status=publish_status).order_by(desc('published_time')).all(),
         }
 
