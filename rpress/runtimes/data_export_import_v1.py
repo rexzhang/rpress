@@ -3,7 +3,6 @@
 
 
 import datetime
-import codecs
 import json
 from uuid import uuid4
 
@@ -157,9 +156,13 @@ def export_site_data_to_json_str(site_id):
     return json_str, filename
 
 
-def import_site_data_from_json(filename):
+def import_site_data_from_json_fp(fp):
     session = db.session()
     post = None
+    messages = []
+
+    # parser json file
+    data = json.load(fp)
 
     # User
     already_exists_users = {}
@@ -169,7 +172,7 @@ def import_site_data_from_json(filename):
     def get_user_obj(user_name):
         if user_name not in already_exists_users:
             password = uuid4().hex
-            print('new user:{} password:{}'.format(user_name, password))
+            messages.append('new user:{} password:{}'.format(user_name, password))
 
             new_user = User(
                 name=user_name,
@@ -181,9 +184,6 @@ def import_site_data_from_json(filename):
             already_exists_users[user_name] = new_user
 
         return already_exists_users[user_name]
-
-    with codecs.open(filename, encoding='utf-8') as fp:
-        data = json.load(fp)
 
     # Site
     if data.get('site') is None or data['site'].get('domain') is None:
@@ -269,31 +269,28 @@ def import_site_data_from_json(filename):
 
     for post_data in data['posts']:
         post = Post.query.filter_by(id=post_data['id']).first()
-        if post is not None:
-            continue
+        if post is None:
+            post = Post(site=site)
 
-        post = Post(
-            site=site,
+        post.id = post_data['id']
+        post.type = post_data['type']
 
-            id=post_data['id'],
-            type=post_data['type'],
+        post.author = get_user_obj(post_data['author'])
+        post.reviser = None if post_data['reviser'] is None else get_user_obj(post_data['reviser'])
 
-            author=get_user_obj(post_data['author']),
-            reviser=None if post_data['reviser'] is None else get_user_obj(post_data['reviser']),
+        post.created_time = post_data['created_time']
+        post.updated_time = post_data['updated_time']
 
-            created_time=post_data['created_time'],
-            updated_time=post_data['updated_time'],
+        post.published = post_data['published']
+        post.publish_status = post_data['publish_status']
+        post.published_time = post_data['published_time']
 
-            published=post_data['published'],
-            publish_status=post_data['publish_status'],
-            published_time=post_data['published_time'],
+        post.name = post_data['name']
+        post.title = post_data['title']
+        post.content = post_data['content']
 
-            name=post_data['name'],
-            title=post_data['title'],
-            content=post_data['content'],
+        post.allow_comment = post_data['allow_comment']
 
-            allow_comment=post_data['allow_comment'],
-        )
         session.add(post)
 
         for new_term_type in ['category', 'tag']:
@@ -304,4 +301,4 @@ def import_site_data_from_json(filename):
             add_comment()
 
     session.commit()
-    return
+    return messages

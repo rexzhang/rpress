@@ -10,7 +10,7 @@ import click
 from flask.cli import with_appcontext
 
 from rpress.models import Site
-from rpress.runtimes.data_export_import_v1 import export_site_data_to_json_str, import_site_data_from_json
+from rpress.runtimes.data_export_import_v1 import export_site_data_to_json_str, import_site_data_from_json_fp
 
 
 @click.command()
@@ -32,6 +32,9 @@ def command_import():
     for filename in p.glob('*.rpress.json'):
         # compatible 3.5
         # TypeError: invalid file: PosixPath
-        import_site_data_from_json(str(filename))
+        with codecs.open(filename, encoding='utf-8') as fp:
+            messages = import_site_data_from_json_fp(fp)
 
+        for message in messages:
+            print(message)
     return

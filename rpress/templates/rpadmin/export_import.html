@@ -7,7 +7,7 @@
       <h5 class="card-title">Export Site</h5>
       <h6 class="card-subtitle mb-2 text-muted">rPress format</h6>
       <p class="card-text">Download site data to rPress file.</p>
-      <a href="{{ url_for('rpadmin_export_import.export') }}" class="btn btn-outline-primary" role="button">download</a>
+      <a href="{{ url_for('rpadmin_export_import.export') }}" class="btn btn-outline-primary" role="button">Download</a>
     </div>
   </div>
   <div class="card" style="width: 18rem;">
@@ -15,17 +15,28 @@
       <h5 class="card-title">Import Site</h5>
       <h6 class="card-subtitle mb-2 text-muted">rPress format</h6>
       <p class="card-text">Upload rPress file, update site data.</p>
-      <button class="btn btn-outline-primary">upload</button>
+      <div class="card-body">
+        <form method=post enctype=multipart/form-data>
+          <!--<div class=" form-group">-->
+          <input type="file" class="form-control-file" name="file" id="exampleFormControlFile1">
+          <input type="submit" class="btn btn-outline-primary" value=Upload>
+          <!--</div>-->
+        </form>
+      </div>
+      <!--<button class="btn btn-outline-primary">upload</button>-->
     </div>
   </div>
+  <form>
+
+  </form>
   <!--<div class="card" style="width: 18rem;">-->
-    <!--<div class="card-body">-->
-      <!--<h5 class="card-title">Import site</h5>-->
-      <!--<h6 class="card-subtitle mb-2 text-muted">WordPress format</h6>-->
-      <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's-->
-        <!--content.</p>-->
-      <!--<button class="btn btn-outline-primary">download</button>-->
-    <!--</div>-->
+  <!--<div class="card-body">-->
+  <!--<h5 class="card-title">Import site</h5>-->
+  <!--<h6 class="card-subtitle mb-2 text-muted">WordPress format</h6>-->
+  <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's-->
+  <!--content.</p>-->
+  <!--<button class="btn btn-outline-primary">download</button>-->
+  <!--</div>-->
   <!--</div>-->
 </div>
 {% endblock %}
