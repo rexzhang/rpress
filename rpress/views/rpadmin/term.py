@@ -10,7 +10,7 @@ from flask_login import login_required
 from rpress.models import Term
 from rpress.database import db
 from rpress.runtimes.rpadmin.template import render_template, set_navbar
-from rpress.runtimes.current_session import get_current_request_site
+from rpress.runtimes.current_session import get_current_site
 from rpress.forms import TermEditFrom
 
 app = flask.Blueprint('rpadmin_term', __name__)
@@ -22,7 +22,7 @@ def list(term_type):
     if term_type not in ['category', 'tag']:
         return  # !!!
 
-    site = get_current_request_site()
+    site = get_current_site()
 
     terms = Term.query.filter_by(site=site, type=term_type).order_by(desc('name')).all()
 
@@ -42,7 +42,7 @@ def new(term_type):
 @app.route('/<string:name>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(name):
-    site = get_current_request_site()
+    site = get_current_site()
 
     term = Term.query.filter_by(site=site, name=name).first_or_404()  # !!!
 

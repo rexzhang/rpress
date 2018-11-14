@@ -9,7 +9,7 @@ from flask_login import login_required
 from rpress.models import SiteSetting
 from rpress.database import db
 from rpress.runtimes.rpadmin.template import render_template, navbar
-from rpress.runtimes.current_session import get_current_request_site, get_current_site_info
+from rpress.runtimes.current_session import get_current_site, get_current_site_info
 from rpress.forms import SettingsForm
 
 app = flask.Blueprint('rpadmin_setting', __name__)
@@ -23,7 +23,7 @@ def list():
         'site': get_current_site_info(),
     }
 
-    return render_template('rpadmin/setting/list.html', content=content)
+    return render_template('rpadmin/settings/list.html', content=content)
 
 
 @app.route('/<string:key>/edit', methods=['GET', 'POST'])
@@ -31,7 +31,7 @@ def list():
 @navbar(level1='settings')
 def edit(key):
     """"""
-    site = get_current_request_site()
+    site = get_current_site()
     site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
     if site_setting is None:
         site_setting = SiteSetting(
@@ -48,8 +48,8 @@ def edit(key):
         db.session.add(site_setting)
         db.session.commit()
 
-        flash("setting updated", "success")
+        flash("settings updated", "success")
     else:
-        flash('setting edit error')
+        flash('settings edit error')
 
-    return render_template("rpadmin/setting/edit.html", form=form, site_setting=site_setting)
+    return render_template("rpadmin/settings/edit.html", form=form, site_setting=site_setting)

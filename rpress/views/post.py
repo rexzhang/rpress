@@ -10,7 +10,7 @@ from flask import request, redirect, url_for
 
 from rpress.constants import POST
 from rpress.runtimes.template import render_template
-from rpress.runtimes.current_session import get_current_request_site
+from rpress.runtimes.current_session import get_current_site
 from rpress.models import Post, User, Term, Comment
 
 """
@@ -74,7 +74,7 @@ post_page = flask.Blueprint('post_page', __name__)
 
 def _sidebar():
     """"""
-    site = get_current_request_site()  # TODO!!!应该传进来
+    site = get_current_site()  # TODO!!!应该传进来
 
     categories = []
     terms = Term.query.filter_by(site=site, type='category').order_by('name').all()
@@ -155,7 +155,7 @@ def _post_info(post):
 
 def _post_term(term, paginate):
     """"""
-    site = get_current_request_site()
+    site = get_current_site()
 
     query = Post.query.filter_by(
         site=site, type=POST.TYPE.BLOG, published=True
@@ -213,7 +213,7 @@ def _render_one_post(post):
 @post_page.route('/paginate/<int:page_num>', methods=['GET'])
 def paginate_with_all(page_num=1):
     """"""
-    site = get_current_request_site()
+    site = get_current_site()
 
     query = Post.query.filter_by(site=site, type='blog', published=True).order_by(desc('published_time'))
     paginate = {
@@ -229,7 +229,7 @@ def paginate_with_all(page_num=1):
 @post_page.route('/date/<int:year>/paginate/<int:page_num>', methods=['GET'])
 def paginate_with_year(year, page_num=1):
     """"""
-    site = get_current_request_site()
+    site = get_current_site()
 
     query = Post.query.filter_by(
         site=site, type='blog', published=True
@@ -277,7 +277,7 @@ def paginate_with_term_tag(term, page_num=1):
 @post_page.route('/author/<string:author>/paginate/<int:page_num>', methods=['GET'])
 def paginate_with_author(author, page_num=1):
     """"""
-    site = get_current_request_site()
+    site = get_current_site()
 
     query = Post.query.filter_by(site=site, type='blog', published=True).filter(
         Post.author.has(User.name == author)).order_by(desc('published_time'))
@@ -294,7 +294,7 @@ def paginate_with_author(author, page_num=1):
 @post_page.route("/search/paginate/<int:page_num>/")
 def paginate_with_search(page_num=1):
     """"""
-    site = get_current_request_site()
+    site = get_current_site()
     keywords = request.args.get('keywords', '').strip(',')
 
     if not keywords:
@@ -324,7 +324,7 @@ def paginate_with_search(page_num=1):
 @post_page.route('/post/<uuid:post_id>', methods=['GET', ])
 def one_with_id(post_id):
     """"""
-    site = get_current_request_site()
+    site = get_current_site()
 
     post = Post.query.filter_by(site=site, id=post_id, published=True).first_or_404()
     return _render_one_post(post)
@@ -333,7 +333,7 @@ def one_with_id(post_id):
 @post_page.route('/<string:post_name>', methods=['GET', ])
 def one_with_name(post_name):
     """"""
-    site = get_current_request_site()
+    site = get_current_site()
 
     post = Post.query.filter_by(site=site, name=post_name, published=True, type='page').first_or_404()
     return _render_one_post(post)

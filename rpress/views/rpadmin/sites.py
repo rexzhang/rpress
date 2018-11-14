@@ -10,7 +10,6 @@ from rpress.runtimes.rpadmin.template import render_template, navbar
 from rpress.models import Site
 from rpress.forms import SiteForm
 
-
 app = Blueprint('rpadmin_site', __name__)
 
 
@@ -21,7 +20,7 @@ def list():
     """mulit-site home page"""
     sites = Site.query.all()
 
-    return render_template('rpadmin/site/list.html', sites=sites)
+    return render_template('rpadmin/sites/list.html', sites=sites)
 
 
 @app.route('/new', methods=['GET'])
@@ -53,7 +52,7 @@ def edit(site_id):
     else:
         pass  # !!!
 
-    return render_template('rpadmin/site/edit.html', site_id=site_id, form=form)
+    return render_template('rpadmin/sites/edit.html', site_id=site_id, form=form)
 
 
 @app.route('/<uuid:site_id>/delete', methods=['GET'])

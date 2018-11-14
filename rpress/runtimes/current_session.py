@@ -23,7 +23,7 @@ def get_current_site_domain():
     return request.environ['HTTP_HOST'].split(':')[0]
 
 
-def get_current_request_site():
+def get_current_site():
     """current site object for current request"""
     domain = get_current_site_domain()
 
@@ -36,7 +36,7 @@ def get_current_request_site():
 
 def get_current_site_info():
     """current session site info"""
-    site = get_current_request_site()  # TODO: redis cache site info
+    site = get_current_site()  # TODO: redis cache site info
     if site is None:
         return None
 

@@ -71,7 +71,7 @@ data_format = {
 """
 
 
-def export_site_data_to_json(site_id):
+def export_site_data_to_json_str(site_id):
     site = Site.query.filter_by(id=site_id).first()
     if site is None:
         return
@@ -103,18 +103,18 @@ def export_site_data_to_json(site_id):
 
     for post in Post.query.filter_by(site=site):
         post_data = {
-            'id': post.id,
+            'id': str(post.id),
             'type': post.type,
 
             'author': user_map_id_to_name[post.author_id],
             'reviser': None if post.reviser_id is None else user_map_id_to_name[post.reviser_id],
 
             'created_time': post.created_time.isoformat(),
-            'updated_time': None if post.update_date is None else post.update_date.isoformat(),
+            'updated_time': None if post.updated_time is None else post.updated_time.isoformat(),
 
             'published': post.published,
             'publish_status': post.publish_status,
-            'published_time': post.published_time.isoformat(),
+            'published_time': None if post.published_time is None else post.published_time.isoformat(),
 
             'name': post.name,
             'title': post.title,
@@ -138,24 +138,23 @@ def export_site_data_to_json(site_id):
         for comment in Comment.query.filter_by(post=post):
             comment_data = {
                 'commenter': {
-                    'name': comment.author_name,
-                    'email': comment.author_email,
-                    'ip': comment.author_ip,
-                    'url': comment.author_url,
+                    'name': comment.commenter_name,
+                    'email': comment.commenter_email,
+                    'ip': comment.commenter_ip,
+                    'url': comment.commenter_url,
                 },
 
-                'time': comment.publish_date.isoformat(),
+                'time': comment.created_time.isoformat(),
                 'content': comment.content,
             }
             post_data['comments'].append(comment_data)
 
         data['posts'].append(post_data)
 
-    filename = '{}.{}.rpress.json'.format(site.domain, datetime.datetime.now().isoformat())
-    with codecs.open(filename, 'w+', encoding='utf-8') as fp:
-        json.dump(data, fp, indent=4, ensure_ascii=False)
+    json_str = json.dumps(data, indent=4, ensure_ascii=False)
+    filename = '{}.{}.rpress.json'.format(site.domain, datetime.datetime.now().strftime('%Y-%m-%d.%H-%M-%S.%f'))
 
-    return
+    return json_str, filename
 
 
 def import_site_data_from_json(filename):
@@ -187,10 +186,17 @@ def import_site_data_from_json(filename):
         data = json.load(fp)
 
     # Site
-    site = Site(domain=data['site']['domain'])
-    session.add(site)
-    session.flush()
+    if data.get('site') is None or data['site'].get('domain') is None:
+        return
 
+    domian = data['site']['domain']
+    site = Site.query.filter_by(domain=domian).first()
+    if site is None:
+        site = Site(domain=domian)
+        session.add(site)
+        session.flush()
+
+    # Site Settings
     for key in data['site']['settings']:
         site_setting = SiteSetting(
             site=site,
@@ -262,6 +268,10 @@ def import_site_data_from_json(filename):
         return comment.id
 
     for post_data in data['posts']:
+        post = Post.query.filter_by(id=post_data['id']).first()
+        if post is not None:
+            continue
+
         post = Post(
             site=site,
 

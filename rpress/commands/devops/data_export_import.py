@@ -2,20 +2,25 @@
 # coding=utf-8
 
 
+import codecs
+
 from pathlib import Path
 
 import click
 from flask.cli import with_appcontext
 
 from rpress.models import Site
-from rpress.runtimes.data_export_import_v1 import export_site_data_to_json, import_site_data_from_json
+from rpress.runtimes.data_export_import_v1 import export_site_data_to_json_str, import_site_data_from_json
 
 
 @click.command()
 @with_appcontext
 def command_export():
     for site in Site.query:
-        export_site_data_to_json(site.id)
+        json_str, filename = export_site_data_to_json_str(site.id)
+
+        with codecs.open(filename, 'w+', encoding='utf-8') as fp:
+            fp.write(json_str)
 
     return
 

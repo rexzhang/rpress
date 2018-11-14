@@ -5,8 +5,12 @@
 from . import (  # noqa: F401
     dashboard,
     profile,
+
     post,
-    setting,
-    site,
     term,
+
+    settings,
+    export_import,
+
+    sites,
 )

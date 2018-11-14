@@ -27,9 +27,11 @@ BLUE_PRINTS = (
 
     (views.rpadmin.post.app, '/rp/admin/post'),
     (views.rpadmin.term.app, '/rp/admin/term'),
-    (views.rpadmin.setting.app, '/rp/admin/setting'),
 
-    (views.rpadmin.site.app, '/rp/admin/site'),
+    (views.rpadmin.settings.app, '/rp/admin/settings'),
+    (views.rpadmin.export_import.app, '/rp/admin/export_import'),
+
+    (views.rpadmin.sites.app, '/rp/admin/sites'),
 
     (views.site_tools.site_tools, '/rp/tools'),
 

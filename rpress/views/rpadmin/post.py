@@ -13,7 +13,7 @@ from rpress.constants import PUBLISH_FSM_DEFINE
 from rpress.models import User, Post
 from rpress.database import db
 from rpress.runtimes.rpadmin.template import render_template, set_navbar
-from rpress.runtimes.current_session import get_current_request_site
+from rpress.runtimes.current_session import get_current_site
 from rpress.helpers.validate import is_valid_post_type
 from rpress.helpers.fsm_publish import PublishFSM
 from rpress.forms import PostEditForm
@@ -27,9 +27,6 @@ def flatten(a):
             yield each
         else:
             yield from flatten(each)
-
-
-import itertools
 
 
 @app.route('/<string:post_type>/list', methods=['GET'])
@@ -46,7 +43,7 @@ def list(post_type):
     if not is_valid_post_type(post_type):
         return redirect(url_for('.list', post_type='blog'))
 
-    site = get_current_request_site()
+    site = get_current_site()
     queryset = Post.query.filter_by(site=site, type=post_type)
 
     for publish_status in publish_status_display_list:
@@ -107,7 +104,7 @@ def new(post_type):
     if user is None:
         return
 
-    site = get_current_request_site()
+    site = get_current_site()
 
     post = Post(author=user, site=site, type=post_type)
     db.session.add(post)

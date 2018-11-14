@@ -37,13 +37,16 @@
         <a class="nav-link" href="{{ url_for('rpadmin_setting.list') }}">
           <i class="nav-icon fas fa-sliders-h"></i> Settings</a>
       </li>
+      <li class="nav-item {% if g.navbar_lv1 == 'export_import' %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('rpadmin_export_import.index') }}">
+          <i class="nav-icon fas fa-file-import"></i> Export/Import</a>
+      </li>
       <li class="nav-item dropdown {% if g.navbar_lv1 == 'sites' %}active{% endif %}">
-        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="nav-icon fas fa-cogs"></i> Sites</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
           <a class="dropdown-item" href="{{ url_for('rpadmin_site.list') }}">
             <i class="nav-icon fas fa-th-list"></i> Site List</a>
-          <a class="dropdown-item" href="#"><i class="nav-icon fas fa-file-import"></i> Import Site</a>
         </div>
       </li>
     </ul>
