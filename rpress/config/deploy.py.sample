@@ -12,7 +12,12 @@ class Config(ConfigBase):
     ConfigBase.SQLALCHEMY_DATABASE['USER'] = 'username'
     ConfigBase.SQLALCHEMY_DATABASE['PASSWORD'] = 'password'
 
+    # Session/Cookie/Flask-Login
+    SECRET_KEY = "secret_key_change_it"
+
+    # Sentry
     SENTRY_CONFIG = {
         'DSN': 'https://xxx:xxx@sentry.io/123',
         'ENVIRONMENT': 'rPress-Release',
     }
+i

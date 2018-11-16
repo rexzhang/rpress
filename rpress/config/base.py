@@ -32,7 +32,7 @@ class ConfigBase(ConfigAbstract):
     PERMANENT_SESSION_LIFETIME = timedelta(hours=8)
 
     # Theme
-    THEME_DEFAULT = 'rexzhangcom'
+    THEME_DEFAULT = 'default'
 
     # Sentry
     SENTRY_CONFIG = {
