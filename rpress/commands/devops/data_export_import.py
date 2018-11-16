@@ -31,8 +31,8 @@ def command_import():
     p = Path('.')
     for filename in p.glob('*.rpress.json'):
         # compatible 3.5
-        # TypeError: invalid file: PosixPath
-        with codecs.open(filename, encoding='utf-8') as fp:
+        # TypeError: invalid file: PosixPath, str(filename)
+        with codecs.open(str(filename), encoding='utf-8') as fp:
             messages = import_site_data_from_json_fp(fp)
 
         for message in messages:
