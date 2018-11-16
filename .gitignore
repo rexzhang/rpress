@@ -1,6 +1,7 @@
 # develop env
 .idea/
 venv/
+.venv/
 *.sqlite3
 
 # python
