@@ -10,10 +10,7 @@
 }
 
 .area-common {
-  padding-top: $base-page-blank-width * 1.75;
-  padding-bottom: $base-page-blank-width * 1.75;
-  padding-left: $base-page-blank-width;
-  padding-right: $base-page-blank-width;
+  padding: $base-page-blank-width * 1.75 $base-page-blank-width $base-page-blank-width * 1.75 $base-page-blank-width;
 }
 
 .underline-box {
@@ -59,7 +56,7 @@ h1, h2, h3, h4, h5, h6 {
 #header {
   @extend .area-common;
 
-  padding-bottom: 0px;
+  padding-bottom: 0;
 }
 
 .site-title {
@@ -96,26 +93,20 @@ h1, h2, h3, h4, h5, h6 {
 //------------------------------------------------------
 // navigation
 #navigation {
-  padding-right: 0px;
+  padding: 0 15px 0 30px;
 
-  @extend .underline-box;
+  //@extend .underline-box;
 }
 
 .nav-box-common {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 10px 15px 10px 15px;
 }
 
 .nav-mainmenu {
   font-size: 14px;
   font-family: $font-family-second;
-  margin-bottom: 0px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 0px;
-  padding-right: 0px;
+  margin-bottom: 0;
+  padding: 10px 0 10px 0;
   float: left;
 
   ul {
@@ -252,10 +243,7 @@ h1, h2, h3, h4, h5, h6 {
 
   ul {
     list-style-type: none;
-    padding-top: 2.1px;
-    padding-bottom: 2.1px;
-    padding-left: 10px;
-    padding-right: 2px;
+    padding: 2.1px 2px 2.1px 10px;
   }
 
   li {
@@ -267,7 +255,7 @@ h1, h2, h3, h4, h5, h6 {
 //------------------------------------------------------
 // footer
 #one-word {
-  margin: 0px;
+  margin: 0;
   padding: 0.5em;
   color: $color-gray;
   background-color: $color-gray-light;
@@ -319,7 +307,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 2em;
   padding: 10em;
   text-align: center;
-  align: center;
+  align-self: center;
 
   h1 {
     font-family: $font-family-major;

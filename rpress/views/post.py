@@ -73,7 +73,6 @@ post_page = flask.Blueprint('post_page', __name__)
 
 
 def _sidebar():
-    """"""
     site = get_current_site()  # TODO!!!应该传进来
 
     categories = []
@@ -104,7 +103,6 @@ def _sidebar():
 
 
 def _widget_date_year():
-    """"""
     date_years = {}
 
     for post in Post.query.filter_by(type='blog', published=True):
@@ -123,7 +121,6 @@ def _widget_date_year():
 
 
 def _post_info(post):
-    """"""
     categorys = []
     tags = []
     for term in post.terms:
@@ -154,7 +151,6 @@ def _post_info(post):
 
 
 def _post_term(term, paginate):
-    """"""
     site = get_current_site()
 
     query = Post.query.filter_by(
@@ -167,7 +163,6 @@ def _post_term(term, paginate):
 
 
 def _render_paginate_post_page(query, paginate):
-    """"""
     post_paginate = query.paginate(paginate['curr_num'], per_page=10)
 
     paginate['has_prev'] = post_paginate.has_prev
@@ -212,7 +207,6 @@ def _render_one_post(post):
 @post_page.route('/', methods=['GET'])
 @post_page.route('/paginate/<int:page_num>', methods=['GET'])
 def paginate_with_all(page_num=1):
-    """"""
     site = get_current_site()
 
     query = Post.query.filter_by(site=site, type='blog', published=True).order_by(desc('published_time'))
@@ -228,7 +222,6 @@ def paginate_with_all(page_num=1):
 @post_page.route('/date/<int:year>', methods=['GET'])
 @post_page.route('/date/<int:year>/paginate/<int:page_num>', methods=['GET'])
 def paginate_with_year(year, page_num=1):
-    """"""
     site = get_current_site()
 
     query = Post.query.filter_by(
@@ -250,7 +243,6 @@ def paginate_with_year(year, page_num=1):
 @post_page.route('/category/<string:term>', methods=['GET'])
 @post_page.route('/category/<string:term>/paginate/<int:page_num>', methods=['GET'])
 def paginate_with_term_category(term, page_num=1):
-    """"""
     paginate = {
         'desc': 'Viewing the category',
         'curr_num': page_num,
@@ -263,7 +255,6 @@ def paginate_with_term_category(term, page_num=1):
 @post_page.route('/tag/<string:term>', methods=['GET'])
 @post_page.route('/tag/<string:term>/paginate/<int:page_num>', methods=['GET'])
 def paginate_with_term_tag(term, page_num=1):
-    """"""
     paginate = {
         'desc': 'Viewing the tag',
         'curr_num': page_num,
@@ -276,7 +267,6 @@ def paginate_with_term_tag(term, page_num=1):
 @post_page.route('/author/<string:author>', methods=['GET'])
 @post_page.route('/author/<string:author>/paginate/<int:page_num>', methods=['GET'])
 def paginate_with_author(author, page_num=1):
-    """"""
     site = get_current_site()
 
     query = Post.query.filter_by(site=site, type='blog', published=True).filter(
@@ -293,12 +283,11 @@ def paginate_with_author(author, page_num=1):
 @post_page.route("/search/")
 @post_page.route("/search/paginate/<int:page_num>/")
 def paginate_with_search(page_num=1):
-    """"""
     site = get_current_site()
     keywords = request.args.get('keywords', '').strip(',')
 
     if not keywords:
-        return redirect(url_for("post_page.index"))
+        return redirect(url_for("post_page.paginate_with_all"))  # TODO:提醒用户输入关键字
 
     post_query = Post.query.search(site=site, keywords=keywords)  # TODO!!!!当前搜索多个关键字有bug
 
@@ -323,7 +312,6 @@ def paginate_with_search(page_num=1):
 
 @post_page.route('/post/<uuid:post_id>', methods=['GET', ])
 def one_with_id(post_id):
-    """"""
     site = get_current_site()
 
     post = Post.query.filter_by(site=site, id=post_id, published=True).first_or_404()
@@ -332,7 +320,6 @@ def one_with_id(post_id):
 
 @post_page.route('/<string:post_name>', methods=['GET', ])
 def one_with_name(post_name):
-    """"""
     site = get_current_site()
 
     post = Post.query.filter_by(site=site, name=post_name, published=True, type='page').first_or_404()

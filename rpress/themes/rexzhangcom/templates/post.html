@@ -1,9 +1,6 @@
 {% extends theme('layout.html') %}
-
 {% block title %}{{ content.post.title }}{{ super() }}{% endblock %}
-
 {% block carousel %}{% include theme('_carousel_post.html') %}{% endblock %}
-
 {% block content %}
 <div id="post">
   <div class="post-summary-box">
@@ -30,7 +27,6 @@
   {% if content.post.allow_comment %}{% include theme('/front/_disqus_thread.html') %}{% endif %}
 </div>
 {% endblock %}
-
 {% block js %}{{ super() }}
 {% if content.post.allow_comment %}{% include theme('/front/_disqus_js.html') %}{% endif %}
 {% endblock %}
