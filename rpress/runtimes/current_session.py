@@ -23,7 +23,7 @@ def get_current_user_info():
 def get_current_site_domain():
     """current request site domain, like rexzhang.com"""
     # https://werkzeug-docs-cn.readthedocs.io/zh_CN/latest/wrappers.html
-    return request.environ.host.split(':')[0]
+    return request.host.split(':')[0]
 
 
 def get_current_site():
