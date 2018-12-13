@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
+
+
 from flask import request
 from flask_login import current_user
 
@@ -20,7 +22,8 @@ def get_current_user_info():
 
 def get_current_site_domain():
     """current request site domain, like rexzhang.com"""
-    return request.environ['HTTP_HOST'].split(':')[0]
+    # https://werkzeug-docs-cn.readthedocs.io/zh_CN/latest/wrappers.html
+    return request.environ.host.split(':')[0]
 
 
 def get_current_site():
