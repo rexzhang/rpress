@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.8
+-----------
+- compatible Flask-Vises 2.0.0
+- fix import error in docker container
+- upgrade bootstrap to v4.1.3
+- new login page
+- new rpadmin UI
+
 Version 0.7
 -----------
 - new password hash method
