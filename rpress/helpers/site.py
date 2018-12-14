@@ -13,7 +13,7 @@ def get_site_settings(site):
     site_settings = {}
 
     for key in SITE_SETTINGS_KEY_LIST:
-        setting = SiteSetting.query.filter_by(site=site, key=key).first()
+        setting = SiteSetting.query.filter_by(site=site, key=key).order_by('created_time').first()
         if setting is None or len(setting.value) == 0:
             site_settings[key] = None
         else:

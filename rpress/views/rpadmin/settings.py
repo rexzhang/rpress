@@ -30,9 +30,8 @@ def list():
 @login_required
 @navbar(level1='settings')
 def edit(key):
-    """"""
     site = get_current_site()
-    site_setting = SiteSetting.query.filter_by(site=site, key=key).first()
+    site_setting = SiteSetting.query.filter_by(site=site, key=key).order_by('created_time').first()
     if site_setting is None:
         site_setting = SiteSetting(
             site_id=site.id,
