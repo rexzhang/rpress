@@ -3,6 +3,7 @@
 
 
 import re
+from datetime import datetime
 
 from sqlalchemy import desc
 import flask
@@ -65,7 +66,6 @@ def list(post_type):
 @app.route('/<uuid:post_id>/publish/<string:trigger>', methods=['GET'])
 @login_required
 def change_publish_status(post_id, trigger):
-    """"""
     post = Post.query.filter_by(id=post_id).first_or_404()
     if post.name is None or post.content is None:
         flash('can not change publish status!')
@@ -84,6 +84,7 @@ def change_publish_status(post_id, trigger):
     post.publish_status = post_publish_fsm.state
     if post_publish_fsm.state == PUBLISH_FSM_DEFINE.STATE.PUBLISHED:
         post.published = True
+        post.published_time = datetime.now()
     else:
         post.published = False
 
