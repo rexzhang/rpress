@@ -5,7 +5,8 @@
 from flask import Flask
 from flask_themes2 import Themes
 from flask_vises.database import configure_db
-from raven.contrib.flask import Sentry
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 from rpress.constants import APP_NAME
 from rpress.database import db
@@ -92,7 +93,12 @@ def configure_blueprints(app):
 def configure_sentry(app):
     sentry_config = app.config.get('SENTRY_CONFIG', {})
     dsn = sentry_config.get('DSN', None)
+    environment = sentry_config.get('ENVIRONMENT', None)
     if dsn is not None:
-        Sentry(app, dsn=dsn)
+        sentry_sdk.init(
+            dsn=dsn,
+            environment=environment,
+            integrations=[FlaskIntegration()]
+        )
 
-    return
+        return

@@ -37,5 +37,5 @@ class ConfigBase(ConfigAbstract):
     # Sentry
     SENTRY_CONFIG = {
         'DSN': None,
-        'ENVIRONMENT': 'rPress-develop',
+        'ENVIRONMENT': 'develop',
     }

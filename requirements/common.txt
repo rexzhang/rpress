@@ -22,4 +22,4 @@ transitions
 
 # deploy
 gunicorn
-raven[flask]
+sentry-sdk[flask]

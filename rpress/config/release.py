@@ -18,4 +18,4 @@ class Config(ConfigBase):
     SECRET_KEY = "THIS IS SECRET KEY, PLEASE CHANGE FOR PRODUCT ENVIRONMENT"
 
     # Sentry
-    ConfigBase.SENTRY_CONFIG['ENVIRONMENT'] = 'rPress-Release'
+    ConfigBase.SENTRY_CONFIG['ENVIRONMENT'] = 'release'
