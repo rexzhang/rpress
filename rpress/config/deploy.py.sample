@@ -16,8 +16,4 @@ class Config(ConfigBase):
     SECRET_KEY = "secret_key_change_it"
 
     # Sentry
-    SENTRY_CONFIG = {
-        'DSN': 'https://xxx:xxx@sentry.io/123',
-        'ENVIRONMENT': 'rPress-Release',
-    }
-
+    ConfigBase.SENTRY_CONFIG['DSN'] = 'https://xxx:xxx@sentry.io/123'
