@@ -5,6 +5,7 @@ Version 0.9
 -----------
 - Remove old rp template
 - Upgrade sentry SDK
+- Run as nobody
 - Fix bug
 
 Version 0.8
