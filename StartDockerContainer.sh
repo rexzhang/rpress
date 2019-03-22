@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+docker pull python:3
+
 docker build -t ray1ex/rpress .
 docker rmi -f $(docker images -qa -f "dangling=true")
 

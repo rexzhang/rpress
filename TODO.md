@@ -6,6 +6,9 @@ TODO
 	* web 后台 add new site 不能正常工作？
 	* 当 get_current_request_site 获取失败时，应该有错误处理和提示？？
 		* 做一个 mulit_site_view 装饰符
+    * 当数据库不可用是提供正确的提示
+    * 以非 root 身份运行
+    * 释放数据库链接
 
 * 0.Y
 	* 清除 post 内多余的格式信息，工具，编辑界面

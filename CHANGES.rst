@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 0.9
+-----------
+- Remove old rp template
+- Upgrade sentry SDK
+- Fix bug
+
 Version 0.8
 -----------
 - compatible Flask-Vises 2.0.0
