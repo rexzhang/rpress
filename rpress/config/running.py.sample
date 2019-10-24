@@ -2,12 +2,12 @@
 # coding=utf-8
 
 
-from .release import Config as ConfigBase
+from .develop import Config as ConfigBase
 
 
 class Config(ConfigBase):
     # database
-    ConfigBase.SQLALCHEMY_DATABASE['HOST'] = 'host.docker.internal'
+    ConfigBase.SQLALCHEMY_DATABASE['HOST'] = 'localhost'
     ConfigBase.SQLALCHEMY_DATABASE['NAME'] = 'rpress_0_x'
     ConfigBase.SQLALCHEMY_DATABASE['USER'] = 'username'
     ConfigBase.SQLALCHEMY_DATABASE['PASSWORD'] = 'password'

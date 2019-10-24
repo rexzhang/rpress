@@ -19,8 +19,11 @@ class ConfigBase(ConfigAbstract):
     TESTING = False
 
     # Database
+    ConfigAbstract.SQLALCHEMY_DATABASE['ENGINE'] = 'postgresql'
+    ConfigAbstract.SQLALCHEMY_DATABASE['HOST'] = 'localhost'
+    ConfigAbstract.SQLALCHEMY_DATABASE['PORT'] = '5432'
     ConfigAbstract.SQLALCHEMY_DATABASE['NAME'] = 'rpress'
-    ConfigAbstract.SQLALCHEMY_DATABASE['USER'] = 'rex'
+    ConfigAbstract.SQLALCHEMY_DATABASE['USER'] = 'rpress'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Session/Cookie/Flask-Login

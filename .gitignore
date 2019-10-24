@@ -14,7 +14,7 @@ __pycache__/
 *.css.map
 
 # deploy
-rpress/config/deploy.py
+rpress/config/running.py
 *.rpress.json
 running/
 
