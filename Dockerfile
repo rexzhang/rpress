@@ -5,8 +5,7 @@ COPY ./rpress/config/docker.py /app/rpress/config/running.py
 
 # develop env only
 #RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-RUN pip install -r /app/requirements.txt
-RUN rm -rf /root/.cache/pip
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 WORKDIR /app
 EXPOSE 5000
